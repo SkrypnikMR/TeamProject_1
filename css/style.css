@@ -23,12 +23,38 @@ body{
 }
 h1, h2, h3, h4, h5, h6{
    margin: 0;
-   font-size: inherit;}
-
+   font-size: inherit;
+}
 .container{
    max-width: 1030px;
    padding: 0 15px;
    margin: 0 auto;
+}
+.header__body{
+   background-color: #8da1f8;
+}
+.header__info{
+   display: flex;
+   flex-direction: row;
+   justify-content: space-around;
+}
+.header__logo{
+   height: 100px;
+   padding: 10px;
+}
+.header__logo:hover{
+   transform: scale(1.2);
+   transition: all 0.3s ease;
+}
+.header__teamName{
+   align-self: flex-start;
+   padding: 10px;
+   margin-left: 100px;
+   font-size: 34px;
+}
+.header__teamSlogan{
+   align-self: flex-end;
+   padding: 10px;
 }
 .header__menu{
    padding: 10px;
