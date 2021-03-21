@@ -1,5 +1,95 @@
 <!DOCTYPE html>
 <html lang="en">
+<<<<<<< HEAD
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Question</title>
+    <link rel="stylesheet" href="css/questions.css" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" />
+    <link
+      href="https://fonts.googleapis.com/css2?family=PT+Serif:ital,wght@0,400;0,700;1,400;1,700&family=Roboto:wght@100&display=swap"
+      rel="stylesheet"
+    />
+  </head>
+  <body>
+    <header>
+      <!-- Здесь Наш общий header -->
+      <div class="headerQuestionText">
+        <h1>Задай нам вопросы</h1>
+      </div>
+      <div class="headerQuestionCreateButton">
+        <button class="questionCreateButton">Создать вопрос</button>
+      </div>
+    </header>
+    <div class="questionContent">
+      <p>Пока ещё нам не задавали вопросы, стань первым :)</p>
+      <!-- -->
+    </div>
+    <footer><!-- Зесь наш общий footer --></footer>
+    <div id="myModal" class="modal">
+      <div class="modal-content">
+        <div class="modal-header">
+          <span class="close">&times;</span>
+          <h2 class="modalMessage">Ваш вопрос</h2>
+        </div>
+        <div class="modal-body">
+          <form name="question">
+            <div class="questionText">
+              <input
+                type="text"
+                name="qeustionText"
+                placeholder="Текст вопроса"
+              />
+            </div>
+            <div class="questionTheme">
+              <select>
+                <option>HTML</option>
+                <option>CSS</option>
+                <option>JAVASCRIPT</option>
+                <option>GIT</option>
+                <option>ERUDITION</option>
+              </select>
+            </div>
+            <div class="questionAnswer">
+              <p>Правильные ответ</p>
+              <input
+                type="radio"
+                name="answer"
+                value="1"
+                required
+                checked
+                id="TRUE"
+              /><label>TRUE</label>
+              <input
+                type="radio"
+                name="answer"
+                value="0"
+                required
+                id="FALSE"
+              /><label>FALSE</label>
+            </div>
+            <div class="questionType">
+              <p>Выбери нужный тип файлов</p>
+              <label><input type="checkbox" id="JSON" checked />JSON</label>
+              <label><input type="checkbox" id="YAML" />YAML</label>
+              <label><input type="checkbox" id="XML" />XML</label>
+              <label><input type="checkbox" id="CSV" />CSV</label>
+              <p>Если вы не выберете ни один из типов, автоматически выберется JSON</p>
+            </div>
+            <div class="questionButtons">
+              <button>ОТМЕНА</button>
+              <button>ОТПРАВИТЬ ВОПРОС</button>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+    <script src="js/questions.js"></script>
+  </body>
+</html>
+=======
 
 <head>
     <meta charset="UTF-8">
@@ -41,3 +131,4 @@
 </body>
 
 </html>
+>>>>>>> dev
