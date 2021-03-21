@@ -14,19 +14,46 @@ header {
 .headerQuestionText h1 {
   color: white;
 }
-.headerQuestionCreateButton {
+.headerFooter {
   display: flex;
-  justify-content: flex-end;
+  justify-content: space-between;
+  align-items: center;
 }
-.questionContent {
+.headerFilter {
+  display: flex;
+  align-items: center;
+}
+.headerFooter input,
+.headerFooter select {
+  margin: 20px 50px;
+  padding: 8px 15px;
+  font-family: "PT Serif", serif;
+  font-family: "Roboto", sans-serif;
+  font-size: 25px;
+}
+input:hover {
+  transform: scale(1.2);
+  transition: all 0.3s ease;
+}
+.questionsContent {
+  display: flex;
+  justify-content: center;
+  align-items: center;
   text-align: center;
   font-size: 25px;
   font-family: "PT Serif", serif;
   font-family: "Roboto", sans-serif;
+  padding: 0 15px;
+  margin: 0 auto;
+  width: 1030px;
+}
+.questionsContent img {
+  width: 100%;
+  height: 400px;
 }
 .modal-content {
   position: relative;
-  background-color: #e1bee7;
+  background-color: #8da1f8;
   margin: auto;
   padding: 0;
   border: 5px solid #7b1fa2;
@@ -74,7 +101,7 @@ header {
   cursor: pointer;
 }
 .modal {
-  display: none;
+  display: block;
   position: fixed;
   z-index: 1;
   padding-top: 50px;
@@ -88,12 +115,16 @@ header {
   padding-bottom: 100px;
 }
 .modal-header {
-  padding: 2px 16px;
-  background-color: rgba(0, 0, 0, 0.15);
+  padding: 2px 13px;
+  background-color: #4b68e6;
   color: white;
   text-align: center;
   font-family: "PT Serif", serif;
   font-family: "Roboto", sans-serif;
+}
+.modal-header h2{
+  padding:20px;
+  font-size: 25px;
 }
 
 .modal-body {
@@ -120,10 +151,28 @@ form {
   font-family: "PT Serif", serif;
   font-family: "Roboto", sans-serif;
 }
-.questionAnswer {
+form p,
+label p {
   display: flex;
   align-items: center;
   justify-content: center;
+  font-family: "PT Serif", serif;
+  font-family: "Roboto", sans-serif;
+  font-size: 25px;
+  padding: 20px;
+}
+.questionAnswer {
+  display: flex;
+  align-items: center;
+  justify-content: space-around;
+}
+.questionAnswer label {
+  padding-top: 4px;
+  padding-right: 10px;
+  padding-left: 5px;
+  font-family: "PT Serif", serif;
+  font-family: "Roboto", sans-serif;
+  font-size: 20px;
 }
 .questionText {
   padding: 10px;
@@ -134,6 +183,7 @@ form {
   height: 50px;
   width: 400px;
   font-size: 20px;
+  margin:20px;
 }
 .questionButtons {
   display: flex;
@@ -141,6 +191,7 @@ form {
 .questionTheme {
   padding: 10px;
 }
+
 .questionTheme select {
   font-family: "PT Serif", serif;
   font-family: "Roboto", sans-serif;
@@ -149,12 +200,18 @@ form {
 .questionType {
   max-width: 75%;
 }
+.questionType label {
+  padding:10px;
+  font-family: "PT Serif", serif;
+  font-family: "Roboto", sans-serif;
+  font-size: 20px;
+}
 
 button {
-  background-color: #9c27b0;
+  background-color: #4b68e6;
   color: white;
   padding: 12px 16px;
-  margin: 20px;
+  margin: 50px;
   font-size: 18px;
   font-weight: bold;
   border: none;
@@ -162,4 +219,11 @@ button {
   width: 180px;
   font-family: "PT Serif", serif;
   font-family: "Roboto", sans-serif;
+}
+button:hover {
+  transform: scale(1.2);
+  transition: all 0.3s ease;
+}
+.hide {
+  display: none;
 }
