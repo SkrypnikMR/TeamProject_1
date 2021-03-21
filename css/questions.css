@@ -1,0 +1,165 @@
+body {
+  background-color: rgb(202, 215, 226);
+}
+header {
+  margin: 0;
+  background-color: rgba(77, 27, 27, 0.2);
+}
+.headerQuestionText {
+  text-align: center;
+  font-size: 30px;
+  font-family: "PT Serif", serif;
+  font-family: "Roboto", sans-serif;
+}
+.headerQuestionText h1 {
+  color: white;
+}
+.headerQuestionCreateButton {
+  display: flex;
+  justify-content: flex-end;
+}
+.questionContent {
+  text-align: center;
+  font-size: 25px;
+  font-family: "PT Serif", serif;
+  font-family: "Roboto", sans-serif;
+}
+.modal-content {
+  position: relative;
+  background-color: #e1bee7;
+  margin: auto;
+  padding: 0;
+  border: 5px solid #7b1fa2;
+  width: 50%;
+  box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+  -webkit-animation-name: animatetop;
+  -webkit-animation-duration: 0.4s;
+  animation-name: animatetop;
+  animation-duration: 0.4s;
+}
+
+@-webkit-keyframes animatetop {
+  from {
+    top: -300px;
+    opacity: 0;
+  }
+  to {
+    top: 0;
+    opacity: 1;
+  }
+}
+
+@keyframes animatetop {
+  from {
+    top: -300px;
+    opacity: 0;
+  }
+  to {
+    top: 0;
+    opacity: 1;
+  }
+}
+
+.close {
+  color: white;
+  float: right;
+  font-size: 28px;
+  font-weight: bold;
+}
+
+.close:hover,
+.close:focus {
+  color: #000;
+  text-decoration: none;
+  cursor: pointer;
+}
+.modal {
+  display: none;
+  position: fixed;
+  z-index: 1;
+  padding-top: 50px;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  overflow: auto;
+  background-color: rgb(0, 0, 0);
+  background-color: rgba(0, 0, 0, 0.4);
+  padding-bottom: 100px;
+}
+.modal-header {
+  padding: 2px 16px;
+  background-color: rgba(0, 0, 0, 0.15);
+  color: white;
+  text-align: center;
+  font-family: "PT Serif", serif;
+  font-family: "Roboto", sans-serif;
+}
+
+.modal-body {
+  padding: 2px 16px;
+}
+
+.modal-footer {
+  padding: 2px 16px;
+  background-color: rgba(0, 0, 0, 0.15);
+  color: white;
+  text-align: center;
+  font-family: "PT Serif", serif;
+  font-family: "Roboto", sans-serif;
+}
+form {
+  color: white;
+  font-size: 25px;
+  text-align: center;
+  min-width: 200px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  font-family: "PT Serif", serif;
+  font-family: "Roboto", sans-serif;
+}
+.questionAnswer {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.questionText {
+  padding: 10px;
+}
+.questionText input {
+  font-family: "PT Serif", serif;
+  font-family: "Roboto", sans-serif;
+  height: 50px;
+  width: 400px;
+  font-size: 20px;
+}
+.questionButtons {
+  display: flex;
+}
+.questionTheme {
+  padding: 10px;
+}
+.questionTheme select {
+  font-family: "PT Serif", serif;
+  font-family: "Roboto", sans-serif;
+  font-size: 25px;
+}
+.questionType {
+  max-width: 75%;
+}
+
+button {
+  background-color: #9c27b0;
+  color: white;
+  padding: 12px 16px;
+  margin: 20px;
+  font-size: 18px;
+  font-weight: bold;
+  border: none;
+  cursor: pointer;
+  width: 180px;
+  font-family: "PT Serif", serif;
+  font-family: "Roboto", sans-serif;
+}
