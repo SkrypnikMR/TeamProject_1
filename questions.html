@@ -45,25 +45,36 @@
               </li>
             </ul>
           </nav>
+          <div class="headerFooter">
+            <div class="headerFilter">
+            <select>
+            <option>Только JSON</option>
+            <option>Только XML</option>
+            <option>Только YAML</option>
+            <option>Только CSV</option>
+          </select> 
+            <input type="text" name="theme" placeholder="Фильтрация по теме">
+          </div>
           <div class="headerQuestionCreateButton">
             <button class="questionCreateButton">Создать вопрос</button>
+          </div></div>
           </div>
         </div>
       </div>
     </header>
-    <div class="questionContent">
-      <p>Пока ещё нам не задавали вопросы, стань первым :)</p>
-      <!-- -->
+    <div class="questionsContent">
+        <!-- сюда позже будут выводиться данные из файлов json xml yaml csv -->
+      <img src="./img/questions.png" alt="" srcset="">
     </div>
     <footer><!-- Зесь наш общий footer --></footer>
-    <div id="myModal" class="modal">
+    <div id="myModal" class="modal hide">
       <div class="modal-content">
         <div class="modal-header">
           <span class="close">&times;</span>
           <h2 class="modalMessage">Ваш вопрос</h2>
         </div>
         <div class="modal-body">
-          <form name="question">
+          <form name="questionForm">
             <div class="questionText">
               <input
                 type="text"
@@ -82,28 +93,29 @@
             </div>
             <div class="questionAnswer">
               <p>Правильные ответ</p>
-              <input
+              <label>TRUE</label><input
                 type="radio"
                 name="answer"
                 value="1"
                 required
                 checked
                 id="TRUE"
-              /><label>TRUE</label>
+              />
+              <label>FALSE</label>
               <input
                 type="radio"
                 name="answer"
                 value="0"
                 required
                 id="FALSE"
-              /><label>FALSE</label>
+              />
             </div>
             <div class="questionType">
               <p>Выбери нужный тип файлов</p>
-              <label><input type="checkbox" id="JSON" checked />JSON</label>
-              <label><input type="checkbox" id="YAML" />YAML</label>
-              <label><input type="checkbox" id="XML" />XML</label>
-              <label><input type="checkbox" id="CSV" />CSV</label>
+              <input type="checkbox" id="JSON" checked /><label>JSON</label>
+              <input type="checkbox" id="YAML" /><label>YAML</label>
+              <input type="checkbox" id="XML" /><label>XML</label>
+              <input type="checkbox" id="CSV" /><label>CSV</label>
               <p>
                 Если вы не выберете ни один из типов, автоматически выберется
                 JSON

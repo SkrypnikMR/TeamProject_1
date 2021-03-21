@@ -1,6 +1,6 @@
 var $modal = document.querySelector(".modal"); // нода модального окна
 var $close = document.querySelector(".close"); // нода кнопки крестика в модальном окне
-var $form = document.forms.question; // нода формы
+var $form = document.forms.questionForm; // нода формы
 var $questionCreateButton = document.querySelector(".questionCreateButton");
 var $formCreateButton = $form.elements[$form.length - 1]; // нода кнопки ОТПРАВИТЬ ВОПРОС
 var $formCancelButton = $form.elements[$form.length - 2]; // нода кнопки ОТПРАВИТЬ ВОПРОС
@@ -11,7 +11,7 @@ var arrayXML = []; //массив объектов, который пойдут 
 var arrayYAML = []; //массив объектов, который пойдут в файл .YAML
 var arrayCSV = []; //массив объектов, который пойдут в файл .CSV
 
-$questionCreateButton.addEventListener("click", showModal); // прослушка клика кнопки
+$questionCreateButton.addEventListener("click", showModal); // прослушка клика кнопки Создания вопроса
 $close.addEventListener("click", hideModal);
 
 var convertedJSONArray = [];
@@ -89,9 +89,9 @@ function createQueston(event) {
     idGenerator++;
     clear();
     hideModal();
-    console.log(arrayJSON);
+/*     console.log(arrayJSON);
     console.log(convertedJSONArray);
-    console.log(checkboxCounter);
+    console.log(checkboxCounter); */
   }
 }
 
@@ -122,16 +122,16 @@ function convertToJSON(array) {
 
 function showModal() {
   // функция показа модального окна
-  $modal.style.display = "block";
+  $modal.classList.remove('hide')
 }
 function hideModal() {
   // функция скрытия модального окна
-  $modal.style.display = "none";
+  $modal.classList.add('hide')
 }
 window.onclick = function (event) {
   // функция закрытия модального окна, методом нажатия за его пределы
   if (event.target === $modal) {
-    $modal.style.display = "none";
+    $modal.classList.add('hide')
   }
 };
 
