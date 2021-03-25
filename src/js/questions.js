@@ -1,11 +1,10 @@
-var $modal = document.querySelector(".modal"); // нода модального окна
+export var $modal = document.querySelector(".modal"); // нода модального окна
 var $close = document.querySelector(".close"); // нода кнопки крестика в модальном окне
-var $form = document.forms.questionForm; // нода формы
+export var $form = document.forms.questionForm; // нода формы
 var $questionCreateButton = document.querySelector(".questionCreateButton");
 var $formCreateButton = $form.elements[$form.length - 1]; // нода кнопки ОТПРАВИТЬ ВОПРОС
 var $formCancelButton = $form.elements[$form.length - 2]; // нода кнопки ОТПРАВИТЬ ВОПРОС
 var $message = document.querySelector(".modalMessage");
-
 
 var arrayJSON = []; //массив объектов, который пойдут в файл .JSON
 var arrayXML = []; //массив объектов, который пойдут в файл .XML
@@ -58,41 +57,40 @@ function createQueston(event) {
       ) {
         checkboxCounter++;
       }
-      if (checkboxCounter === 4){
+      if (checkboxCounter === 4) {
         arrayJSON.push(obj);
       }
-        if (
-          $form.elements[i].type === "checkbox" &&
-          $form.elements[i].checked
-        ) {
-          // раскидываем по массивам, в зависимости от выбранного типа
-          switch ($form.elements[i].id) {
-            case "CSV":
-              arrayCSV.push(obj);
-              break;
-            case "XML":
-              arrayXML.push(obj);
-              break;
-            case "YAML":
-              arrayYAML.push(obj);
-              break;
-            case "JSON":
-              arrayJSON.push(obj);
-              convertedJSONArray = convertToJSON(arrayJSON);
-              break;
-          }
+      if ($form.elements[i].type === "checkbox" && $form.elements[i].checked) {
+        // раскидываем по массивам, в зависимости от выбранного типа
+        switch ($form.elements[i].id) {
+          case "CSV":
+            obj.type = "CSV";
+            arrayCSV.push(obj);
+
+            break;
+          case "XML":
+            obj.type = "XML";
+            arrayXML.push(obj);
+            break;
+          case "YAML":
+            obj.type = "YAML";
+            arrayYAML.push(obj);
+            break;
+          case "JSON":
+            obj.type = "JSON";
+            arrayJSON.push(obj);
+            convertedJSONArray = convertToJSON(arrayJSON);
+            break;
         }
+      }
       obj["stringDate"] = new Date().toDateString();
-      obj["date"] = new Date().getTime();
+      obj["date"] = new Date().getTime(); /*  */
     }
   }
   if (flag) {
     idGenerator++;
     clear();
     hideModal();
-/*     console.log(arrayJSON);
-    console.log(convertedJSONArray);
-    console.log(checkboxCounter); */
   }
 }
 
@@ -123,16 +121,16 @@ function convertToJSON(array) {
 
 function showModal() {
   // функция показа модального окна
-  $modal.classList.remove('hide')
+  $modal.classList.remove("hide");
 }
 function hideModal() {
   // функция скрытия модального окна
-  $modal.classList.add('hide')
+  $modal.classList.add("hide");
 }
 window.onclick = function (event) {
   // функция закрытия модального окна, методом нажатия за его пределы
   if (event.target === $modal) {
-    $modal.classList.add('hide')
+    $modal.classList.add("hide");
   }
 };
 
