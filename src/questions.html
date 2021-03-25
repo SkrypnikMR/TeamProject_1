@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Question</title>
+    <link rel="preconnect" href="https://fonts.gstatic.com" />
+    <link
+      href="https://fonts.googleapis.com/css2?family=PT+Serif:ital,wght@0,400;0,700;1,400;1,700&family=Roboto:wght@100&display=swap"
+      rel="stylesheet"
+    />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Lato:wght@400;700&family=Open+Sans&family=PT+Sans:wght@400;700&display=swap"
+      rel="stylesheet"
+    />
+  </head>
+  <body>
+    <header class="header" id="header">
+      <div class="container">
+        <div class="header__body">
+          <div class="header__info">
+            <a href="index.html"
+              ><img
+                class="header__logo"
+                src="./img/logo.png""
+                alt="logo"
+            /></a>
+            <p class="header__teamName">bigBossesExtraSmart</p>
+            <p class="header__teamSlogan">team slogan goes here</p>
+          </div>
+          <nav class="header__menu">
+            <ul class="header__list">
+              <li class="header__menu-item">
+                <a class="header__menu-link" href="index.html">HOME</a>
+              </li>
+              <li class="header__menu-item">
+                <a class="header__menu-link" href="#">QUESTIONS</a>
+              </li>
+              <li class="header__menu-item">
+                <a class="header__menu-link" href="about.html">ABOUT</a>
+              </li>
+            </ul>
+          </nav>
+          <div class="headerFooter">
+            <div class="headerFilter">
+            <select>
+            <option>Только JSON</option>
+            <option>Только XML</option>
+            <option>Только YAML</option>
+            <option>Только CSV</option>
+          </select> 
+          <select>
+            <option>HTML</option>
+            <option>CSS</option>
+            <option>JAVASCRIPT</option>
+            <option>GIT</option>
+            <option>ERUDITION</option>
+          </select>
+          </div>
+          <div class="headerQuestionCreateButton">
+            <button class="questionCreateButton">Создать вопрос</button>
+          </div></div>
+          </div>
+        </div>
+      </div>
+    </header>
+    <div class="questionsContent">
+        <!-- сюда позже будут выводиться данные из файлов json xml yaml csv -->
+      <img src="./img/questions.png" alt="" srcset="">
+    </div>
+    <footer><!-- Зесь наш общий footer --></footer>
+    <div id="myModal" class="modal hide">
+      <div class="modal-content">
+        <div class="modal-header">
+          <span class="close">&times;</span>
+          <h2 class="modalMessage">Ваш вопрос</h2>
+        </div>
+        <div class="modal-body">
+          <form name="questionForm">
+            <div class="questionText">
+              <input
+                type="text"
+                name="qeustionText"
+                placeholder="Текст вопроса"
+              />
+            </div>
+            <div class="questionTheme">
+              <select>
+                <option>HTML</option>
+                <option>CSS</option>
+                <option>JAVASCRIPT</option>
+                <option>GIT</option>
+                <option>ERUDITION</option>
+              </select>
+            </div>
+            <div class="questionAnswer">
+              <p>Правильные ответ</p>
+              <label>TRUE</label><input
+                type="radio"
+                name="answer"
+                value="1"
+                required
+                checked
+                id="TRUE"
+              />
+              <label>FALSE</label>
+              <input
+                type="radio"
+                name="answer"
+                value="0"
+                required
+                id="FALSE"
+              />
+            </div>
+            <div class="questionType">
+              <p>Выбери нужный тип файлов</p>
+              <input type="checkbox" id="JSON" checked /><label>JSON</label>
+              <input type="checkbox" id="YAML" /><label>YAML</label>
+              <input type="checkbox" id="XML" /><label>XML</label>
+              <input type="checkbox" id="CSV" /><label>CSV</label>
+              <p>
+                Если вы не выберете ни один из типов, автоматически выберется
+                JSON
+              </p>
+            </div>
+            <div class="questionButtons">
+              <button>ОТМЕНА</button>
+              <button>ОТПРАВИТЬ ВОПРОС</button>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+  </body>
+</html>
