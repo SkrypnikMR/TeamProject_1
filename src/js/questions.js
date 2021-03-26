@@ -175,7 +175,9 @@ function getFromJSONfile() {
 
 function renderToQuestionResult() {
   var commingJSONArray = JSON.parse(request.responseText);
+  
   for (var i = 0; i < commingJSONArray.length; i++) {
+    console.log(commingJSONArray[i])
     $textFROMJSONFile.innerHTML += `
     <h1> Текст вопроса: <span>${commingJSONArray[i].qeustionText}</span></h1>
     <p> Дата: ${commingJSONArray[i].stringDate}</p>
