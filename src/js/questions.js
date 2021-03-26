@@ -94,6 +94,7 @@ function createQueston(event) {
     }
   }
   if (flag) {
+    console.log(obj);
     idGenerator++;
     clear();
     hideModal();

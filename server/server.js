@@ -20,6 +20,9 @@ app.post("/", (req, res) => {
   fs.writeFileSync("questions.json", `${JSON.stringify(req.body)}`);
   res.send("POST request to the homepage");
   console.log(req.body);
+
+
+  
 });
 
 app.listen(3000, () => {
