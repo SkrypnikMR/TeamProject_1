@@ -1,10 +1,16 @@
-export var $modal = document.querySelector(".modal"); // нода модального окна
+var $modal = document.querySelector(".modal"); // нода модального окна
 var $close = document.querySelector(".close"); // нода кнопки крестика в модальном окне
-export var $form = document.forms.questionForm; // нода формы
+var $form = document.forms.questionForm; // нода формы
 var $questionCreateButton = document.querySelector(".questionCreateButton");
 var $formCreateButton = $form.elements[$form.length - 1]; // нода кнопки ОТПРАВИТЬ ВОПРОС
 var $formCancelButton = $form.elements[$form.length - 2]; // нода кнопки ОТПРАВИТЬ ВОПРОС
 var $message = document.querySelector(".modalMessage");
+
+var $getFromJSONButton = document.querySelector("#getFromJSONFile"); // тестовая кнопка  показа из questions.json
+var $textFROMJSONFile = document.querySelector(".header__Question_result_text"); // тестовая нода отображения questions.json
+
+var url = "http://127.0.0.1:3000/";
+var request = new XMLHttpRequest();
 
 var arrayJSON = []; //массив объектов, который пойдут в файл .JSON
 var arrayXML = []; //массив объектов, который пойдут в файл .XML
@@ -13,12 +19,12 @@ var arrayCSV = []; //массив объектов, который пойдут 
 
 $questionCreateButton.addEventListener("click", showModal); // прослушка клика кнопки Создания вопроса
 $close.addEventListener("click", hideModal);
+$formCreateButton.addEventListener("click", createQueston); // - слушаем клик  кнопки ОТПРАВИТЬ ВОПРОС
+$formCancelButton.addEventListener("click", hideModal);
+$getFromJSONButton.addEventListener("click", getFromJSONfile);
 
 var convertedJSONArray = [];
 var idGenerator = 0; // generator id начинаем с 0;
-
-$formCreateButton.addEventListener("click", createQueston); // - слушаем клик  кнопки ОТПРАВИТЬ ВОПРОС
-$formCancelButton.addEventListener("click", hideModal);
 
 function createQueston(event) {
   // функция клика кнопки ОТПРАВИТЬ ВОПРОС
@@ -91,6 +97,16 @@ function createQueston(event) {
     idGenerator++;
     clear();
     hideModal();
+    request.open("POST", url, true);
+    request.setRequestHeader("Content-type", "application/json");
+    request.onreadystatechange = function () {
+      //Вызывает функцию при смене состояния.
+      if (request.readyState == XMLHttpRequest.DONE && request.status == 200) {
+        // Запрос завершён. Здесь можно обрабатывать результат.
+      }
+    };
+    request.send(JSON.stringify(arrayJSON));
+    console.log(arrayJSON);
   }
 }
 
@@ -145,4 +161,26 @@ function findDublicate(array) {
     }
   }
   return array;
+}
+
+function getFromJSONfile() {
+  request.open("GET", url + "questions.json", false);
+  request.send();
+  if (request.status != 200) {
+    console.log(request.status + ": " + request.statusText);
+  } else {
+    renderToQuestionResult();
+  }
+}
+
+function renderToQuestionResult() {
+  var commingJSONArray = JSON.parse(request.responseText);
+  for (var i = 0; i < commingJSONArray.length; i++) {
+    $textFROMJSONFile.innerHTML += `
+    <h1> Текст вопроса: <span>${commingJSONArray[i].qeustionText}</span></h1>
+    <p> Дата: ${commingJSONArray[i].stringDate}</p>
+    <p> Ответ: ${commingJSONArray[i].answer}</p>
+    <p> Тип файла: ${commingJSONArray[i].type}</p>
+    `;
+  }
 }

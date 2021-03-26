@@ -224,6 +224,24 @@ button:hover {
   transform: scale(1.2);
   transition: all 0.3s ease;
 }
+.header__Question__result{
+  text-align: center;
+}
+.header__Question_result_text{
+  h1 {
+    font-size: 40px;
+    color:red;
+    padding:10px;
+  }
+  span {
+    color: black;
+    padding:10px;
+  }
+  p {
+    font-size: 25px;
+    padding:10px;
+  }
+}
 .hide {
   display: none;
 }
