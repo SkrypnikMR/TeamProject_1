@@ -57,26 +57,4 @@ if (
   // результат из developers.json записываем в переменую
   // отрисовываем данные (смотри render.js какой функцией)
 }
-if (window.location.pathname === "/questions.html") {
-  renderNoQuestions();
-  getRequest(URL, "questions")
-    .then(function (responce) {
-      return JSON.parse(responce);
-    })
-    .then(function (data) {
-      renderServerQuestions(data);
-    })
-    .catch(function (error) {
-      console.log(error);
 
-    });
-
-  /*  это старый синхронный запрос 
-  var questions = getRequest(URL, "questions");
-  if (questions.length <= 0) {
-    renderNoQuestions(questions);
-  }
-  if (questions.length > 0) {
-    renderServerQuestions(questions);
-  }*/
-}

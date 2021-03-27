@@ -1,7 +1,19 @@
 import { getRequest, postRequest, URL } from "./request";
-import { renderServerQuestions } from "./render";
+import { renderServerQuestions, renderNoQuestions } from "./render";
 
 if (window.location.pathname === "/questions.html") {
+  renderNoQuestions();
+  getRequest(URL, "questions")
+  .then(function (responce) {
+    return JSON.parse(responce);
+  })
+  .then(function (data) {
+    renderServerQuestions(data);
+  })
+  .catch(function (error) {
+    console.log(error);
+
+  });
   var $modal = document.querySelector(".modal"); // нода модального окна
   var $close = document.querySelector(".close"); // нода кнопки крестика в модальном окне
   var $form = document.forms.questionForm; // нода формы
@@ -31,8 +43,17 @@ if (window.location.pathname === "/questions.html") {
       clear();
       hideModal();
       postRequest(URL, "questions", obj);
-      var refresh = getRequest(URL, "questions");
-      renderServerQuestions(refresh);
+      renderNoQuestions();
+  getRequest(URL, "questions")
+    .then(function (responce) {
+      return JSON.parse(responce);
+    })
+    .then(function (data) {
+      renderServerQuestions(data);
+    })
+    .catch(function (error) {
+      console.log(error);
+    });
     }
   }
 
@@ -69,8 +90,4 @@ if (window.location.pathname === "/questions.html") {
       }
     }
   };
-
-  function renderQuestionCreateErrorMessage(message) {
-    $message.innerHTML = '<h2 class="modalMessage">' + message + "</h2>";
-  }
 }
