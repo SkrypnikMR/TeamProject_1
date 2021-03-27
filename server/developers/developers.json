@@ -1,44 +1,44 @@
 [
     {
-        "name": "Максим",
-        "age": "25",
-        "lovely_color": "red",
+        "name": "Tkachenko Polina",
+        "age": "21",
+        "lovely_color": "pink",
         "exp": "nothing",
-        "hobby": "tabble-tenis, hookah"
+        "hobby": "Sewing, table games, stand up comedy"
     },
     {
-        "name": "Макси",
-        "age": "25",
-        "lovely_color": "red",
+        "name": "Kalyna Olha",
+        "age": "18",
+        "lovely_color": "purple",
         "exp": "nothing",
-        "hobby": "tabble-tenis, hookah"
+        "hobby": "Board games, podcasts, books"
     },
     {
-        "name": "Макс",
-        "age": "25",
-        "lovely_color": "red",
+        "name": "Bondarenko Vyacheslav",
+        "age": "36",
+        "lovely_color": "turquoise",
         "exp": "nothing",
-        "hobby": "tabble-tenis, hookah"
+        "hobby": "Design, it, sport"
     },
     {
-        "name": "Мак",
-        "age": "25",
-        "lovely_color": "red",
+        "name": "Vakulenko Artem",
+        "age": "22",
+        "lovely_color": "blue",
         "exp": "nothing",
-        "hobby": "tabble-tenis, hookah"
+        "hobby": "Music, literature"
     },
     {
-        "name": "Ма",
+        "name": "Skrypnik Maksym",
         "age": "25",
         "lovely_color": "red",
         "exp": "nothing",
-        "hobby": "tabble-tenis, hookah"
+        "hobby": "Table tennis, football, hookah"
     },
     {
-        "name": "М",
-        "age": "25",
-        "lovely_color": "red",
+        "name": "Marharyta Horiunova",
+        "age": "32",
+        "lovely_color": "green",
         "exp": "nothing",
-        "hobby": "tabble-tenis, another"
+        "hobby": "She's not with us, but she's part of the team"
     }
 ]
