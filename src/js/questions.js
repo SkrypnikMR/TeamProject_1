@@ -2,6 +2,7 @@ import { getRequest, postRequest, URL } from "./request";
 import { renderServerQuestions } from "./render";
 
 if (window.location.pathname === "/questions.html") {
+  var $modal = document.querySelector(".modal"); // нода модального окна
   var $close = document.querySelector(".close"); // нода кнопки крестика в модальном окне
   var $form = document.forms.questionForm; // нода формы
   var $questionCreateButton = document.querySelector(".questionCreateButton");
@@ -72,4 +73,4 @@ if (window.location.pathname === "/questions.html") {
   function renderQuestionCreateErrorMessage(message) {
     $message.innerHTML = '<h2 class="modalMessage">' + message + "</h2>";
   }
-} 
+}
