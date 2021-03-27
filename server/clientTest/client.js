@@ -12,7 +12,7 @@ function buttonGetClick() {
   getMethod(URL, "developers");
 }
 function buttonPostClick() {
-  postMethod(URL, "questions", { c: 1 });
+  postMethod(URL, "questions", { d: 1 });
 }
 
 function getMethod(url, folder) {
