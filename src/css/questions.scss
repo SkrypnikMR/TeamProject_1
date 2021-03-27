@@ -231,6 +231,9 @@ button:hover {
       display: flex;
       justify-content: space-around;
       flex-wrap: wrap;
+      img {
+        width: 100%;
+      }
       .questions__item {
         min-width: 400px;
         min-height: 300px;
@@ -269,17 +272,15 @@ button:hover {
         }
         .questions__answer {
           font-size: 30px;
- 
-          
-          .questions__info {
-            padding:10px;
-            text-align: center;
-              .questions__result{
-                color:red;
-                font-size:30px;
-                padding:30px;
 
-              }
+          .questions__info {
+            padding: 10px;
+            text-align: center;
+            .questions__result {
+              color: red;
+              font-size: 30px;
+              padding: 30px;
+            }
           }
         }
       }

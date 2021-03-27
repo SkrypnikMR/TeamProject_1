@@ -1,5 +1,7 @@
 var $developers = document.querySelectorAll(".userCard__item"); // нода коллекции userCard item
-var $qHTMLContent = document.querySelector(".questions__Content"); // Нода контента на странице вопросов
+var $qHTMLContent = document.querySelector(".questions__Content");
+var $qHTMLContentWrapperItems = document.querySelector(".questions__items");
+console.log($qHTMLContentWrapperItems); // Нода контента на странице вопросов
 export function renderServerDeveloperData(serverData) {
   for (var i = 0; i < serverData.length; i++) {
     $developers[i].children[2].textContent = serverData[i].name;
@@ -68,5 +70,5 @@ function renderServerQuestionItem() {
 }
 
 export function renderNoQuestions() {
-  return ($qHTMLContent.innerHTML = `<img src="./img/questions.png" alt="" srcset="">`);
+  return ($qHTMLContentWrapperItems.innerHTML = `<img src="./img/questions.png" alt="" srcset="">`);
 }
