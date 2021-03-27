@@ -27,12 +27,17 @@ var server = http.createServer(function (req, res) {
     res.writeHead(200, headers);
     res.end(answer);
   }
+  if (req.method === "GET" && req.url === "/questions") {
+    var answer = fs.readFileSync("questions/questions.json");
+    res.writeHead(200, headers);
+    res.end(answer);
+  }
   if (req.method === "POST" && req.url === "/questions") {
     jsonParser(req, res, (err) => {
       if (err) console.log(error);
-      var questions = JSON.parse(fs.readFileSync("questions/questions.json"));
-      var data = Object.assign(questions, req.body);
-      fs.writeFileSync("questions/questions.json", JSON.stringify(data));
+      var answer = JSON.parse(fs.readFileSync("questions/questions.json"));
+      answer.push(req.body);
+      fs.writeFileSync("questions/questions.json", JSON.stringify(answer));
     });
     res.writeHead(200, headers);
     res.end("done");

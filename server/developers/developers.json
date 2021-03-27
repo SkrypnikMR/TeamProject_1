@@ -1,31 +1,44 @@
 [
     {
-        "id": "b01",
-        "caption": "p_nom_rt",
-        "type": "real",
-        "value": 220000.0,
-        "min": 0.1,
-        "max": 999999.0,
-        "units": "u_kgh"
+        "name": "Максим",
+        "age": "25",
+        "lovely_color": "red",
+        "exp": "nothing",
+        "hobby": "tabble-tenis, hookah"
     },
     {
-        "id": "b02",
-        "caption": "p_nom_sp",
-        "type": "real",
-        "value": 1.0,
-        "min": 0.1,
-        "max": 10.0,
-        "units": "u_mps"
+        "name": "Макси",
+        "age": "25",
+        "lovely_color": "red",
+        "exp": "nothing",
+        "hobby": "tabble-tenis, hookah"
     },
     {
-        "id": "b03",
-        "caption": "p_fdr_dim",
-        "type": "list",
-        "value": 0,
-        "text_arr": [
-            "l_fd1",
-            "l_fd2",
-            "l_fd3"
-        ]
+        "name": "Макс",
+        "age": "25",
+        "lovely_color": "red",
+        "exp": "nothing",
+        "hobby": "tabble-tenis, hookah"
+    },
+    {
+        "name": "Мак",
+        "age": "25",
+        "lovely_color": "red",
+        "exp": "nothing",
+        "hobby": "tabble-tenis, hookah"
+    },
+    {
+        "name": "Ма",
+        "age": "25",
+        "lovely_color": "red",
+        "exp": "nothing",
+        "hobby": "tabble-tenis, hookah"
+    },
+    {
+        "name": "М",
+        "age": "25",
+        "lovely_color": "red",
+        "exp": "nothing",
+        "hobby": "tabble-tenis, another"
     }
 ]

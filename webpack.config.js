@@ -15,6 +15,7 @@ module.exports = {
     new HTMLPlugin({
       filename: "index.html",
       template: "./src/index.html",
+      inject:true,
     }),
     new HTMLPlugin({
       filename: "questions.html",
