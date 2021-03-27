@@ -34,7 +34,7 @@ var server = http.createServer(function (req, res) {
   }
   if (req.method === "POST" && req.url === "/questions") {
     jsonParser(req, res, (err) => {
-      if (err) console.log(error);
+      if (err) console.log(err);
       var answer = JSON.parse(fs.readFileSync("questions/questions.json"));
       answer.push(req.body);
       fs.writeFileSync("questions/questions.json", JSON.stringify(answer));

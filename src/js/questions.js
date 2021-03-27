@@ -4,22 +4,22 @@ import { renderServerQuestions, renderNoQuestions } from "./render";
 if (window.location.pathname === "/questions.html") {
   renderNoQuestions();
   getRequest(URL, "questions")
-  .then(function (responce) {
-    return JSON.parse(responce);
-  })
-  .then(function (data) {
-    renderServerQuestions(data);
-  })
-  .catch(function (error) {
-    console.log(error);
-
-  });
+    .then(function (responce) {
+      return JSON.parse(responce);
+    })
+    .then(function (data) {
+      renderServerQuestions(data);
+    })
+    .catch(function (error) {
+      console.log(error);
+      renderNoQuestions();
+    });
   var $modal = document.querySelector(".modal"); // нода модального окна
   var $close = document.querySelector(".close"); // нода кнопки крестика в модальном окне
   var $form = document.forms.questionForm; // нода формы
   var $questionCreateButton = document.querySelector(".questionCreateButton");
   var $formCreateButton = $form.elements[$form.length - 1]; // нода кнопки ОТПРАВИТЬ ВОПРОС
-  var $formCancelButton = $form.elements[$form.length - 2]; // нода кнопки ОТПРАВИТЬ ВОПРОС
+  var $formCancelButton = $form.elements[$form.length - 2]; // нода кнопки вернуться ВОПРОС
   var $message = document.querySelector(".modalMessage");
 
   $questionCreateButton.addEventListener("click", showModal); // прослушка клика кнопки Создания вопроса
@@ -38,22 +38,20 @@ if (window.location.pathname === "/questions.html") {
     obj["stringDate"] = new Date().toDateString();
     obj["date"] = new Date().getTime(); /*  */
     if (flag) {
-      console.log(obj);
-      idGenerator++;
       clear();
       hideModal();
-      postRequest(URL, "questions", obj);
-      renderNoQuestions();
-  getRequest(URL, "questions")
-    .then(function (responce) {
-      return JSON.parse(responce);
-    })
-    .then(function (data) {
-      renderServerQuestions(data);
-    })
-    .catch(function (error) {
-      console.log(error);
-    });
+      postRequest(URL, "questions", obj).then(function () {
+        getRequest(URL, "questions")
+          .then(function (responce) {
+            return JSON.parse(responce);
+          })
+          .then(function (data) {
+            renderServerQuestions(data);
+          })
+          .catch(function (error) {
+            console.log(error);
+          });
+      });
     }
   }
 
