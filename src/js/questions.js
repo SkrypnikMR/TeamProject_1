@@ -30,6 +30,7 @@ if (window.location.pathname === "/questions.html") {
   function createQueston(event) {
     // функция клика кнопки ОТПРАВИТЬ ВОПРОС
     event.preventDefault();
+    
     var obj = {};
     var flag = true;
     obj[$form.elements[0].name] = $form.elements[0].value;
@@ -96,15 +97,12 @@ if (window.location.pathname === "/questions.html") {
     /* добавить на все обработчики */
     console.log();
     for (var i = 0; i < $questionDeleteButtons.length; i++) {
-      $questionDeleteButtons[i].addEventListener("click", () => {
-       /*  var obj = {};
+      $questionDeleteButtons[i].addEventListener("click", (event) => {
+         var obj = {};
         obj.date = Number(
-          $questionDeleteButtons[i].parentElement.getAttribute("date")
-        ); */
-        console.log(
-          $questionDeleteButtons[1].parentElement.getAttribute("date")
-        );
-        /* deleteRequest(URL, "questions", obj).then(function () {
+          event.target.parentElement.parentElement.getAttribute("date")
+        ); 
+        deleteRequest(URL, "questions", obj).then(function () {
           getRequest(URL, "questions")
             .then(function (responce) {
               return JSON.parse(responce);
@@ -116,7 +114,7 @@ if (window.location.pathname === "/questions.html") {
             .catch(function (error) {
               console.log(error);
             });
-        }); */
+        });
       });
     }
   }

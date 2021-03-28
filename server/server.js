@@ -51,7 +51,6 @@ var server = http.createServer(function (req, res) {
           answer.splice(i, 1);
         }
       }
-      console.log(answer);
       fs.writeFileSync("questions/questions.json", JSON.stringify(answer));
     });
     res.writeHead(200, headers);
