@@ -173,6 +173,7 @@ if (window.location.pathname === "/questions.html") {
         obj.date = Number(
           event.target.parentElement.parentElement.getAttribute("date")
         );
+        obj.type = event.target.parentElement.parentElement.getAttribute("type").split(',');
         deleteRequest(URL, "questions", obj).then(function () {
           getRequest(URL, "questions")
             .then(function (responce) {

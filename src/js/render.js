@@ -27,6 +27,10 @@ export function renderServerQuestions(serverData) {
           "date",
           serverData[0].date
         );
+        $qHTMLContent.children[0].children[0].children[0].setAttribute(
+          "type",
+          [serverData[0].type]
+        );
         $qHTMLContent.children[0].children[0].children[0].children[1].children[0].children[1].textContent =
           serverData[i].questionText;
         $qHTMLContent.children[0].children[0].children[0].children[1].children[1].children[1].textContent =
