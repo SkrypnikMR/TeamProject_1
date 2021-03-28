@@ -90,37 +90,34 @@ if (window.location.pathname === "/questions.html") {
     }
   };
   function listenDeleteButtons() {
-   /*  var $questionDeleteButtons = document.querySelectorAll('.questions__edit');
-   добавить на все обработчики
-   */
-    var $questionDeleteButton = document.querySelector(".questions__edit");
-    $questionDeleteButton.addEventListener("click", () => {
-      var obj = {};
-      obj.date = Number(
-        $questionDeleteButton.parentElement.getAttribute("date")
-      );
-      obj.questionText =
-        $questionDeleteButton.parentElement.children[1].children[0].children[1].innerHTML;
-      obj.theme =
-        $questionDeleteButton.parentElement.children[1].children[1].children[1].innerHTML;
-      obj.answer =
-        $questionDeleteButton.parentElement.children[1].children[2].children[1].innerHTML;
-      obj.stringDate =
-        $questionDeleteButton.parentElement.children[1].children[3].children[1].innerHTML;
+    /*     var $questionDeleteButton = document.querySelector(".questions__edit"); */
 
-      deleteRequest(URL, "questions", obj).then(function () {
-        getRequest(URL, "questions")
-          .then(function (responce) {
-            return JSON.parse(responce);
-          })
-          .then(function (data) {
-            renderServerQuestions(data);
-            listenDeleteButtons();
-          })
-          .catch(function (error) {
-            console.log(error);
-          });
+    var $questionDeleteButtons = document.querySelectorAll(".questions__edit");
+    /* добавить на все обработчики */
+    console.log();
+    for (var i = 0; i < $questionDeleteButtons.length; i++) {
+      $questionDeleteButtons[i].addEventListener("click", () => {
+       /*  var obj = {};
+        obj.date = Number(
+          $questionDeleteButtons[i].parentElement.getAttribute("date")
+        ); */
+        console.log(
+          $questionDeleteButtons[1].parentElement.getAttribute("date")
+        );
+        /* deleteRequest(URL, "questions", obj).then(function () {
+          getRequest(URL, "questions")
+            .then(function (responce) {
+              return JSON.parse(responce);
+            })
+            .then(function (data) {
+              renderServerQuestions(data);
+              listenDeleteButtons();
+            })
+            .catch(function (error) {
+              console.log(error);
+            });
+        }); */
       });
-    });
+    }
   }
 }
