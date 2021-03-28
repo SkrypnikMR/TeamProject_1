@@ -1,3 +1,5 @@
+
+
 export function renderServerDeveloperData(serverData) {
   var $developers = document.querySelectorAll(".userCard__item"); // нода коллекции userCard item
   for (var i = 0; i < serverData.length; i++) {
@@ -15,37 +17,46 @@ export function renderServerDeveloperData(serverData) {
 
 export function renderServerQuestions(serverData) {
   var $qHTMLContent = document.querySelector(".questions__Content");
-  var some;
-  for (var i = 0; i < serverData.length; i++) {
-    if (i === 0) {
-      $qHTMLContent.children[0].children[0].innerHTML = renderServerQuestionItem();
-      $qHTMLContent.children[0].children[0].children[0].setAttribute('date', serverData[0].date);
-      $qHTMLContent.children[0].children[0].children[0].children[1].children[0].children[1].textContent =
-        serverData[i].questionText;
-      $qHTMLContent.children[0].children[0].children[0].children[1].children[1].children[1].textContent =
-        serverData[i].theme;
-      $qHTMLContent.children[0].children[0].children[0].children[1].children[2].children[1].textContent =
-        serverData[i].answer;
-      $qHTMLContent.children[0].children[0].children[0].children[1].children[3].children[1].textContent =
-        serverData[i].stringDate;
-    } else {
-    
-      $qHTMLContent.children[0].children[0].innerHTML += renderServerQuestionItem();
-      $qHTMLContent.children[0].children[0].children[i].setAttribute('date', serverData[i].date);
-      $qHTMLContent.children[0].children[0].children[
-        i
-      ].children[1].children[0].children[1].textContent =
-        serverData[i].questionText;
-      $qHTMLContent.children[0].children[0].children[
-        i
-      ].children[1].children[1].children[1].textContent = serverData[i].theme;
-      $qHTMLContent.children[0].children[0].children[
-        i
-      ].children[1].children[2].children[1].textContent = serverData[i].answer;
-      $qHTMLContent.children[0].children[0].children[
-        i
-      ].children[1].children[3].children[1].textContent =
-        serverData[i].stringDate;
+  if (serverData.length === 0) {
+    renderNoQuestions();
+  } else {
+    for (var i = 0; i < serverData.length; i++) {
+      if (i === 0) {
+        $qHTMLContent.children[0].children[0].innerHTML = renderServerQuestionItem();
+        $qHTMLContent.children[0].children[0].children[0].setAttribute(
+          "date",
+          serverData[0].date
+        );
+        $qHTMLContent.children[0].children[0].children[0].children[1].children[0].children[1].textContent =
+          serverData[i].questionText;
+        $qHTMLContent.children[0].children[0].children[0].children[1].children[1].children[1].textContent =
+          serverData[i].theme;
+        $qHTMLContent.children[0].children[0].children[0].children[1].children[2].children[1].textContent =
+          serverData[i].answer;
+        $qHTMLContent.children[0].children[0].children[0].children[1].children[3].children[1].textContent =
+          serverData[i].stringDate;
+      } else {
+        $qHTMLContent.children[0].children[0].innerHTML += renderServerQuestionItem();
+        $qHTMLContent.children[0].children[0].children[i].setAttribute(
+          "date",
+          serverData[i].date
+        );
+        $qHTMLContent.children[0].children[0].children[
+          i
+        ].children[1].children[0].children[1].textContent =
+          serverData[i].questionText;
+        $qHTMLContent.children[0].children[0].children[
+          i
+        ].children[1].children[1].children[1].textContent = serverData[i].theme;
+        $qHTMLContent.children[0].children[0].children[
+          i
+        ].children[1].children[2].children[1].textContent =
+          serverData[i].answer;
+        $qHTMLContent.children[0].children[0].children[
+          i
+        ].children[1].children[3].children[1].textContent =
+          serverData[i].stringDate;
+      }
     }
   }
 }

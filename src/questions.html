@@ -79,16 +79,17 @@
           <h2 class="modalMessage">Ваш вопрос</h2>
         </div>
         <div class="modal-body">
-          <form name="questionForm">
+          <form class="questionForm">
             <div class="questionText">
               <input
                 type="text"
                 name="questionText"
                 placeholder="Текст вопроса"
+                class="question"
               />
             </div>
             <div class="questionTheme">
-              <select>
+              <select class="theme">
                 <option>HTML</option>
                 <option>CSS</option>
                 <option>JAVASCRIPT</option>
@@ -102,33 +103,30 @@
                 type="radio"
                 name="answer"
                 value="1"
-                required
-                checked
-                id="TRUE"
+                class="TRUERadio"
               />
               <label>FALSE</label>
               <input
                 type="radio"
                 name="answer"
                 value="0"
-                required
-                id="FALSE"
+                class="FALSERadio"
               />
             </div>
             <div class="questionType">
               <p>Выбери нужный тип файлов</p>
-              <input type="checkbox" id="JSON" checked /><label>JSON</label>
-              <input type="checkbox" id="YAML" /><label>YAML</label>
-              <input type="checkbox" id="XML" /><label>XML</label>
-              <input type="checkbox" id="CSV" /><label>CSV</label>
+              <input type="checkbox" class="question__type-JSON"  /><label>JSON</label>
+              <input type="checkbox" class="question__type-YAML" /><label>YAML</label>
+              <input type="checkbox" class="question__type-XML" /><label>XML</label>
+              <input type="checkbox" class="question__type-CSV" /><label>CSV</label>
               <p>
                 Если вы не выберете ни один из типов, автоматически выберется
                 JSON
               </p>
             </div>
             <div class="questionButtons">
-              <button>ОТМЕНА</button>
-              <button>ОТПРАВИТЬ ВОПРОС</button>
+           <!--    <button class="questionCancel">ОТМЕНА</button> -->
+              <button class="questionCreate">ОТПРАВИТЬ ВОПРОС</button>
             </div>
           </form>
         </div>
