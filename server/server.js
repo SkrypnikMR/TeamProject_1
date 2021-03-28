@@ -34,9 +34,24 @@ var server = http.createServer(function (req, res) {
   }
   if (req.method === "POST" && req.url === "/questions") {
     jsonParser(req, res, (err) => {
-      if (err) console.log(error);
+      if (err) console.log(err);
       var answer = JSON.parse(fs.readFileSync("questions/questions.json"));
-      answer.push(req.body);
+      answer.unshift(req.body);
+      fs.writeFileSync("questions/questions.json", JSON.stringify(answer));
+    });
+    res.writeHead(200, headers);
+    res.end("done");
+  }
+  if (req.method === "DELETE" && req.url === "/questions") {
+    jsonParser(req, res, (err) => {
+      if (err) console.log(err);
+      var answer = JSON.parse(fs.readFileSync("questions/questions.json"));
+      for (var i = 0; i < answer.length; i++) {
+        if (answer[i].date === req.body.date) {
+          answer.splice(i, 1);
+        }
+      }
+      console.log(answer);
       fs.writeFileSync("questions/questions.json", JSON.stringify(answer));
     });
     res.writeHead(200, headers);
