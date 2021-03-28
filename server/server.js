@@ -22,8 +22,18 @@ var server = http.createServer(function (req, res) {
     res.writeHead(200, headers);
     res.end("Server Work!");
   }
-  if (req.method === "GET" && req.url === "/developers") {
-    var answer = fs.readFileSync("developers/developers.json");
+  if(req.method === "GET" && req.url === "/?questions=XML"){
+    var answer = fs.readFileSync("questions/questionsXML.json");
+    res.writeHead(200, headers);
+    res.end(answer);
+  }
+  if(req.method === "GET" && req.url === "/?questions=CSV"){
+    var answer = fs.readFileSync("questions/questionsCSV.json");
+    res.writeHead(200, headers);
+    res.end(answer);
+  }
+  if(req.method === "GET" && req.url === "/?questions=YAML"){
+    var answer = fs.readFileSync("questions/questionsYAML.json");
     res.writeHead(200, headers);
     res.end(answer);
   }
@@ -58,6 +68,7 @@ server.listen(3000);
 
 function writeInFiles(req) {
   if (req.body.type.includes("JSON")) {
+    // req.body.type = JSON
     var answer = JSON.parse(fs.readFileSync("questions/questionsJSON.json"));
     answer.unshift(req.body);
     fs.writeFileSync("questions/questionsJSON.json", JSON.stringify(answer));

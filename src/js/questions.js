@@ -3,6 +3,8 @@ import { renderServerQuestions, renderNoQuestions } from "./render";
 
 if (window.location.pathname === "/questions.html") {
   renderNoQuestions();
+  listenTypeSelect();
+
   getRequest(URL, "questions")
     .then(function (responce) {
       return JSON.parse(responce);
@@ -15,6 +17,7 @@ if (window.location.pathname === "/questions.html") {
       console.log(error);
       renderNoQuestions();
     });
+
   var $modal = document.querySelector(".modal"); // нода модального окна
   var $closeX = document.querySelector(".close"); // нода кнопки крестика в модальном окне
   var $questionCreateButton = document.querySelector(".questionCreateButton");
@@ -173,7 +176,9 @@ if (window.location.pathname === "/questions.html") {
         obj.date = Number(
           event.target.parentElement.parentElement.getAttribute("date")
         );
-        obj.type = event.target.parentElement.parentElement.getAttribute("type").split(',');
+        obj.type = event.target.parentElement.parentElement
+          .getAttribute("type")
+          .split(",");
         deleteRequest(URL, "questions", obj).then(function () {
           getRequest(URL, "questions")
             .then(function (responce) {
@@ -188,6 +193,73 @@ if (window.location.pathname === "/questions.html") {
             });
         });
       });
+    }
+  }
+
+  function listenTypeSelect() {
+    var $typeSelect = document.querySelector(".header__filter-type");
+    $typeSelect.addEventListener("change", typeSelectGetRequest);
+  }
+
+  function typeSelectGetRequest() {
+    var $typeSelect = document.querySelector(".header__filter-type");
+    console.log($typeSelect.value);
+
+    if ($typeSelect.value === "XML") {
+      getRequest(URL, "?questions=XML")
+        .then(function (responce) {
+          return JSON.parse(responce);
+        })
+        .then(function (data) {
+          renderServerQuestions(data);
+          listenDeleteButtons();
+        })
+        .catch(function (error) {
+          console.log(error);
+          renderNoQuestions();
+        });
+    }
+    if ($typeSelect.value === "YAML") {
+      getRequest(URL, "?questions=YAML")
+        .then(function (responce) {
+          return JSON.parse(responce);
+        })
+        .then(function (data) {
+          renderServerQuestions(data);
+          listenDeleteButtons();
+        })
+        .catch(function (error) {
+          console.log(error);
+          renderNoQuestions();
+        });
+    }
+    if ($typeSelect.value === "JSON") {
+      getRequest(URL, "questions")
+        .then(function (responce) {
+          return JSON.parse(responce);
+        })
+        .then(function (data) {
+          renderServerQuestions(data);
+          listenDeleteButtons();
+        })
+        .catch(function (error) {
+          console.log(error);
+          renderNoQuestions();
+        });
+    }
+    if ($typeSelect.value === "CSV") {
+      getRequest(URL, "?questions=CSV")
+        .then(function (responce) {
+          return JSON.parse(responce);
+        })
+        .then(function (data) {
+          renderServerQuestions(data);
+          listenDeleteButtons();
+        })
+        .catch(function (error) {
+          console.log(error);
+          renderNoQuestions();
+        });
     }
   }
 }
