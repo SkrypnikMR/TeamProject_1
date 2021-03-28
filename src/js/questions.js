@@ -3,6 +3,8 @@ import { renderServerQuestions, renderNoQuestions } from "./render";
 
 if (window.location.pathname === "/questions.html") {
   renderNoQuestions();
+  listenTypeSelect();
+
   getRequest(URL, "questions")
     .then(function (responce) {
       return JSON.parse(responce);
@@ -15,68 +17,140 @@ if (window.location.pathname === "/questions.html") {
       console.log(error);
       renderNoQuestions();
     });
+
   var $modal = document.querySelector(".modal"); // нода модального окна
-  var $close = document.querySelector(".close"); // нода кнопки крестика в модальном окне
-  var $form = document.forms.questionForm; // нода формы
+  var $closeX = document.querySelector(".close"); // нода кнопки крестика в модальном окне
   var $questionCreateButton = document.querySelector(".questionCreateButton");
-  var $formCreateButton = $form.elements[$form.length - 1]; // нода кнопки ОТПРАВИТЬ ВОПРОС
-  var $formCancelButton = $form.elements[$form.length - 2]; // нода кнопки вернуться ВОПРОС
 
   $questionCreateButton.addEventListener("click", showModal); // прослушка клика кнопки Создания вопроса
-  $close.addEventListener("click", hideModal);
-  $formCreateButton.addEventListener("click", createQueston); // - слушаем клик  кнопки ОТПРАВИТЬ ВОПРОС
-  $formCancelButton.addEventListener("click", hideModal);
-
-  function createQueston(event) {
-    // функция клика кнопки ОТПРАВИТЬ ВОПРОС
-    event.preventDefault();
-    
-    var obj = {};
-    var flag = true;
-    obj[$form.elements[0].name] = $form.elements[0].value;
-    obj["theme"] = $form.elements[1].value;
-    obj[$form.elements[3].name] = Boolean(Number($form.elements[3].value));
-    obj["stringDate"] = new Date().toDateString();
-    obj["date"] = new Date().getTime();
-    if (flag) {
-      clear();
-      hideModal();
-      postRequest(URL, "questions", obj).then(function () {
-        getRequest(URL, "questions")
-          .then(function (responce) {
-            return JSON.parse(responce);
-          })
-          .then(function (data) {
-            renderServerQuestions(data);
-            listenDeleteButtons();
-          })
-          .catch(function (error) {
-            console.log(error);
-          });
-      });
-    }
-  }
-
-  function clear() {
-    // функция очистки инпутов и анчекинга чекбоксов радиобатанов
-    for (var i = 0; i <= $form.length - 1; i++) {
-      if ($form.elements[i].type === "text") {
-        $form.elements[i].value = "";
-      }
-      if (
-        $form.elements[i].checked &&
-        $form.elements[i].id !== "JSON" &&
-        $form.elements[i].id !== "TRUE" &&
-        $form.elements[i].id !== "FALSE"
-      ) {
-        $form.elements[i].checked = false;
-      }
-    }
-  }
+  $closeX.addEventListener("click", hideModal);
 
   function showModal() {
-    // функция показа модального окна
     $modal.classList.remove("hide");
+    var $formCreateButton = document.querySelector(".questionCreate"); // нода кнопки ОТПРАВИТЬ ВОПРОС
+    /*   $formCancelButton.addEventListener("click", hideModal); // нода кнопки вернуться */
+    $formCreateButton.addEventListener("click", createQueston);
+    function createQueston(event) {
+      // функция клика кнопки ОТПРАВИТЬ ВОПРОС
+      event.preventDefault();
+      var $questionForm = document.querySelector(".questionForm");
+      var $text = document.querySelector(".question");
+      var $theme = document.querySelector(".theme");
+      var $questionAnswer = document.querySelector(".questionAnswer");
+      var $questionType = document.querySelector(".questionType");
+      errorText("Напишите текст вопроса");
+      var flag = formTextValidation($text) && answerValidation();
+      var obj = {};
+      obj["questionText"] = $text.value;
+      obj["theme"] = $theme.value;
+      obj["date"] = new Date().getTime();
+      obj[
+        "stringDate"
+      ] = `${new Date().toLocaleDateString()} ${new Date().toLocaleTimeString()}`;
+      obj["type"] = checkType();
+      obj["answer"] = checkAnswer();
+
+      if (flag) {
+        clearModal();
+        hideModal();
+        postRequest(URL, "questions", obj).then(function () {
+          getRequest(URL, "questions")
+            .then(function (responce) {
+              return JSON.parse(responce);
+            })
+            .then(function (data) {
+              renderServerQuestions(data);
+              listenDeleteButtons();
+            })
+            .catch(function (error) {
+              console.log(error);
+            });
+        });
+      }
+    }
+  }
+
+  function checkAnswer() {
+    // проверяем какая из кнопок чекнута
+    var $trueRadio = document.querySelector(".TRUERadio");
+    var $falseRadio = document.querySelector(".FALSERadio");
+
+    if ($trueRadio.checked) {
+      return true;
+    } else return false;
+  }
+
+  function checkType() {
+    // проверяем какой из типов выбран и записываем его в массив типов, если не выбрано ничего - выбираем JSON
+    var JSON = document.querySelector(".question__type-JSON");
+    var XML = document.querySelector(".question__type-XML");
+    var YAML = document.querySelector(".question__type-YAML");
+    var CSV = document.querySelector(".question__type-CSV");
+
+    var result = [];
+
+    if (JSON.checked) {
+      result.push("JSON");
+    }
+    if (XML.checked) {
+      result.push("XML");
+    }
+    if (YAML.checked) {
+      result.push("YAML");
+    }
+    if (CSV.checked) {
+      result.push("CSV");
+    }
+    if (!JSON.checked && !XML.checked && !YAML.checked && !CSV.checked) {
+      result.push("JSON");
+    }
+    return result;
+  }
+
+  function answerValidation() {
+    var $trueRadio = document.querySelector(".TRUERadio");
+    var $falseRadio = document.querySelector(".FALSERadio");
+    if ($trueRadio.checked || $falseRadio.checked) {
+      return true;
+    } else {
+      errorText("Выберите вариант ответа!");
+      return false;
+    }
+  }
+
+  function formTextValidation($node) {
+    // валидируем форму, не должен быть пустой
+    var $text = document.querySelector(".question");
+    if ($node.isEqualNode($text)) {
+      if ($node.value === "") {
+        errorText("Напишите текст вопроса");
+        return false;
+      }
+    }
+    return true;
+  }
+
+  function errorText(errorText) {
+    // отрисовка текста ошибки в modalHead
+    var $modalMessage = document.querySelector(".modalMessage");
+    return ($modalMessage.textContent = errorText);
+  }
+  function clearModal() {
+    // функция очистки инпутов и анчекинга чекбоксов радиобатанов
+    var $text = document.querySelector(".question");
+    var $trueRadio = document.querySelector(".TRUERadio");
+    var $falseRadio = document.querySelector(".FALSERadio");
+    var $JSON = document.querySelector(".question__type-JSON");
+    var $XML = document.querySelector(".question__type-XML");
+    var $YAML = document.querySelector(".question__type-YAML");
+    var $CSV = document.querySelector(".question__type-CSV");
+    $text.value = "";
+    $trueRadio.checked = false;
+    $falseRadio.checked = false;
+    $JSON.checked = false;
+    $XML.checked = false;
+    $YAML.checked = false;
+    $CSV.checked = false;
   }
   function hideModal() {
     // функция скрытия модального окна
@@ -98,10 +172,13 @@ if (window.location.pathname === "/questions.html") {
     console.log();
     for (var i = 0; i < $questionDeleteButtons.length; i++) {
       $questionDeleteButtons[i].addEventListener("click", (event) => {
-         var obj = {};
+        var obj = {};
         obj.date = Number(
           event.target.parentElement.parentElement.getAttribute("date")
-        ); 
+        );
+        obj.type = event.target.parentElement.parentElement
+          .getAttribute("type")
+          .split(",");
         deleteRequest(URL, "questions", obj).then(function () {
           getRequest(URL, "questions")
             .then(function (responce) {
@@ -116,6 +193,73 @@ if (window.location.pathname === "/questions.html") {
             });
         });
       });
+    }
+  }
+
+  function listenTypeSelect() {
+    var $typeSelect = document.querySelector(".header__filter-type");
+    $typeSelect.addEventListener("change", typeSelectGetRequest);
+  }
+
+  function typeSelectGetRequest() {
+    var $typeSelect = document.querySelector(".header__filter-type");
+    console.log($typeSelect.value);
+
+    if ($typeSelect.value === "XML") {
+      getRequest(URL, "?questions=XML")
+        .then(function (responce) {
+          return JSON.parse(responce);
+        })
+        .then(function (data) {
+          renderServerQuestions(data);
+          listenDeleteButtons();
+        })
+        .catch(function (error) {
+          console.log(error);
+          renderNoQuestions();
+        });
+    }
+    if ($typeSelect.value === "YAML") {
+      getRequest(URL, "?questions=YAML")
+        .then(function (responce) {
+          return JSON.parse(responce);
+        })
+        .then(function (data) {
+          renderServerQuestions(data);
+          listenDeleteButtons();
+        })
+        .catch(function (error) {
+          console.log(error);
+          renderNoQuestions();
+        });
+    }
+    if ($typeSelect.value === "JSON") {
+      getRequest(URL, "questions")
+        .then(function (responce) {
+          return JSON.parse(responce);
+        })
+        .then(function (data) {
+          renderServerQuestions(data);
+          listenDeleteButtons();
+        })
+        .catch(function (error) {
+          console.log(error);
+          renderNoQuestions();
+        });
+    }
+    if ($typeSelect.value === "CSV") {
+      getRequest(URL, "?questions=CSV")
+        .then(function (responce) {
+          return JSON.parse(responce);
+        })
+        .then(function (data) {
+          renderServerQuestions(data);
+          listenDeleteButtons();
+        })
+        .catch(function (error) {
+          console.log(error);
+          renderNoQuestions();
+        });
     }
   }
 }
