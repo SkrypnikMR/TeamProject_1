@@ -42,6 +42,11 @@ var server = http.createServer(function (req, res) {
     res.writeHead(200, headers);
     res.end(answer);
   }
+  if (req.method === "GET" && req.url === "/developers") {
+    var answer = fs.readFileSync("developers/developers.json");
+    res.writeHead(200, headers);
+    res.end(answer);
+  }
   if (req.method === "POST" && req.url === "/questions") {
     jsonParser(req, res, (err) => {
       if (err) console.log(err);
