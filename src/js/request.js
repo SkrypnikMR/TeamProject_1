@@ -30,3 +30,18 @@ export function postRequest(url, folder, requestBody) {
     request.send(JSON.stringify(requestBody));
   });
 }
+export function deleteRequest(url, folder, requestBody) {
+  return new Promise(function (responce, reject) {
+    var request = new XMLHttpRequest();
+    request.open("DELETE", url + folder, true);
+    request.setRequestHeader("Content-Type", "application/json");
+    request.addEventListener("load", function () {
+      if (request.status < 400) responce(request.responseText);
+      else fail(new Error("Request failed: " + request.statusText));
+    });
+    request.addEventListener("error", function () {
+      reject(new Error("Network error"));
+    });
+    request.send(JSON.stringify(requestBody));
+  });
+}

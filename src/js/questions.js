@@ -1,4 +1,4 @@
-import { getRequest, postRequest, URL } from "./request";
+import { getRequest, postRequest, deleteRequest, URL } from "./request";
 import { renderServerQuestions, renderNoQuestions } from "./render";
 
 if (window.location.pathname === "/questions.html") {
@@ -9,6 +9,7 @@ if (window.location.pathname === "/questions.html") {
     })
     .then(function (data) {
       renderServerQuestions(data);
+      listenDeleteButtons();
     })
     .catch(function (error) {
       console.log(error);
@@ -20,7 +21,6 @@ if (window.location.pathname === "/questions.html") {
   var $questionCreateButton = document.querySelector(".questionCreateButton");
   var $formCreateButton = $form.elements[$form.length - 1]; // нода кнопки ОТПРАВИТЬ ВОПРОС
   var $formCancelButton = $form.elements[$form.length - 2]; // нода кнопки вернуться ВОПРОС
-  var $message = document.querySelector(".modalMessage");
 
   $questionCreateButton.addEventListener("click", showModal); // прослушка клика кнопки Создания вопроса
   $close.addEventListener("click", hideModal);
@@ -36,7 +36,7 @@ if (window.location.pathname === "/questions.html") {
     obj["theme"] = $form.elements[1].value;
     obj[$form.elements[3].name] = Boolean(Number($form.elements[3].value));
     obj["stringDate"] = new Date().toDateString();
-    obj["date"] = new Date().getTime(); /*  */
+    obj["date"] = new Date().getTime();
     if (flag) {
       clear();
       hideModal();
@@ -47,6 +47,7 @@ if (window.location.pathname === "/questions.html") {
           })
           .then(function (data) {
             renderServerQuestions(data);
+            listenDeleteButtons();
           })
           .catch(function (error) {
             console.log(error);
@@ -88,4 +89,38 @@ if (window.location.pathname === "/questions.html") {
       }
     }
   };
+  function listenDeleteButtons() {
+   /*  var $questionDeleteButtons = document.querySelectorAll('.questions__edit');
+   добавить на все обработчики
+   */
+    var $questionDeleteButton = document.querySelector(".questions__edit");
+    $questionDeleteButton.addEventListener("click", () => {
+      var obj = {};
+      obj.date = Number(
+        $questionDeleteButton.parentElement.getAttribute("date")
+      );
+      obj.questionText =
+        $questionDeleteButton.parentElement.children[1].children[0].children[1].innerHTML;
+      obj.theme =
+        $questionDeleteButton.parentElement.children[1].children[1].children[1].innerHTML;
+      obj.answer =
+        $questionDeleteButton.parentElement.children[1].children[2].children[1].innerHTML;
+      obj.stringDate =
+        $questionDeleteButton.parentElement.children[1].children[3].children[1].innerHTML;
+
+      deleteRequest(URL, "questions", obj).then(function () {
+        getRequest(URL, "questions")
+          .then(function (responce) {
+            return JSON.parse(responce);
+          })
+          .then(function (data) {
+            renderServerQuestions(data);
+            listenDeleteButtons();
+          })
+          .catch(function (error) {
+            console.log(error);
+          });
+      });
+    });
+  }
 }
