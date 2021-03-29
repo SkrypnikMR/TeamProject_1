@@ -2,10 +2,11 @@ import { getRequest, postRequest, deleteRequest, URL } from "./request";
 import { renderServerQuestions, renderNoQuestions } from "./render";
 
 if (window.location.pathname === "/questions.html") {
+  var $typeSelect = document.querySelector(".header__filter-type");
+  $typeSelect.value = localStorage.getItem('type') || $typeSelect.value;
   renderNoQuestions();
   listenTypeSelect();
-
-  getRequest(URL, "questions")
+  getRequest(URL, `?questions=${$typeSelect.value}`)
     .then(function (responce) {
       return JSON.parse(responce);
     })
@@ -179,33 +180,33 @@ if (window.location.pathname === "/questions.html") {
         obj.type = event.target.parentElement.parentElement
           .getAttribute("type")
           .split(",");
-        deleteRequest(URL, "questions", obj).then(function () {
-          getRequest(URL, "questions")
-            .then(function (responce) {
-              return JSON.parse(responce);
-            })
-            .then(function (data) {
-              renderServerQuestions(data);
-              listenDeleteButtons();
-            })
-            .catch(function (error) {
-              console.log(error);
-            });
-        });
+        deleteRequest(URL, `questions?delete=${$typeSelect.value}`, obj).then(
+          function () {
+            getRequest(URL, `?questions=${$typeSelect.value}`)
+              .then(function (responce) {
+                return JSON.parse(responce);
+              })
+              .then(function (data) {
+                renderServerQuestions(data);
+                listenDeleteButtons();
+              })
+              .catch(function (error) {
+                console.log(error);
+              });
+          }
+        );
       });
     }
   }
 
   function listenTypeSelect() {
-    var $typeSelect = document.querySelector(".header__filter-type");
     $typeSelect.addEventListener("change", typeSelectGetRequest);
+
   }
 
   function typeSelectGetRequest() {
-    var $typeSelect = document.querySelector(".header__filter-type");
-    console.log($typeSelect.value);
-
     if ($typeSelect.value === "XML") {
+      localStorage.setItem('type', 'XML')
       getRequest(URL, "?questions=XML")
         .then(function (responce) {
           return JSON.parse(responce);
@@ -220,6 +221,7 @@ if (window.location.pathname === "/questions.html") {
         });
     }
     if ($typeSelect.value === "YAML") {
+      localStorage.setItem('type', 'YAML')
       getRequest(URL, "?questions=YAML")
         .then(function (responce) {
           return JSON.parse(responce);
@@ -234,6 +236,7 @@ if (window.location.pathname === "/questions.html") {
         });
     }
     if ($typeSelect.value === "JSON") {
+      localStorage.setItem('type', 'JSON');
       getRequest(URL, "questions")
         .then(function (responce) {
           return JSON.parse(responce);
@@ -248,6 +251,7 @@ if (window.location.pathname === "/questions.html") {
         });
     }
     if ($typeSelect.value === "CSV") {
+      localStorage.setItem('type', 'CSV')
       getRequest(URL, "?questions=CSV")
         .then(function (responce) {
           return JSON.parse(responce);

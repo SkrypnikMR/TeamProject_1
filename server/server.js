@@ -17,23 +17,32 @@ var server = http.createServer(function (req, res) {
     res.end();
     return;
   }
-
+  if (req.method === "GET" && req.url === "/developers") {
+    var answer = fs.readFileSync("developers/developers.json");
+    res.writeHead(200, headers);
+    res.end(answer);
+  }
   if (req.method === "GET" && req.url === "/") {
     res.writeHead(200, headers);
     res.end("Server Work!");
   }
-  if(req.method === "GET" && req.url === "/?questions=XML"){
+  if (req.method === "GET" && req.url === "/?questions=XML") {
     var answer = fs.readFileSync("questions/questionsXML.json");
     res.writeHead(200, headers);
     res.end(answer);
   }
-  if(req.method === "GET" && req.url === "/?questions=CSV"){
+  if (req.method === "GET" && req.url === "/?questions=CSV") {
     var answer = fs.readFileSync("questions/questionsCSV.json");
     res.writeHead(200, headers);
     res.end(answer);
   }
-  if(req.method === "GET" && req.url === "/?questions=YAML"){
+  if (req.method === "GET" && req.url === "/?questions=YAML") {
     var answer = fs.readFileSync("questions/questionsYAML.json");
+    res.writeHead(200, headers);
+    res.end(answer);
+  }
+  if (req.method === "GET" && req.url === "/?questions=JSON") {
+    var answer = fs.readFileSync("questions/questionsJSON.json");
     res.writeHead(200, headers);
     res.end(answer);
   }
@@ -42,27 +51,70 @@ var server = http.createServer(function (req, res) {
     res.writeHead(200, headers);
     res.end(answer);
   }
-  if (req.method === "GET" && req.url === "/developers") {
-    var answer = fs.readFileSync("developers/developers.json");
-    res.writeHead(200, headers);
-    res.end(answer);
-  }
+
+ 
   if (req.method === "POST" && req.url === "/questions") {
     jsonParser(req, res, (err) => {
       if (err) console.log(err);
       // логика записи по разным файлам без конвертеров
       console.log(req.body);
-
       writeInFiles(req);
     });
     res.writeHead(200, headers);
     res.end("done");
   }
-  if (req.method === "DELETE" && req.url === "/questions") {
+  if (req.method === "DELETE" && req.url === "/questions?delete=XML") {
     jsonParser(req, res, (err) => {
       if (err) console.log(err);
-      console.log(req.body.type);
-      deleteinFiles(req);
+      var answerXML = JSON.parse(fs.readFileSync("questions/questionsXML.json"));
+      for (var i = 0; i < answerXML.length; i++) {
+        if (answerXML[i].date === req.body.date) {
+          answerXML.splice(i, 1);
+        }
+      }
+      fs.writeFileSync("questions/questionsXML.json", JSON.stringify(answerXML));
+    });
+    res.writeHead(200, headers);
+    res.end("done");
+  }
+  if (req.method === "DELETE" && req.url === "/questions?delete=JSON") {
+    jsonParser(req, res, (err) => {
+      if (err) console.log(err);
+      var answerJSON = JSON.parse(fs.readFileSync("questions/questionsJSON.json"));
+      for (var i = 0; i < answerJSON.length; i++) {
+        if (answerJSON[i].date === req.body.date) {
+          answerJSON.splice(i, 1);
+        }
+      }
+      fs.writeFileSync("questions/questionsJSON.json", JSON.stringify(answerJSON));
+    });
+    res.writeHead(200, headers);
+    res.end("done");
+  }
+  if (req.method === "DELETE" && req.url === "/questions?delete=YAML") {
+    jsonParser(req, res, (err) => {
+      if (err) console.log(err);
+      var answerYAML = JSON.parse(fs.readFileSync("questions/questionsYAML.json"));
+      for (var i = 0; i < answerYAML.length; i++) {
+        if (answerYAML[i].date === req.body.date) {
+          answerYAML.splice(i, 1);
+        }
+      }
+      fs.writeFileSync("questions/questionsYAML.json", JSON.stringify(answerYAML));
+    });
+    res.writeHead(200, headers);
+    res.end("done");
+  }
+  if (req.method === "DELETE" && req.url === "/questions?delete=CSV") {
+    jsonParser(req, res, (err) => {
+      if (err) console.log(err);
+      var answerCSV = JSON.parse(fs.readFileSync("questions/questionsCSV.json"));
+      for (var i = 0; i < answerCSV.length; i++) {
+        if (answerCSV[i].date === req.body.date) {
+          answerCSV.splice(i, 1);
+        }
+      }
+      fs.writeFileSync("questions/questionsCSV.json", JSON.stringify(answerCSV));
     });
     res.writeHead(200, headers);
     res.end("done");
@@ -73,10 +125,9 @@ server.listen(3000);
 
 function writeInFiles(req) {
   if (req.body.type.includes("JSON")) {
-    // req.body.type = JSON
-    var answer = JSON.parse(fs.readFileSync("questions/questionsJSON.json"));
-    answer.unshift(req.body);
-    fs.writeFileSync("questions/questionsJSON.json", JSON.stringify(answer));
+    var answerJSON = JSON.parse(fs.readFileSync("questions/questionsJSON.json"));
+    answerJSON.unshift(req.body);
+    fs.writeFileSync("questions/questionsJSON.json", JSON.stringify(answerJSON));
   }
 
   if (req.body.type.includes("CSV")) {
@@ -95,6 +146,7 @@ function writeInFiles(req) {
     );
   }
   if (req.body.type.includes("XML")) {
+    req.body.type = "XML";
     var answerXML = JSON.parse(fs.readFileSync("questions/questionsXML.json"));
     answerXML.unshift(req.body);
     fs.writeFileSync("questions/questionsXML.json", JSON.stringify(answerXML));
@@ -146,9 +198,6 @@ function deleteinFiles(req) {
         answerXML.splice(i, 1);
       }
     }
-    fs.writeFileSync(
-      "questions/questionsXML.json",
-      JSON.stringify(answerXML)
-    );
+    fs.writeFileSync("questions/questionsXML.json", JSON.stringify(answerXML));
   }
 }
