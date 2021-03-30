@@ -2,20 +2,30 @@ import { getRequest, postRequest, deleteRequest, URL } from "./request";
 import { renderServerQuestions, renderNoQuestions } from "./render";
 
 if (window.location.pathname === "/questions.html") {
-  var $typeSelect = document.querySelector(".header__filter-type");
-  $typeSelect.value = localStorage.getItem('type') || $typeSelect.value;
-  renderNoQuestions();
-  listenTypeSelect();
-  getRequest(URL, `?questions=${$typeSelect.value}`)
+  // всё что происходит, когда мы запукаем страницу questions.html
+
+  var $typeSelect = document.querySelector(".header__filter-type"); // нода фильтра типа;
+  $typeSelect.value = localStorage.getItem("type") || $typeSelect.value; // пулучаем value из локалстореджа, если его нет , то value = себе
+  localStorage.setItem("type", $typeSelect.value); // cетим в локал сторедж, нужно для первого запуска приложения, пока нет ничего в localStorage.
+  listenTypeSelect(); // Добавляем слушателя селекту
+  getRequest(URL, `?questions=${$typeSelect.value}`) // запрос на получение данных из нужного файла
     .then(function (responce) {
       return JSON.parse(responce);
     })
     .then(function (data) {
-      renderServerQuestions(data);
-      listenDeleteButtons();
+      if (data.length === 0) {
+        // если файл пустой - отрисует страницу без вопросов
+        renderNoQuestions();
+      } else {
+        // если массив не пустой - запустится рендеринг вопросов
+        renderServerQuestions(data);
+        // вешаем события клик, на крестик в вопросе
+        listenDeleteButtons();
+      }
     })
     .catch(function (error) {
       console.log(error);
+      // отлавливаем ошибки в промисе, если она будет - отрисует нет вопросов *____ в дальнейшем можно отрисовывать страницу ошибка сервера*
       renderNoQuestions();
     });
 
@@ -24,7 +34,7 @@ if (window.location.pathname === "/questions.html") {
   var $questionCreateButton = document.querySelector(".questionCreateButton");
 
   $questionCreateButton.addEventListener("click", showModal); // прослушка клика кнопки Создания вопроса
-  $closeX.addEventListener("click", hideModal);
+  $closeX.addEventListener("click", hideModal); // слушатель у крестика модального окна
 
   function showModal() {
     $modal.classList.remove("hide");
@@ -34,28 +44,30 @@ if (window.location.pathname === "/questions.html") {
     function createQueston(event) {
       // функция клика кнопки ОТПРАВИТЬ ВОПРОС
       event.preventDefault();
-      var $questionForm = document.querySelector(".questionForm");
+
       var $text = document.querySelector(".question");
       var $theme = document.querySelector(".theme");
-      var $questionAnswer = document.querySelector(".questionAnswer");
-      var $questionType = document.querySelector(".questionType");
-      errorText("Напишите текст вопроса");
-      var flag = formTextValidation($text) && answerValidation();
+      var flag = formTextValidation($text) && answerValidation(); // в флаг запимсываем значение вернувшееся после выполнения валидации
+
+      // создаем объект, который будет отправлять на сервер
+      var objDate = new Date();
       var obj = {};
       obj["questionText"] = $text.value;
       obj["theme"] = $theme.value;
-      obj["date"] = new Date().getTime();
+      obj["date"] = objDate.getTime();
       obj[
         "stringDate"
-      ] = `${new Date().toLocaleDateString()} ${new Date().toLocaleTimeString()}`;
+      ] = `${objDate.toLocaleDateString()} | ${objDate.toLocaleTimeString()}`;
       obj["type"] = checkType();
       obj["answer"] = checkAnswer();
-
+      //если прошла валидаци - нас пустет в иф
       if (flag) {
         clearModal();
         hideModal();
         postRequest(URL, "questions", obj).then(function () {
-          getRequest(URL, "questions")
+          localStorage.setItem('type',obj.type[obj.type.length - 1]);
+          $typeSelect.value = localStorage.getItem('type');
+          getRequest(URL, `?questions=${ $typeSelect.value}`)
             .then(function (responce) {
               return JSON.parse(responce);
             })
@@ -109,6 +121,7 @@ if (window.location.pathname === "/questions.html") {
   }
 
   function answerValidation() {
+    //валидация ответов, они должны быть выбраны!
     var $trueRadio = document.querySelector(".TRUERadio");
     var $falseRadio = document.querySelector(".FALSERadio");
     if ($trueRadio.checked || $falseRadio.checked) {
@@ -166,11 +179,8 @@ if (window.location.pathname === "/questions.html") {
     }
   };
   function listenDeleteButtons() {
-    /*     var $questionDeleteButton = document.querySelector(".questions__edit"); */
-
     var $questionDeleteButtons = document.querySelectorAll(".questions__edit");
     /* добавить на все обработчики */
-    console.log();
     for (var i = 0; i < $questionDeleteButtons.length; i++) {
       $questionDeleteButtons[i].addEventListener("click", (event) => {
         var obj = {};
@@ -187,8 +197,12 @@ if (window.location.pathname === "/questions.html") {
                 return JSON.parse(responce);
               })
               .then(function (data) {
-                renderServerQuestions(data);
-                listenDeleteButtons();
+                if (data.length === 0) {
+                  renderNoQuestions();
+                } else {
+                  renderServerQuestions(data);
+                  listenDeleteButtons();
+                }
               })
               .catch(function (error) {
                 console.log(error);
@@ -201,69 +215,26 @@ if (window.location.pathname === "/questions.html") {
 
   function listenTypeSelect() {
     $typeSelect.addEventListener("change", typeSelectGetRequest);
-
   }
 
   function typeSelectGetRequest() {
-    if ($typeSelect.value === "XML") {
-      localStorage.setItem('type', 'XML')
-      getRequest(URL, "?questions=XML")
-        .then(function (responce) {
-          return JSON.parse(responce);
-        })
-        .then(function (data) {
+    // сетим новое значение, если у нас изменилось value select'a типа
+    localStorage.setItem("type", `${$typeSelect.value}`);
+    getRequest(URL, `?questions=${$typeSelect.value}`)
+      .then(function (responce) {
+        return JSON.parse(responce);
+      })
+      .then(function (data) {
+        if (data.length === 0) {
+          renderNoQuestions();
+        } else {
           renderServerQuestions(data);
           listenDeleteButtons();
-        })
-        .catch(function (error) {
-          console.log(error);
-          renderNoQuestions();
-        });
-    }
-    if ($typeSelect.value === "YAML") {
-      localStorage.setItem('type', 'YAML')
-      getRequest(URL, "?questions=YAML")
-        .then(function (responce) {
-          return JSON.parse(responce);
-        })
-        .then(function (data) {
-          renderServerQuestions(data);
-          listenDeleteButtons();
-        })
-        .catch(function (error) {
-          console.log(error);
-          renderNoQuestions();
-        });
-    }
-    if ($typeSelect.value === "JSON") {
-      localStorage.setItem('type', 'JSON');
-      getRequest(URL, "questions")
-        .then(function (responce) {
-          return JSON.parse(responce);
-        })
-        .then(function (data) {
-          renderServerQuestions(data);
-          listenDeleteButtons();
-        })
-        .catch(function (error) {
-          console.log(error);
-          renderNoQuestions();
-        });
-    }
-    if ($typeSelect.value === "CSV") {
-      localStorage.setItem('type', 'CSV')
-      getRequest(URL, "?questions=CSV")
-        .then(function (responce) {
-          return JSON.parse(responce);
-        })
-        .then(function (data) {
-          renderServerQuestions(data);
-          listenDeleteButtons();
-        })
-        .catch(function (error) {
-          console.log(error);
-          renderNoQuestions();
-        });
-    }
+        }
+      })
+      .catch(function (error) {
+        console.log(error);
+        renderNoQuestions();
+      });
   }
 }
