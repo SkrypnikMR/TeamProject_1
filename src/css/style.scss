@@ -206,14 +206,14 @@ footer {
   text-align: center;
   background-color: #AAB9F8;
   margin: 0 auto;
+  .text{
+    height: 100%;
+    font-size: 20px;
+    padding: 7px;
+    margin: 15px;
+  }
 }
 
-.main__info-text{
-  height: 100%;
-  font-size: 20px;
-  padding: 7px;
-  margin: 15px;
-}
 
 .animated__caption{
   height: 100%;
