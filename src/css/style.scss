@@ -43,7 +43,7 @@ h6 {
   .header__logo {
     height: 100px;
     padding: 10px;
-    :hover {
+    &:hover {
       transform: scale(1.2);
       transition: all 0.3s ease;
     }
@@ -79,7 +79,7 @@ h6 {
     background-color: rgba(27, 255, 225, 0.2);
     font-size: 25px;
     transition: all 0.3s ease;
-    :hover {
+    &:hover {
       transform: scale(1.2);
     }
   }
