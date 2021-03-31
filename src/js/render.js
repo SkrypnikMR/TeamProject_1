@@ -1,92 +1,103 @@
-
-
 export function renderServerDeveloperData(serverData) {
-  var $developers = document.querySelectorAll(".userCard__item"); // нода коллекции userCard item
+  var $developers = document.querySelector(".userCard__items");
   for (var i = 0; i < serverData.length; i++) {
-    $developers[i].children[2].textContent = serverData[i].name;
-    $developers[i].children[5].children[0].children[1].textContent =
-      serverData[i].age;
-    $developers[i].children[5].children[1].children[1].textContent =
-      serverData[i].lovely_color;
-    $developers[i].children[5].children[2].children[1].textContent =
-      serverData[i].exp;
-    $developers[i].children[7].children[0].children[0].textContent =
-      serverData[i].hobby;
+    renderandFillDevItem($developers, serverData, i); // вызываем функцию отрисовки итема, столько раз, скольк нам приехало объектов
   }
+}
+function renderandFillDevItem($node, serverData, i) {
+  // фукнция отрисовки одного итема на странице index.html
+  $node.innerHTML += `<div class="userCard__item">
+        <div class="userCard__edit">
+          <img src="img/edit.png" alt="edit">
+        </div>
+        <div class="userCard__photoDev">
+          <img src="img/1.jpg" alt="photoDev">
+        </div>
+        <h3 class="userCard__name">${serverData[i].name}</h3>
+        <div class="userCard__line"></div>
+        <h4 class="userCard__title">ОБО МНЕ</h4>
+        <div class="userCard__about">
+          <div class="userCard__info">
+            <p>Возраст:</p>
+            <p>${serverData[i].age}</p>
+          </div>
+          <div class="userCard__info">
+            <p>Любимый цвет::</p>
+            <p>${serverData[i].lovely_color}</p>
+          </div>
+          <div class="userCard__info">
+            <p>Опыт в IT:</p>
+            <p>${serverData[i].exp}</p>
+          </div>
+        </div>
+        <h4 class="userCard__title">ХОББИ</h4>
+        <div class="userCard__about">
+          <div class="userCard__info">
+            <p>${serverData[i].hobby} </p>
+          </div>
+        </div>
+      </div>`;
+      if(i === serverData.length - 1){
+       var $userCard = $node.querySelectorAll('.userCard__item');
+        $userCard[5].classList.add('gone');
+      }
 }
 
 export function renderServerQuestions(serverData) {
-  var $qHTMLContent = document.querySelector(".questions__Content");
-  if (serverData.length === 0) {
+  // функция, отрисовки вопросов, которые мы получаем с сервера
+  var $questionItems = document.querySelector(".questions__items");
+  if (!Array.isArray(serverData)) {
     renderNoQuestions();
   } else {
     for (var i = 0; i < serverData.length; i++) {
-      if (i === 0) {
-        $qHTMLContent.children[0].children[0].innerHTML = renderServerQuestionItem();
-        $qHTMLContent.children[0].children[0].children[0].setAttribute(
-          "date",
-          serverData[0].date
-        );
-        $qHTMLContent.children[0].children[0].children[0].setAttribute(
-          "type",
-          [serverData[0].type]
-        );
-        $qHTMLContent.children[0].children[0].children[0].children[1].children[0].children[1].textContent =
-          serverData[i].questionText;
-        $qHTMLContent.children[0].children[0].children[0].children[1].children[1].children[1].textContent =
-          serverData[i].theme;
-        $qHTMLContent.children[0].children[0].children[0].children[1].children[2].children[1].textContent =
-          serverData[i].answer;
-        $qHTMLContent.children[0].children[0].children[0].children[1].children[3].children[1].textContent =
-          serverData[i].stringDate;
-      } else {
-        $qHTMLContent.children[0].children[0].innerHTML += renderServerQuestionItem();
-        $qHTMLContent.children[0].children[0].children[i].setAttribute(
-          "date",
-          serverData[i].date
-        );
-        $qHTMLContent.children[0].children[0].children[
-          i
-        ].children[1].children[0].children[1].textContent =
-          serverData[i].questionText;
-        $qHTMLContent.children[0].children[0].children[
-          i
-        ].children[1].children[1].children[1].textContent = serverData[i].theme;
-        $qHTMLContent.children[0].children[0].children[
-          i
-        ].children[1].children[2].children[1].textContent =
-          serverData[i].answer;
-        $qHTMLContent.children[0].children[0].children[
-          i
-        ].children[1].children[3].children[1].textContent =
-          serverData[i].stringDate;
-      }
+      createAndFillQuestionItem($questionItems, serverData, i);
     }
   }
 }
+function createAndFillQuestionItem($node, serverData, i) {
 
-function renderServerQuestionItem() {
-  return `<div class="questions__item">
-  <div class="questions__edit">
-  <img src="img/X.png" alt="edit">
-</div>
-  <div class="questions__answer">
-    <div class="questions__info">
-      <p><b>Текст вопроса:</b> </p><p class="questions__result"></p>
-    </div>
-    <div class="questions__info">
-      <p><b>Тема вопроса:</b> </p><p class="questions__result"></p>
-    </div>  
-    <div class="questions__info">
-      <p><b>Ответ на вопрос:</b> </p><p class="questions__result"></p>
-    </div>
-    <div class="questions__info">
-      <p><b>Дата вопроса:</b> </p><p class="questions__result"></p>
+  if (i === 0) {
+    $node.innerHTML = `<div class="questions__item" date = ${serverData[i].date} type = ${serverData[i].type}>
+    <div class="questions__edit">
+    <img src="img/X.png" alt="edit">
   </div>
-</div>`;
+    <div class="questions__answer">
+      <div class="questions__info">
+        <p><b>Текст вопроса:</b> </p><p class="questions__result">${serverData[i].questionText}</p>
+      </div>
+      <div class="questions__info">
+        <p><b>Тема вопроса:</b> </p><p class="questions__result">${serverData[i].theme}</p>
+      </div>  
+      <div class="questions__info">
+        <p><b>Ответ на вопрос:</b> </p><p class="questions__result">${serverData[i].answer}</p>
+      </div>
+      <div class="questions__info">
+        <p><b>Дата вопроса:</b> </p><p class="questions__result">${serverData[i].stringDate}</p>
+    </div>
+  </div>`;
+  } else {
+    $node.innerHTML = `<div class="questions__item" date = ${serverData[i].date} type = ${serverData[i].type}>
+    <div class="questions__edit">
+    <img src="img/X.png" alt="edit">
+  </div>
+    <div class="questions__answer">
+      <div class="questions__info">
+        <p><b>Текст вопроса:</b> </p><p class="questions__result">${serverData[i].questionText}</p>
+      </div>
+      <div class="questions__info">
+        <p><b>Тема вопроса:</b> </p><p class="questions__result">${serverData[i].theme}</p>
+      </div>  
+      <div class="questions__info">
+        <p><b>Ответ на вопрос:</b> </p><p class="questions__result">${serverData[i].answer}</p>
+      </div>
+      <div class="questions__info">
+        <p><b>Дата вопроса:</b> </p><p class="questions__result">${serverData[i].stringDate}</p>
+    </div>
+  </div>`;
+  }
 }
 
 export function renderNoQuestions() {
-  var $qHTMLContentWrapperItems = document.querySelector(".questions__items");
-  return ($qHTMLContentWrapperItems.innerHTML = `<img src="./img/questions.png" alt="" srcset="">`);
+  var $qHTMLQuestionItems = document.querySelector(".questions__items");
+  $qHTMLQuestionItems.innerHTML = `<img src="./img/questions.png" alt="" srcset="">`;
 }
