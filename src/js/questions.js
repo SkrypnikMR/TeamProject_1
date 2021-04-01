@@ -7,8 +7,8 @@ if (window.location.pathname === "/questions.html") {
   var $typeSelect = document.querySelector(".header__filter-type"); // нода фильтра типа;
   $typeSelect.value = localStorage.getItem("type") || $typeSelect.value; // пулучаем value из локалстореджа, если его нет , то value = себе
   localStorage.setItem("type", $typeSelect.value); // cетим в локал сторедж, нужно для первого запуска приложения, пока нет ничего в localStorage.
-  listenTypeSelect(); // Добавляем слушателя селекту
-  getRequest(URL, `?questions=${$typeSelect.value}`) // запрос на получение данных из нужного файла
+  listenTypeSelect(); // Добавляем слушателя селекту /* &theme=all */
+  getRequest(URL, `?questions&type=${$typeSelect.value}`) // запрос на получение данных из нужного файла
     .then(function (responce) {
       return JSON.parse(responce);
     })
@@ -64,10 +64,10 @@ if (window.location.pathname === "/questions.html") {
       if (flag) {
         clearModal();
         hideModal();
-        postRequest(URL, "questions", obj).then(function () {
+        postRequest(URL, `?questions&type=${$typeSelect.value}`, obj).then(function () {
           localStorage.setItem('type',obj.type[obj.type.length - 1]);
           $typeSelect.value = localStorage.getItem('type');
-          getRequest(URL, `?questions=${ $typeSelect.value}`)
+          getRequest(URL, `?questions&type=${$typeSelect.value}`)
             .then(function (responce) {
               return JSON.parse(responce);
             })
@@ -190,9 +190,9 @@ if (window.location.pathname === "/questions.html") {
         obj.type = event.target.parentElement.parentElement
           .getAttribute("type")
           .split(",");
-        deleteRequest(URL, `questions?delete=${$typeSelect.value}`, obj).then(
+        deleteRequest(URL, `?questions&type=${$typeSelect.value}`, obj).then(
           function () {
-            getRequest(URL, `?questions=${$typeSelect.value}`)
+            getRequest(URL, `?questions&type=${$typeSelect.value}`)
               .then(function (responce) {
                 return JSON.parse(responce);
               })
@@ -220,7 +220,7 @@ if (window.location.pathname === "/questions.html") {
   function typeSelectGetRequest() {
     // сетим новое значение, если у нас изменилось value select'a типа
     localStorage.setItem("type", `${$typeSelect.value}`);
-    getRequest(URL, `?questions=${$typeSelect.value}`)
+    getRequest(URL, `?questions&type=${$typeSelect.value}`)
       .then(function (responce) {
         return JSON.parse(responce);
       })
