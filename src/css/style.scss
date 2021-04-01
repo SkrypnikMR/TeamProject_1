@@ -31,59 +31,58 @@ h6 {
   margin: 0;
   font-size: inherit;
 }
-
+//header styles
 .header__body {
-  
   border-radius: 10px 10px 10px 10px;
   background-color: rgba(27, 255, 225, 0.2);
-}
-.header__info {
-  display: flex;
-  flex-direction: row;
-  justify-content: space-around;
-}
-.header__logo {
-  height: 100px;
-  padding: 10px;
-}
-.header__logo:hover {
-  transform: scale(1.2);
-  transition: all 0.3s ease;
-}
-.header__teamName {
-  align-self: center;
-  padding: 10px;
-  margin-left: 100px;
-  font-size: 50px;
-}
-.header__teamSlogan {
-  align-self: flex-end;
-  padding: 10px;
-}
-.header__menu {
-  padding: 10px;
-  background-color: rgba(27, 255, 225, 1);
-}
-.header__list {
-  margin: 0 auto;
-  max-width: 1000px;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-}
-.header__menu-link {
-  font-size: 20px;
-  text-transform: uppercase;
-  font-family: "Lato", sans-serif;
-  font-weight: 400;
-  padding: 10px 100px;
-  color: white;
-  background-color: rgba(27, 255, 225, 0.2);
-  font-size: 25px;
-  transition: all 0.3s ease;
-}
-.header__menu-link:hover {
-  transform: scale(1.2);
+  .header__info {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-around;
+  }
+  .header__logo {
+    height: 100px;
+    padding: 10px;
+    &:hover {
+      transform: scale(1.2);
+      transition: all 0.3s ease;
+    }
+  }
+  .header__teamName {
+    align-self: center;
+    padding: 10px;
+    margin-left: 100px;
+    font-size: 50px;
+  }
+  .header__teamSlogan {
+    align-self: flex-end;
+    padding: 10px;
+  }
+  .header__menu {
+    padding: 10px;
+    background-color: rgba(27, 255, 225, 1);
+    .header__list {
+      margin: 0 auto;
+      max-width: 1000px;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
+  }
+  .header__menu-link {
+    font-size: 20px;
+    text-transform: uppercase;
+    font-family: "Lato", sans-serif;
+    font-weight: 400;
+    padding: 10px 100px;
+    color: white;
+    background-color: rgba(27, 255, 225, 0.2);
+    font-size: 25px;
+    transition: all 0.3s ease;
+    &:hover {
+      transform: scale(1.2);
+    }
+  }
 }
 
 /*USER CARD*/
