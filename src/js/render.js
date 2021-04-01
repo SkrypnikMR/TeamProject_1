@@ -76,7 +76,7 @@ function createAndFillQuestionItem($node, serverData, i) {
     </div>
   </div>`;
   } else {
-    $node.innerHTML = `<div class="questions__item" date = ${serverData[i].date} type = ${serverData[i].type}>
+    $node.innerHTML += `<div class="questions__item" date = ${serverData[i].date} type = ${serverData[i].type}>
     <div class="questions__edit">
     <img src="img/X.png" alt="edit">
   </div>
