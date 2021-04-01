@@ -11,193 +11,74 @@ var server = http.createServer(function (req, res) {
     "Access-Control-Allow-Methods": "GET,PUT,POST,DELETE",
     "Access-Control-Max-Age": 12344345789,
   };
-  if (req.method === "OPTIONS") {
-    // забудешь это написать - будет зависнет запрос
-    res.writeHead(204, headers);
-    res.end();
-    return;
-  }
-  if (req.method === "GET" && req.url === "/developers") {
+  if (req.method === "GET" && req.url === "/developers" || req.url === "/") {
     var answer = fs.readFileSync("developers/developers.json");
     res.writeHead(200, headers);
     res.end(answer);
   }
-  if (req.method === "GET" && req.url === "/") {
-    res.writeHead(200, headers);
-    res.end("Server Work!");
-  }
-  if (req.method === "GET" && req.url === "/?questions=XML") {
-    var answer = fs.readFileSync("questions/questionsXML.json");
-    res.writeHead(200, headers);
-    res.end(answer);
-  }
-  if (req.method === "GET" && req.url === "/?questions=CSV") {
-    var answer = fs.readFileSync("questions/questionsCSV.json");
-    res.writeHead(200, headers);
-    res.end(answer);
-  }
-  if (req.method === "GET" && req.url === "/?questions=YAML") {
-    var answer = fs.readFileSync("questions/questionsYAML.json");
-    res.writeHead(200, headers);
-    res.end(answer);
-  }
-  if (req.method === "GET" && req.url === "/?questions=JSON") {
-    var answer = fs.readFileSync("questions/questionsJSON.json");
-    res.writeHead(200, headers);
-    res.end(answer);
-  }
-  if (req.method === "GET" && req.url === "/questions") {
-    var answer = fs.readFileSync("questions/questionsJSON.json");
-    res.writeHead(200, headers);
-    res.end(answer);
-  }
-
- 
-  if (req.method === "POST" && req.url === "/questions") {
-    jsonParser(req, res, (err) => {
-      if (err) console.log(err);
-      // логика записи по разным файлам без конвертеров
-      console.log(req.body);
-      writeInFiles(req);
-    });
-    res.writeHead(200, headers);
-    res.end("done");
-  }
-  if (req.method === "DELETE" && req.url === "/questions?delete=XML") {
-    jsonParser(req, res, (err) => {
-      if (err) console.log(err);
-      var answerXML = JSON.parse(fs.readFileSync("questions/questionsXML.json"));
-      for (var i = 0; i < answerXML.length; i++) {
-        if (answerXML[i].date === req.body.date) {
-          answerXML.splice(i, 1);
-        }
-      }
-      fs.writeFileSync("questions/questionsXML.json", JSON.stringify(answerXML));
-    });
-    res.writeHead(200, headers);
-    res.end("done");
-  }
-  if (req.method === "DELETE" && req.url === "/questions?delete=JSON") {
-    jsonParser(req, res, (err) => {
-      if (err) console.log(err);
-      var answerJSON = JSON.parse(fs.readFileSync("questions/questionsJSON.json"));
-      for (var i = 0; i < answerJSON.length; i++) {
-        if (answerJSON[i].date === req.body.date) {
-          answerJSON.splice(i, 1);
-        }
-      }
-      fs.writeFileSync("questions/questionsJSON.json", JSON.stringify(answerJSON));
-    });
-    res.writeHead(200, headers);
-    res.end("done");
-  }
-  if (req.method === "DELETE" && req.url === "/questions?delete=YAML") {
-    jsonParser(req, res, (err) => {
-      if (err) console.log(err);
-      var answerYAML = JSON.parse(fs.readFileSync("questions/questionsYAML.json"));
-      for (var i = 0; i < answerYAML.length; i++) {
-        if (answerYAML[i].date === req.body.date) {
-          answerYAML.splice(i, 1);
-        }
-      }
-      fs.writeFileSync("questions/questionsYAML.json", JSON.stringify(answerYAML));
-    });
-    res.writeHead(200, headers);
-    res.end("done");
-  }
-  if (req.method === "DELETE" && req.url === "/questions?delete=CSV") {
-    jsonParser(req, res, (err) => {
-      if (err) console.log(err);
-      var answerCSV = JSON.parse(fs.readFileSync("questions/questionsCSV.json"));
-      for (var i = 0; i < answerCSV.length; i++) {
-        if (answerCSV[i].date === req.body.date) {
-          answerCSV.splice(i, 1);
-        }
-      }
-      fs.writeFileSync("questions/questionsCSV.json", JSON.stringify(answerCSV));
-    });
-    res.writeHead(200, headers);
-    res.end("done");
+  if (req.url !== "/developers") {
+    watchMethodAndUrl(req, res, headers);
   }
 });
 
 server.listen(3000);
 
-function writeInFiles(req) {
-  if (req.body.type.includes("JSON")) {
-    var answerJSON = JSON.parse(fs.readFileSync("questions/questionsJSON.json"));
-    answerJSON.unshift(req.body);
-    fs.writeFileSync("questions/questionsJSON.json", JSON.stringify(answerJSON));
-  }
-
-  if (req.body.type.includes("CSV")) {
-    var answerCSV = JSON.parse(fs.readFileSync("questions/questionsCSV.json"));
-    answerCSV.unshift(req.body);
-    fs.writeFileSync("questions/questionsCSV.json", JSON.stringify(answerCSV));
-  }
-  if (req.body.type.includes("YAML")) {
-    var answerYAML = JSON.parse(
-      fs.readFileSync("questions/questionsYAML.json")
-    );
-    answerYAML.unshift(req.body);
-    fs.writeFileSync(
-      "questions/questionsYAML.json",
-      JSON.stringify(answerYAML)
-    );
-  }
-  if (req.body.type.includes("XML")) {
-    req.body.type = "XML";
-    var answerXML = JSON.parse(fs.readFileSync("questions/questionsXML.json"));
-    answerXML.unshift(req.body);
-    fs.writeFileSync("questions/questionsXML.json", JSON.stringify(answerXML));
+function watchMethodAndUrl(req, res, headers) {
+  if (req.method === "GET") {
+    watchGetUrl(req, res, headers);
+  } else if (req.method === "POST") {
+    watchPostUrl(req, res,headers);
+  } else if (req.method === "DELETE") {
+    watchDeleteUrl(req, res, headers);
+  } else if (req.method === "OPTIONS") {
+    res.writeHead(204, headers);
+    res.end();
+    return;
   }
 }
-
-function deleteinFiles(req) {
-  if (req.body.type.includes("JSON")) {
-    var answerJSON = JSON.parse(
-      fs.readFileSync("questions/questionsJSON.json")
-    );
-    for (var i = 0; i < answerJSON.length; i++) {
-      if (answerJSON[i].date === req.body.date) {
-        answerJSON.splice(i, 1);
-      }
-    }
-    fs.writeFileSync(
-      "questions/questionsJSON.json",
-      JSON.stringify(answerJSON)
-    );
-  }
-  if (req.body.type.includes("CSV")) {
-    var answerCSV = JSON.parse(fs.readFileSync("questions/questionsCSV.json"));
-    for (var i = 0; i < answerCSV.length; i++) {
-      if (answerCSV[i].date === req.body.date) {
-        answerCSV.splice(i, 1);
-      }
-    }
-    fs.writeFileSync("questions/questionsCSV.json", JSON.stringify(answerCSV));
-  }
-  if (req.body.type.includes("YAML")) {
-    var answerYAML = JSON.parse(
-      fs.readFileSync("questions/questionsYAML.json")
-    );
-    for (var i = 0; i < answerYAML.length; i++) {
-      if (answerYAML[i].date === req.body.date) {
-        answerYAML.splice(i, 1);
-      }
-    }
-    fs.writeFileSync(
-      "questions/questionsYAML.json",
-      JSON.stringify(answerYAML)
-    );
-  }
-  if (req.body.type.includes("XML")) {
-    var answerXML = JSON.parse(fs.readFileSync("questions/questionsXML.json"));
-    for (var i = 0; i < answerXML.length; i++) {
-      if (answerXML[i].date === req.body.date) {
-        answerXML.splice(i, 1);
-      }
-    }
-    fs.writeFileSync("questions/questionsXML.json", JSON.stringify(answerXML));
-  }
+function watchGetUrl(req, res, headers) {
+  var URL = new URLSearchParams(req.url);
+  var fileReadResult = fs.readFileSync(
+    `questions/questions${URL.get("type")}.json`
+  );
+  res.writeHead(200, headers);
+  res.end(fileReadResult);
 }
+function watchPostUrl(req, res, headers) {
+  jsonParser(req, res, (err) => {
+    if (err) console.log(err);
+    var URL = new URLSearchParams(req.url);
+    var fileReadResult = JSON.parse(
+      fs.readFileSync(`questions/questions${URL.get("type")}.json`)
+    );
+      fileReadResult.unshift(req.body);
+    fs.writeFileSync(
+      `questions/questions${URL.get("type")}.json`,
+      JSON.stringify(fileReadResult)
+    );
+  });
+  res.writeHead(200, headers);
+  res.end("done");
+}
+function watchDeleteUrl(req, res, headers) {
+  jsonParser(req, res, (err) => {
+    if (err) console.log(err);
+    var URL = new URLSearchParams(req.url);
+    var fileReadResult = JSON.parse(
+      fs.readFileSync(`questions/questions${URL.get("type")}.json`)
+    );
+
+    for (var i = 0; i < fileReadResult.length; i++) {
+      if (fileReadResult[i].date === req.body.date) {
+        fileReadResult.splice(i, 1);
+      }
+    }
+    fs.writeFileSync(
+      `questions/questions${URL.get("type")}.json`,
+      JSON.stringify(fileReadResult)
+    );
+  });
+  res.writeHead(200, headers);
+  res.end("done");
+}
+
