@@ -1,4 +1,4 @@
-import { getRequest, postRequest, deleteRequest, URL } from "./request";
+import { getRequest, postRequest, deleteRequest, URL, getQuestions } from "./request";
 import { renderServerQuestions, renderNoQuestions } from "./render";
 
 if (window.location.pathname === "/questions.html") {
@@ -199,10 +199,9 @@ if (window.location.pathname === "/questions.html") {
         // если файл пустой - отрисует страницу без вопросов
         renderNoQuestions();
       } else {
-        // если массив не пустой - запустится рендеринг вопросов
-        renderServerQuestions(data);
-        // вешаем события клик, на крестик в вопросе
-        listenDeleteButtons();
+        getQuestions(data).then(function(){
+          listenDeleteButtons();
+        })
       }
     })
     .catch(function (error) {
