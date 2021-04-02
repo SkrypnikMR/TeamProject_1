@@ -1,3 +1,5 @@
+import {renderServerDeveloperData, renderServerQuestions} from './render'
+
 export const URL = "http://localhost:3000/"; // constant нашего пути
 var request = new XMLHttpRequest();
 export function getRequest(url, folder) {
@@ -43,5 +45,17 @@ export function deleteRequest(url, folder, requestBody) {
       reject(new Error("Network error"));
     });
     request.send(JSON.stringify(requestBody));
+  });
+}
+export function getDevelopers(data) {
+  return new Promise(function (resolve, reject) {
+    renderServerDeveloperData(data);
+    resolve(data);
+  });
+}
+export function getQuestions(data) {
+  return new Promise(function (resolve, reject) {
+    renderServerQuestions(data);
+    resolve(data);
   });
 }
