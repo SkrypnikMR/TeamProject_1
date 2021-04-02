@@ -223,6 +223,52 @@ h6 {
 }
 
 /* Polina styles */
+.carousel{
+  align-items: center;
+  display: flex;
+  margin: 2rem auto;
+  overflow: hidden;
+  position: relative;
+  width: 800px;
+}
+
+.carousel__images{
+  display: flex;
+  transform: translateX(0);
+  transition: transform 0.25s;
+}
+img {
+  border-radius: 5px;
+}
+
+.carousel__button{
+  background: hotpink;
+  border: 0;
+  border-radius: 50%;
+  color: white;
+  cursor: pointer;
+  font-size: 1.5rem;
+  font-weight: bold;
+  height: 3rem;
+  opacity: 0.25;
+  position: absolute;
+  transition: opacity 0.25s;
+  width: 3rem;
+  z-index: 1;
+}
+
+#previous{
+  left: 5px;
+}
+
+#next{
+  right: 5px;
+}
+
+.carousel__button:hover{
+  opacity: 0.8;
+}
+
 .main-info {
   width: 100%;
   text-align: center;
