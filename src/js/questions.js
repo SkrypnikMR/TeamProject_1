@@ -15,6 +15,7 @@ if (window.location.pathname === "/questions.html") {
   getAndRender();  // сделали гет запрос и отрисовали
 
   var $modal = document.querySelector(".modal"); // нода модального окна
+  var $modalDelete = document.querySelector('.modalDeleteConfirmation') //нода модалки на удаление вопроса
   var $closeX = document.querySelector(".close"); // нода кнопки крестика в модальном окне
   var $questionCreateButton = document.querySelector(".questionCreateButton");
 
@@ -153,27 +154,44 @@ if (window.location.pathname === "/questions.html") {
       }
     }
   };
+  var objDelete = {} //инициализация объекта для удаления
   function listenDeleteButtons() {
     var $questionDeleteButtons = document.querySelectorAll(".questions__edit");
     /* добавить на все обработчики */
     for (var i = 0; i < $questionDeleteButtons.length; i++) {
-      $questionDeleteButtons[i].addEventListener("click", (event) => {
-        var obj = {};
-        obj.date = Number(
+      $questionDeleteButtons[i].addEventListener("click", function(event) { 
+        //добавляем в объект ключи date and type  
+        objDelete.date = Number(
           event.target.parentElement.parentElement.getAttribute("date")
         );
-        obj.type = event.target.parentElement.parentElement
+        objDelete.type = event.target.parentElement.parentElement
           .getAttribute("type")
           .split(",");
-        deleteRequest(URL, `?questions&type=${$typeSelect.value}`, obj).then(
-          function () {
-            getAndRender();
-          }
-        );
-      });
-    }
+          //вызываем функцию показа модалки
+      showDeleteModal()
+    })
   }
 
+  function showDeleteModal (){
+    $modalDelete.classList.remove("hide");
+    var $confirmButton = document.querySelector(".confirmButton"); // нода кнопки confirm
+    var $cancelButton = document.querySelector(".cancelButton"); // нода кнопки cancel
+    $confirmButton.addEventListener('click', deleteConfirm); // слушатель кнопки confirm
+    $cancelButton.addEventListener('click', hideDeleteModal); // слушатель кнопки cancel
+  }
+//в deleteConfirm в deleteRequest передаем objDelete и перерендериваем страницу и прячем модалку
+  function deleteConfirm(){ 
+        deleteRequest(URL, `?questions&type=${$typeSelect.value}`, objDelete).then(
+          function () {
+            getAndRender();}
+            );
+        hideDeleteModal()
+  }
+ } 
+
+ function hideDeleteModal (){
+  $modalDelete.classList.add("hide");
+ }
   function listenTypeSelect() {
     $typeSelect.addEventListener("change", typeSelectGetRequest);
   }
@@ -211,6 +229,4 @@ if (window.location.pathname === "/questions.html") {
       renderNoQuestions();
     });
   }
-  
-
 }
