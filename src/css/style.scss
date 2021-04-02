@@ -199,14 +199,14 @@ footer {
 
 /* Polina styles */
 .main-info {
-  width: 1000px;
+  width: 100%;
   text-align: center;
-  background-color: #aab9f8;
+  background-color: rgba(27, 255, 225, 0.2);
   margin: 0 auto;
   .text{
     height: 100%;
     font-size: 20px;
-    padding: 7px;
+    padding: 10px;
     margin: 15px;
   }
 }
@@ -221,7 +221,6 @@ footer {
     #ef5350,
     #f48fb1,
     #7e57c2,
-    #2196f3,
     #26c6da,
     #43a047,
     #eeff41,
