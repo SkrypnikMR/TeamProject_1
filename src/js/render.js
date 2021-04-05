@@ -3,6 +3,7 @@ export function renderServerDeveloperData(serverData) {
   for (var i = 0; i < serverData.length; i++) {
     renderandFillDevItem($developers, serverData, i); // вызываем функцию отрисовки итема, столько раз, скольк нам приехало объектов
   }
+  return true;
 }
 function renderandFillDevItem($node, serverData, i) {
   // фукнция отрисовки одного итема на странице index.html
@@ -36,6 +37,22 @@ function renderandFillDevItem($node, serverData, i) {
             <p>${serverData[i].hobby} </p>
           </div>
         </div>
+        <!-- Modal form  -->
+  <div class="form-user">
+      <form action="" class="form-user__form">
+          <h4 class="userCard__title">ОБО МНЕ</h4>
+          <p>Возраст:</p>
+          <input type="text" class="form-user__ageform">
+          <p>Любимый цвет:</p>
+          <input type="text" class="form-user__likecolor">
+          <p>Опыт в IT:</p>
+          <input type="text" class="form-user__it">
+          <h4 class="userCard__title">ХОББИ</h4>
+          <input type="text" class="form-user__hobie">
+          <button class="form-user__btn">Изменить</button>
+      </form>
+  </div>
+  <!-- END Modal form  -->
       </div>`;
       if(i === serverData.length - 1){
        var $userCard = $node.querySelectorAll('.userCard__item');

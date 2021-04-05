@@ -1,8 +1,9 @@
 var http = require("http");
 var fs = require("fs");
 var { json } = require("body-parser");
-
 var jsonParser = json();
+
+
 
 var server = http.createServer(function (req, res) {
   var headers = {
@@ -11,11 +12,44 @@ var server = http.createServer(function (req, res) {
     "Access-Control-Allow-Methods": "GET,PUT,POST,DELETE",
     "Access-Control-Max-Age": 12344345789,
   };
+ 
+  if (req.method === 'OPTIONS') {
+    res.writeHead(204, headers);
+    res.end();
+    return;
+    }
+
   if (req.method === "GET" && req.url === "/developers" || req.url === "/") {
     var answer = fs.readFileSync("developers/developers.json");
     res.writeHead(200, headers);
     res.end(answer);
   }
+
+
+  /*if(req.method === "POST" && req.url === "/developers" || req.url === "/"){
+    fs.writeFile('./developers/developers.json', JSON.stringify(jsonDev), function(err){
+      if(err) console.log("err");
+    });
+  }*/
+
+  if(req.method === "POST" && req.url === "/developers" || req.url === "/"){
+   
+    
+    jsonParser(req, res, (error)=>{
+      if(error) console.log(error);
+
+      /*var devs = JSON.parse(fs.readFileSync("developers/developers.json"));
+      var data = Object.assign(devs, req.body);*/
+      console.log(req.body);
+      //console.log(JSON.stringify(data));
+      fs.writeFileSync('./developers/developers.json', JSON.stringify(req.body.devs));
+      res.writeHead(200, headers);
+      res.end();
+    });
+  }
+
+
+
   if (req.url !== "/developers") {
     watchMethodAndUrl(req, res, headers);
   }
