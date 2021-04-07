@@ -1,3 +1,5 @@
+
+
 export function renderServerDeveloperData(serverData) {
   var $developers = document.querySelector(".userCard__items");
   for (var i = 0; i < serverData.length; i++) {
@@ -46,16 +48,19 @@ function renderandFillDevItem($node, serverData, i) {
 export function renderServerQuestions(serverData) {
   // функция, отрисовки вопросов, которые мы получаем с сервера
   var $questionItems = document.querySelector(".questions__items");
-  if (!Array.isArray(serverData)) {
+  if (!Array.isArray(serverData) || serverData[0] === '') {
     renderNoQuestions();
   } else {
     for (var i = 0; i < serverData.length; i++) {
+      if(serverData[i] === ''){
+        continue;
+      }
       createAndFillQuestionItem($questionItems, serverData, i);
+      
     }
   }
 }
 function createAndFillQuestionItem($node, serverData, i) {
-
   if (i === 0) {
     $node.innerHTML = `<div class="questions__item" date = ${serverData[i].date} type = ${serverData[i].type}>
     <div class="questions__edit">
