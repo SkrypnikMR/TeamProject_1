@@ -25,6 +25,8 @@ var server = http.createServer(function (req, res) {
 server.listen(3000);
 
 function watchMethodAndUrl(req, res, headers) {
+  /* функция распределяющая распределяющая что делать, 
+  при определенное варианте запроса */
   if (req.method === "GET") {
     watchGetUrl(req, res, headers);
   } else if (req.method === "POST") {
@@ -38,6 +40,8 @@ function watchMethodAndUrl(req, res, headers) {
   }
 }
 function watchGetUrl(req, res, headers) {
+  /* функция отвечающая за обработку get запросов, 
+  смотря на query параметры, которые пришли в запросе */
   var URL = new URLSearchParams(req.url);
   if (URL.get("type") === "JSON") {
     getFromXMLFile(URL);
@@ -60,6 +64,9 @@ function watchGetUrl(req, res, headers) {
   }
 }
 function watchPostUrl(req, res, headers) {
+  /*    функция, отвечающая за обработку get запросов, 
+  логика которой повязана на количестве типов, приехавших в объекте, 
+  если выбран не 1 тип вопроса - запишет во все, которые нужно */
   jsonParser(req, res, (err) => {
     if (err) console.log(err);
     var URL = new URLSearchParams(req.url);
@@ -95,6 +102,8 @@ function watchPostUrl(req, res, headers) {
   res.end("done");
 }
 function watchDeleteUrl(req, res, headers) {
+  /* Функция логики обработки delete запросов, основная на сравнении questions.date
+  При совпадении - объект будет удален из файла, файл перезапишется */
   jsonParser(req, res, (err) => {
     if (err) console.log(err);
     var URL = new URLSearchParams(req.url);
@@ -134,6 +143,8 @@ function watchDeleteUrl(req, res, headers) {
 }
 
 function getFromJSONFile(URL, mode) {
+  /* Фунция чтения из файла JSON и фильтрации его, 
+  если нужно по темам, которые приходят в query параметрах */
   var bufferFromJsonFile = fs.readFileSync(`questions/questions.json`);
   var arrayFromJson = [];
   var parsedBuffer = JSON.parse(bufferFromJsonFile);
@@ -150,6 +161,8 @@ function getFromJSONFile(URL, mode) {
 }
 
 function getFromXMLFile(URL, mode) {
+  /* Фунция чтения из файла XML и фильтрации его, 
+  если нужно по темам, которые приходят в query параметрах */
   var bufferFromXMLFile = fs.readFileSync(`questions/questions.xml`, "utf-8");
   if (bufferFromXMLFile === "") {
     fs.writeFileSync(
