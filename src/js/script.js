@@ -1,4 +1,5 @@
 
+if (window.location.pathname === "/" || window.location.pathname === "/index.html") {
 var req = new XMLHttpRequest();
 req.open("GET", "http://localhost:3000/developers", false);
 req.send();
@@ -131,4 +132,4 @@ function POST_req(arg){
 }
 getEditPenUser();
 setbtnFormUser();
-
+}
