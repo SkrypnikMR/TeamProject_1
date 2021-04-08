@@ -1,4 +1,4 @@
-if (window.location.pathname === "/about.html") {
+ if (window.location.pathname === "/about.html") {
     let carouselImages = document.querySelector('.carousel__images');
     let carouselButton = document.querySelectorAll('.carousel__button');
     let numberOfImages = document.querySelectorAll('.carousel__images img').length;
@@ -21,4 +21,4 @@ if (window.location.pathname === "/about.html") {
             carouselImages.style.transform = `translateX(${translateX}px)`;
         });
     });
-}
+} 
