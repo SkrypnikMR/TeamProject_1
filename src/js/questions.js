@@ -1,35 +1,21 @@
-import { getRequest, postRequest, deleteRequest, URL } from "./request";
+import { getRequest, postRequest, deleteRequest, URL, getQuestions } from "./request";
 import { renderServerQuestions, renderNoQuestions } from "./render";
 
 if (window.location.pathname === "/questions.html") {
   // всё что происходит, когда мы запукаем страницу questions.html
 
   var $typeSelect = document.querySelector(".header__filter-type"); // нода фильтра типа;
+  var $themeSelect = document.querySelector(".header__filter-theme"); // нода фильтра темы;
   $typeSelect.value = localStorage.getItem("type") || $typeSelect.value; // пулучаем value из локалстореджа, если его нет , то value = себе
   localStorage.setItem("type", $typeSelect.value); // cетим в локал сторедж, нужно для первого запуска приложения, пока нет ничего в localStorage.
-  listenTypeSelect(); // Добавляем слушателя селекту /* &theme=all */
-  getRequest(URL, `?questions&type=${$typeSelect.value}`) // запрос на получение данных из нужного файла
-    .then(function (responce) {
-      return JSON.parse(responce);
-    })
-    .then(function (data) {
-      if (data.length === 0) {
-        // если файл пустой - отрисует страницу без вопросов
-        renderNoQuestions();
-      } else {
-        // если массив не пустой - запустится рендеринг вопросов
-        renderServerQuestions(data);
-        // вешаем события клик, на крестик в вопросе
-        listenDeleteButtons();
-      }
-    })
-    .catch(function (error) {
-      console.log(error);
-      // отлавливаем ошибки в промисе, если она будет - отрисует нет вопросов *____ в дальнейшем можно отрисовывать страницу ошибка сервера*
-      renderNoQuestions();
-    });
+  $themeSelect.value = localStorage.getItem("theme") || $themeSelect.value; // пулучаем value из локалстореджа, если его нет , то value = себе
+  localStorage.setItem("theme", $themeSelect.value); // cетим в локал сторедж, нужно для первого запуска приложения, пока нет ничего в localStorage.
+  listenTypeSelect(); // Добавляем слушателя селекту типов
+  listenThemeSelect(); // Добавляем слушателя селекту тем
+  getAndRender();  // сделали гет запрос и отрисовали
 
   var $modal = document.querySelector(".modal"); // нода модального окна
+  var $modalDelete = document.querySelector('.modalDeleteConfirmation') //нода модалки на удаление вопроса
   var $closeX = document.querySelector(".close"); // нода кнопки крестика в модальном окне
   var $questionCreateButton = document.querySelector(".questionCreateButton");
 
@@ -64,21 +50,11 @@ if (window.location.pathname === "/questions.html") {
       if (flag) {
         clearModal();
         hideModal();
-        postRequest(URL, `?questions&type=${$typeSelect.value}`, obj).then(function () {
-          localStorage.setItem('type',obj.type[obj.type.length - 1]);
-          $typeSelect.value = localStorage.getItem('type');
-          getRequest(URL, `?questions&type=${$typeSelect.value}`)
-            .then(function (responce) {
-              return JSON.parse(responce);
-            })
-            .then(function (data) {
-              renderServerQuestions(data);
-              listenDeleteButtons();
-            })
-            .catch(function (error) {
-              console.log(error);
-            });
-        });
+        postRequest(URL, `?questions&type=${$typeSelect.value}`, obj).then(
+          function () {
+            getAndRender();
+          }
+        );
       }
     }
   }
@@ -178,63 +154,78 @@ if (window.location.pathname === "/questions.html") {
       }
     }
   };
+  var objDelete = {} //инициализация объекта для удаления
   function listenDeleteButtons() {
     var $questionDeleteButtons = document.querySelectorAll(".questions__edit");
     /* добавить на все обработчики */
     for (var i = 0; i < $questionDeleteButtons.length; i++) {
-      $questionDeleteButtons[i].addEventListener("click", (event) => {
-        var obj = {};
-        obj.date = Number(
+      $questionDeleteButtons[i].addEventListener("click", function(event) { 
+        //добавляем в объект ключи date and type  
+        objDelete.date = Number(
           event.target.parentElement.parentElement.getAttribute("date")
         );
-        obj.type = event.target.parentElement.parentElement
+        objDelete.type = event.target.parentElement.parentElement
           .getAttribute("type")
           .split(",");
-        deleteRequest(URL, `?questions&type=${$typeSelect.value}`, obj).then(
-          function () {
-            getRequest(URL, `?questions&type=${$typeSelect.value}`)
-              .then(function (responce) {
-                return JSON.parse(responce);
-              })
-              .then(function (data) {
-                if (data.length === 0) {
-                  renderNoQuestions();
-                } else {
-                  renderServerQuestions(data);
-                  listenDeleteButtons();
-                }
-              })
-              .catch(function (error) {
-                console.log(error);
-              });
-          }
-        );
-      });
-    }
+          //вызываем функцию показа модалки
+      showDeleteModal()
+    })
   }
 
+  function showDeleteModal (){
+    $modalDelete.classList.remove("hide");
+    var $confirmButton = document.querySelector(".confirmButton"); // нода кнопки confirm
+    var $cancelButton = document.querySelector(".cancelButton"); // нода кнопки cancel
+    $confirmButton.addEventListener('click', deleteConfirm); // слушатель кнопки confirm
+    $cancelButton.addEventListener('click', hideDeleteModal); // слушатель кнопки cancel
+  }
+//в deleteConfirm в deleteRequest передаем objDelete и перерендериваем страницу и прячем модалку
+  function deleteConfirm(){ 
+        deleteRequest(URL, `?questions&type=${$typeSelect.value}`, objDelete).then(
+          function () {
+            getAndRender();}
+            );
+        hideDeleteModal()
+  }
+ } 
+
+ function hideDeleteModal (){
+  $modalDelete.classList.add("hide");
+ }
   function listenTypeSelect() {
     $typeSelect.addEventListener("change", typeSelectGetRequest);
   }
-
+  function listenThemeSelect() {
+    $themeSelect.addEventListener("change", themeSelectGetRequest);
+  }
+  function themeSelectGetRequest(){
+    localStorage.setItem("theme", `${$themeSelect.value}`);
+    getAndRender();
+  }
   function typeSelectGetRequest() {
     // сетим новое значение, если у нас изменилось value select'a типа
     localStorage.setItem("type", `${$typeSelect.value}`);
-    getRequest(URL, `?questions&type=${$typeSelect.value}`)
-      .then(function (responce) {
-        return JSON.parse(responce);
-      })
-      .then(function (data) {
-        if (data.length === 0) {
-          renderNoQuestions();
-        } else {
-          renderServerQuestions(data);
-          listenDeleteButtons();
-        }
-      })
-      .catch(function (error) {
-        console.log(error);
+    getAndRender();
+  }
+  function getAndRender(){
+    getRequest(URL, `?questions&type=${$typeSelect.value}&theme=${$themeSelect.value}`) // запрос на получение данных из нужного файла
+    .then(function (responce) {
+      return JSON.parse(responce);
+    })
+    .then(function (data) {
+      if (data.length === 0) {
+        // если файл пустой - отрисует страницу без вопросов
         renderNoQuestions();
-      });
+      } else {
+        getQuestions(data).then(function(){
+          listenDeleteButtons();
+        })
+      }
+    })
+    .catch(function (error) {
+      console.log(error);
+      // отлавливаем ошибки в промисе, если она будет - отрисует нет вопросов *____ в дальнейшем можно отрисовывать страницу ошибка сервера*
+      renderNoQuestions();
+    });
   }
 }
