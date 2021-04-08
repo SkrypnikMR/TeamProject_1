@@ -2,6 +2,7 @@ import {renderServerDeveloperData, renderServerQuestions} from './render'
 
 export const URL = "http://localhost:3000/"; // constant нашего пути
 var request = new XMLHttpRequest();
+
 export function getRequest(url, folder) {
   return new Promise(function (responce, reject) {
     request.open("GET", url + folder, true);
@@ -32,6 +33,7 @@ export function postRequest(url, folder, requestBody) {
     request.send(JSON.stringify(requestBody));
   });
 }
+
 export function deleteRequest(url, folder, requestBody) {
   return new Promise(function (responce, reject) {
     var request = new XMLHttpRequest();
