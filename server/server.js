@@ -62,6 +62,11 @@ function watchGetUrl(req, res, headers) {
       res.end(JSON.stringify(serverAnswer));
     }
   }
+  if (URL.get("type") === "CSV") {
+    var serverAnswer = getFromCSV(URL);
+    res.writeHead(200, headers);
+    res.end(JSON.stringify(serverAnswer));
+  }
 }
 function watchPostUrl(req, res, headers) {
   /*    функция, отвечающая за обработку get запросов, 
@@ -95,6 +100,12 @@ function watchPostUrl(req, res, headers) {
           newRecord.unshift(req.body);
           fs.writeFileSync("questions/questions.xml", convertToXML(newRecord));
         }
+      }
+      if (req.body.type[i] === "CSV") {
+        req.body.type[i] = ["CSV"];
+        var arrayFromCSV = getFromCSV(URL, 1);
+        arrayFromCSV.unshift(req.body);
+        fs.writeFileSync('questions/questions.csv', convertToCSV(arrayFromCSV));
       }
     }
   });
@@ -136,6 +147,15 @@ function watchDeleteUrl(req, res, headers) {
         }
         fs.writeFileSync(`questions/questions.xml`, convertToXML(arrayFromXML));
       }
+    }
+    if (URL.get("type") === "CSV") {
+      var arrayFromCSV = getFromCSV(URL, 1);
+      for (var i = 0; i < arrayFromCSV.length; i++) {
+        if (arrayFromCSV[i].date === req.body.date) {
+          arrayFromCSV.splice(i, 1);
+        }
+      }
+      fs.writeFileSync(`questions/questions.csv`, convertToCSV(arrayFromCSV));
     }
   });
   res.writeHead(200, headers);
@@ -206,4 +226,46 @@ function convertToXML(array) {
 
   result += "</questions>";
   return result;
+}
+function convertToCSV(array) {
+  var result = "";
+  result += `${Object.keys(array[0])} \n`;
+  for (var i = 0; i < array.length; i++) {
+    if (array[i].theme === undefined) {
+      continue;
+    }
+    result += `${Object.values(array[i])} \n`;
+  }
+
+  return result;
+}
+function parseFromCSV(string) {
+  string = string.split("\n");
+  var result = [];
+  for (var i = 1; i < string.length; i++) {
+    var obj = {};
+    obj[string[0].split(",")[0]] = string[i].split(",")[0];
+    obj[string[0].split(",")[1]] = string[i].split(",")[1];
+    obj[string[0].split(",")[2]] = Number(string[i].split(",")[2]);
+    obj[string[0].split(",")[3]] = string[i].split(",")[3];
+    obj[string[0].split(",")[4]] = string[i].split(",")[4];
+    obj[string[0].split(",")[5].trim()] = Boolean(string[i].split(",")[5]);
+    result.push(obj);
+  }
+  return result;
+}
+function getFromCSV(URL, mode) {
+  var bufferFromCSVFile = fs.readFileSync("questions/questions.csv", "utf-8");
+  var arrayFromCSV = parseFromCSV(bufferFromCSVFile);
+  var themesCSVArray = [];
+  if (URL.get("theme") === "ALLTHEMES" || mode === 1) {
+    return arrayFromCSV;
+  } else {
+    for (var i = 0; i < arrayFromCSV.length; i++) {
+      if (arrayFromCSV[i].theme === URL.get("theme")) {
+        themesCSVArray.push(arrayFromCSV[i]);
+      }
+    }
+  }
+  return themesCSVArray;
 }
