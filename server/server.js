@@ -62,6 +62,11 @@ function watchGetUrl(req, res, headers) {
       res.end(JSON.stringify(serverAnswer));
     }
   }
+  if (URL.get("type") === "CSV") {
+    var serverAnswer = getFromCSV(URL);
+    res.writeHead(200, headers);
+    res.end(JSON.stringify(serverAnswer));
+  }
 }
 function watchPostUrl(req, res, headers) {
   /*    функция, отвечающая за обработку get запросов, 
@@ -95,6 +100,12 @@ function watchPostUrl(req, res, headers) {
           newRecord.unshift(req.body);
           fs.writeFileSync("questions/questions.xml", convertToXML(newRecord));
         }
+      }
+      if (req.body.type[i] === "CSV") {
+        req.body.type[i] = ["CSV"];
+        var arrayFromCSV = getFromCSV(URL, 1);
+        arrayFromCSV.unshift(req.body);
+        fs.writeFileSync('questions/questions.csv', convertToCSV(arrayFromCSV));
       }
     }
   });
@@ -136,6 +147,15 @@ function watchDeleteUrl(req, res, headers) {
         }
         fs.writeFileSync(`questions/questions.xml`, convertToXML(arrayFromXML));
       }
+    }
+    if (URL.get("type") === "CSV") {
+      var arrayFromCSV = getFromCSV(URL, 1);
+      for (var i = 0; i < arrayFromCSV.length; i++) {
+        if (arrayFromCSV[i].date === req.body.date) {
+          arrayFromCSV.splice(i, 1);
+        }
+      }
+      fs.writeFileSync(`questions/questions.csv`, convertToCSV(arrayFromCSV));
     }
   });
   res.writeHead(200, headers);
@@ -209,12 +229,12 @@ function convertToXML(array) {
 }
 function convertToCSV(array) {
   var result = "";
-  result += ${Object.keys(array[0])} \n;
+  result += `${Object.keys(array[0])} \n`;
   for (var i = 0; i < array.length; i++) {
     if (array[i].theme === undefined) {
       continue;
     }
-    result += ${Object.values(array[i])} \n;
+    result += `${Object.values(array[i])} \n`;
   }
 
   return result;
@@ -233,4 +253,19 @@ function parseFromCSV(string) {
     result.push(obj);
   }
   return result;
+}
+function getFromCSV(URL, mode) {
+  var bufferFromCSVFile = fs.readFileSync("questions/questions.csv", "utf-8");
+  var arrayFromCSV = parseFromCSV(bufferFromCSVFile);
+  var themesCSVArray = [];
+  if (URL.get("theme") === "ALLTHEMES" || mode === 1) {
+    return arrayFromCSV;
+  } else {
+    for (var i = 0; i < arrayFromCSV.length; i++) {
+      if (arrayFromCSV[i].theme === URL.get("theme")) {
+        themesCSVArray.push(arrayFromCSV[i]);
+      }
+    }
+  }
+  return themesCSVArray;
 }
