@@ -115,13 +115,12 @@ h6 {
   justify-content: space-between;
   width: 300px;
   border: 2px solid #cacaca;
-  background-color: rgba(27, 255, 225, 0.2);
   border-radius: 16px;
   position: relative;
   padding: 15px 45px 15px 45px;
   margin-top: 50px;
   overflow: hidden;
-  transition: 0.3s all;
+  transition: all 0.3s;
 }
 
 .userCard__item:hover {
@@ -158,6 +157,7 @@ h6 {
 }
 
 .userCard__name {
+  text-align: center;
   font-size: 24px;
   color: #747474;
   margin: 15px 0 20px 0;
@@ -195,11 +195,58 @@ h6 {
   position: absolute;
   top:0;
   transform: translateX(-100%);
-  transition: .5 all;
+  transition: all .5s;
 
   &-active{
       transform: translateX(0%);
   }
+
+  &__name{
+    padding: 0;
+    font-size: 16px;
+  }
+
+  &__title{
+    color: #747474;
+    margin: 15px 0 5px 0;
+  }
+
+  &__descr{
+    font-size: 16px;
+    font-weight: 600;
+    padding: 0;
+    margin: 15px 0 5px 0;
+  }
+
+  &_input{
+    padding: 5px;
+  }
+
+  &__hobie{
+    width: 100%;
+  }
+
+  &__btn{
+    margin: 15px 0 0 0;
+  }
+
+  &__change{
+    padding: 5px;
+    margin: 0;
+    border: none;
+  }
+
+  &__cancel{
+    padding: 5px;
+    margin: 0;
+    background-color:#747474;
+    color: #fff;
+    border: none;
+  }
+
+
+
+
   
 }
 

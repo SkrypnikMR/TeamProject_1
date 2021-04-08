@@ -37,11 +37,6 @@ var server = http.createServer(function (req, res) {
     
     jsonParser(req, res, (error)=>{
       if(error) console.log(error);
-
-      /*var devs = JSON.parse(fs.readFileSync("developers/developers.json"));
-      var data = Object.assign(devs, req.body);*/
-      console.log(req.body);
-      //console.log(JSON.stringify(data));
       fs.writeFileSync('./developers/developers.json', JSON.stringify(req.body.devs));
       res.writeHead(200, headers);
       res.end();

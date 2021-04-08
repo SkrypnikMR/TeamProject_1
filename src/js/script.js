@@ -1,6 +1,3 @@
-//import { URL, getRequest, postRequest } from "./request";
-//import { renderServerDeveloperData } from "./render";
-
 
 var req = new XMLHttpRequest();
 req.open("GET", "http://localhost:3000/developers", false);
@@ -47,16 +44,21 @@ function devRender(arg){
   <!-- Modal form  -->
     <div class="form-user">
       <form action="" class="form-user__form">
-          <h4 class="userCard__title">ОБО МНЕ</h4>
-          <p>Возраст:</p>
-          <input type="text" class="form-user__ageform">
-          <p>Любимый цвет:</p>
-          <input type="text" class="form-user__likecolor">
-          <p>Опыт в IT:</p>
-          <input type="text" class="form-user__it">
-          <h4 class="userCard__title">ХОББИ</h4>
-          <input type="text" class="form-user__hobie">
-          <button class="form-user__btn" type="submit">Изменить</button>
+          <p class="form-user__name">sss</p>
+          <h4 class="form-user__title">ОБО МНЕ</h4>
+          <p class="form-user__descr">Возраст:</p>
+          <input type="text" class="form-user__ageform form-user_input">
+          <p class="form-user__descr">Любимый цвет:</p>
+          <input type="text" class="form-user__likecolor form-user_input">
+          <p class="form-user__descr">Опыт в IT:</p>
+          <input type="text" class="form-user__it form-user_input">
+          <h4 class="form-user__title">ХОББИ</h4>
+          <textarea class="form-user__hobie form-user_input"></textarea>
+          <div class="form-user__btn">
+            <button class="form-user__change">Изменить</button>
+            <button class="form-user__cancel">Отмена</button>
+          </div>
+    
       </form>
     </div>
   <!-- END Modal form  -->
@@ -69,15 +71,24 @@ devRender(devJSON);
 
 var editPen = document.querySelectorAll(".userCard__edit");
 var formUser = document.querySelectorAll(".form-user");
-var btnFormUser = document.querySelectorAll(".form-user__btn"); 
+var btnFormUser = document.querySelectorAll(".form-user__change"); 
+var btnFormUserCancel = document.querySelectorAll(".form-user__cancel");
 var inputAge = document.querySelectorAll(".form-user__ageform");
+var inputLikecolor = document.querySelectorAll(".form-user__likecolor");
+var inputIt = document.querySelectorAll(".form-user__it");
+var inputHobby = document.querySelectorAll(".form-user__hobie");
+var userName = document.querySelectorAll(".form-user__name");
 
 
 function getEditPenUser(){
   editPen.forEach(function(item, i){
     item.addEventListener("click", function(){
+      userName[i].innerHTML = devJSON[i].name;
       formUser[i].classList.toggle("form-user-active");
       inputAge[i].value = devJSON[i].age;
+      inputLikecolor[i].value = devJSON[i].lovely_color;
+      inputIt[i].value = devJSON[i].exp;
+      inputHobby[i].value = devJSON[i].hobby;
       
     });
 });
@@ -87,18 +98,25 @@ function getEditPenUser(){
 function setbtnFormUser(){
   btnFormUser.forEach(function(item,i){
     item.addEventListener("click", function(e){
-       e.preventDefault();
+      // e.preventDefault();
         formUser[i].classList.toggle("form-user-active");
         devJSON[i].age = inputAge[i].value;
-
-        var devJSON_POST = JSON.stringify({ devs : devJSON});
+        devJSON[i].lovely_color =  inputLikecolor[i].value;
+        devJSON[i].exp = inputIt[i].value;
+        devJSON[i].hobby = inputHobby[i].value;
+        var devJSON_POST = { devs : devJSON};
         POST_req(devJSON_POST);
-
-        
-        
     });
 });
 }
+
+
+btnFormUserCancel.forEach(function(item, i){
+  item.addEventListener("click", function(e){
+    e.preventDefault();
+    formUser[i].classList.toggle("form-user-active");
+  });
+});
  
 function POST_req(arg){
   var req = new XMLHttpRequest();
@@ -114,36 +132,3 @@ function POST_req(arg){
 getEditPenUser();
 setbtnFormUser();
 
-
-
-
-/*if (
-  window.location.pathname === "/" || // если открыта страница index
-  window.location.pathname === "/index.html"
-) {
-  //старт страницы начинается с гет запроса по девелоперсам
-  var res = false;
-  getRequest(URL, "developers") //ф-ция GET
-    .then(function (responce) {
-      return JSON.parse(responce);
-    })
-    .then(function (data) {
-      getDevelopers(data).then(function(){
-        var editPen = document.querySelectorAll(".userCard__edit");
-        var formUser = document.querySelectorAll(".form-user");
-        var btnFormUser = document.querySelectorAll(".form-user__btn"); 
-        editPenUser(editPen, formUser);
-        
-      });
-      }).catch(function (error) {
-      console.log(error);
-    });
-
-}
-
-function getDevelopers(data){
-  return new Promise(function(resolve, reject){
-    renderServerDeveloperData(data); // Ф-ция рендера
-    resolve(data);
-  });
-}*/
