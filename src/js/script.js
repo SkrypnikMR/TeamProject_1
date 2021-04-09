@@ -1,10 +1,17 @@
+var devJSON;
 
-if (window.location.pathname === "/" || window.location.pathname === "/index.html") {
-var req = new XMLHttpRequest();
-req.open("GET", "http://localhost:3000/developers", false);
-req.send();
-var devJSON = JSON.parse(req.response);
-console.log(devJSON);
+function GETreq(){
+  if (window.location.pathname === "/" || window.location.pathname === "/index.html") {
+    var req = new XMLHttpRequest();
+    req.open("GET", "http://localhost:3000/developers", false);
+    req.send();
+    devJSON = JSON.parse(req.response);
+    devRender(devJSON);
+    console.log(devJSON);
+}
+}
+
+GETreq();
 
 function devRender(arg){
   var userCardItems = document.querySelector(".userCard__items");
@@ -68,7 +75,7 @@ function devRender(arg){
   }
 }
 
-devRender(devJSON);
+//devRender(devJSON);
 
 var editPen = document.querySelectorAll(".userCard__edit");
 var formUser = document.querySelectorAll(".form-user");
@@ -81,10 +88,12 @@ var inputHobby = document.querySelectorAll(".form-user__hobie");
 var userName = document.querySelectorAll(".form-user__name");
 
 
+
 function getEditPenUser(){
   editPen.forEach(function(item, i){
     item.addEventListener("click", function(){
       userName[i].innerHTML = devJSON[i].name;
+      formUser[i].classList.add("blockOpacity");
       formUser[i].classList.toggle("form-user-active");
       inputAge[i].value = devJSON[i].age;
       inputLikecolor[i].value = devJSON[i].lovely_color;
@@ -99,17 +108,23 @@ function getEditPenUser(){
 function setbtnFormUser(){
   btnFormUser.forEach(function(item,i){
     item.addEventListener("click", function(e){
-      // e.preventDefault();
+        e.preventDefault();
         formUser[i].classList.toggle("form-user-active");
         devJSON[i].age = inputAge[i].value;
         devJSON[i].lovely_color =  inputLikecolor[i].value;
         devJSON[i].exp = inputIt[i].value;
         devJSON[i].hobby = inputHobby[i].value;
         var devJSON_POST = { devs : devJSON};
-        POST_req(devJSON_POST);
+        POST_req(devJSON_POST).then(function(){
+          /*console.log("!!!!!");
+          GETreq();*/
+          devRender(devJSON);
+        });
     });
 });
 }
+
+
 
 
 btnFormUserCancel.forEach(function(item, i){
@@ -119,7 +134,7 @@ btnFormUserCancel.forEach(function(item, i){
   });
 });
  
-function POST_req(arg){
+/*function POST_req(arg){
   var req = new XMLHttpRequest();
   req.open("POST", "http://localhost:3000/developers", true);
   req.setRequestHeader('Content-Type', 'application/json');
@@ -129,7 +144,22 @@ function POST_req(arg){
            console.log(req.response);
           }
   });
+}*/
+
+function POST_req(arg){
+  return new Promise(function(responce, reject){
+    var req = new XMLHttpRequest();
+    req.open("POST", "http://localhost:3000/developers", true);
+    req.setRequestHeader('Content-Type', 'application/json');
+    req.send(JSON.stringify(arg));
+    req.addEventListener("load", function(){
+        if(req.status === 200){
+          responce(req.response);
+        }
+  });
+  }); 
 }
+
+
 getEditPenUser();
 setbtnFormUser();
-}
