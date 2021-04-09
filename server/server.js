@@ -3,7 +3,8 @@ var fs = require("fs");
 var { json } = require("body-parser");
 var XMLparser = require("fast-xml-parser");
 var jsonParser = json();
-
+var yamlParser = require("js-yaml");
+var YAML = require("json-to-pretty-yaml");
 
 
 var server = http.createServer(function (req, res) {
@@ -95,6 +96,11 @@ function watchGetUrl(req, res, headers) {
     res.writeHead(200, headers);
     res.end(JSON.stringify(serverAnswer));
   }
+  if (URL.get("type") === "YAML"){
+    var serverAnswer = getFromYaml(URL);
+    res.writeHead(200, headers);
+    res.end(JSON.stringify(serverAnswer));
+  }
 }
 function watchPostUrl(req, res, headers) {
   /*    функция, отвечающая за обработку get запросов, 
@@ -128,6 +134,11 @@ function watchPostUrl(req, res, headers) {
           newRecord.unshift(req.body);
           fs.writeFileSync("questions/questions.xml", convertToXML(newRecord));
         }
+      }
+      if (req.body.type[i] === "YAML"){
+        var arrayFromYAML = getFromYaml(URL, 1);
+        arrayFromYAML.unshift(req.body);
+        fs.writeFileSync('questions/questions.yaml', YAML.stringify(arrayFromYAML));
       }
       if (req.body.type[i] === "CSV") {
         req.body.type[i] = ["CSV"];
@@ -175,6 +186,15 @@ function watchDeleteUrl(req, res, headers) {
         }
         fs.writeFileSync(`questions/questions.xml`, convertToXML(arrayFromXML));
       }
+    }
+    if (URL.get("type") === "YAML"){
+      var arrayFromYAML = getFromYaml(URL, 1);
+      for (var i = 0; i < arrayFromYAML.length; i++){
+        if (arrayFromYAML[i].date === req.body.date){
+          arrayFromYAML.splice(i,1);
+        }
+      }
+      fs.writeFileSync(`questions/questions.yaml`, YAML.stringify(arrayFromYAML));
     }
     if (URL.get("type") === "CSV") {
       var arrayFromCSV = getFromCSV(URL, 1);
@@ -297,3 +317,24 @@ function getFromCSV(URL, mode) {
   }
   return themesCSVArray;
 }
+
+
+
+function getFromYaml(URL, mode) {
+  var bufferFromYaml = fs.readFileSync("questions/questions.yaml", "utf-8");
+  var arrayFromYaml = yamlParser.load(bufferFromYaml);
+  var themesYAMLArray = [];
+  if (URL.get("theme") === "ALLTHEMES" || mode === 1){
+    return arrayFromYaml;
+  }
+  else {
+    for (var i = 0; i < arrayFromYaml.length; i++){
+      if (arrayFromYaml[i].theme === URL.get("theme")){
+        themesYAMLArray.push(arrayFromYaml[i]);
+      }
+    }
+    return themesYAMLArray;
+  }
+}
+
+//getFromYaml();
