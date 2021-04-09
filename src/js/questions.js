@@ -155,6 +155,7 @@ if (window.location.pathname === "/questions.html") {
     if ($modal) {
       if (event.target === $modal) {
         $modal.classList.add("hide");
+        clearModal()
       }
     }
   };
