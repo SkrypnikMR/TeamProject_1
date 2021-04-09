@@ -110,7 +110,7 @@ function createAndFillQuestionItem($node, serverData, i) {
     <div class = "question__text">
       <div class="questions__answer">
         <div class="questions__info">
-          <p><b>Текст вопроса:</b> </p><p class="questions__result" title = title = ${serverData[i].questionText}>${serverData[i].questionText}</p>
+          <p><b>Текст вопроса:</b> </p><p class="questions__result" title =${serverData[i].questionText}>${serverData[i].questionText}</p>
         </div>
         </div>
       </div>
