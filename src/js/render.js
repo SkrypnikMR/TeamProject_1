@@ -54,7 +54,7 @@ function renderandFillDevItem($node, serverData, i) {
   </div>
   <!-- END Modal form  -->
       </div>`;
-  if (i === serverData.length - 1 ||i === serverData.length - 2) {
+  if (i === serverData.length - 1 || i === serverData.length - 2) {
     var $userCard = $node.querySelectorAll(".userCard__item");
     $userCard[i].classList.add("gone");
   }
@@ -63,7 +63,9 @@ function renderandFillDevItem($node, serverData, i) {
 export function renderServerQuestions(serverData) {
   // функция, отрисовки вопросов, которые мы получаем с сервера
   var $questionItems = document.querySelector(".questions__items");
+
   if (
+    serverData[0] === null ||
     !Array.isArray(serverData) ||
     serverData[0] === "" ||
     serverData[0].date === null
@@ -147,6 +149,7 @@ export function rerenderElement(event, obj) {
   var $inputColor = $elementModal.querySelector(".form-user__likecolor");
   var $inputExp = $elementModal.querySelector(".form-user__it");
   var $inputHobbie = $elementModal.querySelector(".form-user__hobbie");
+  $inputAge.placeholder = obj.age;
   $age.textContent = obj.age;
   $color.textContent = obj.lovely_color;
   $inputColor.placeholder = obj.lovely_color;
@@ -154,5 +157,5 @@ export function rerenderElement(event, obj) {
   $inputExp.placeholder = obj.exp;
   $hobbie.textContent = obj.hobbie;
   $inputHobbie.placeholder = obj.hobbie;
-  $inputAge = obj.age;
+ 
 }
