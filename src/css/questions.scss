@@ -324,7 +324,6 @@ button:hover {
         }
         .question__text{
           display: block;
-          max-height: 150px;
         }
         .questions__themeDateAns{
           display: flex;
@@ -343,7 +342,7 @@ button:hover {
           padding: 10px;
           overflow: hidden;
           word-wrap: break-word;
-          display: -webkit-box;
+          display: block;
           -webkit-line-clamp: 3;
           -webkit-box-orient: vertical;
           line-height: 1.3em;
