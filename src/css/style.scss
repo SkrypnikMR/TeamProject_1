@@ -228,7 +228,7 @@ h6 {
     padding: 5px;
   }
 
-  &__hobie {
+  &__hobbie {
     width: 100%;
   }
 
@@ -372,3 +372,7 @@ footer {
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
   }
+.gone{
+  opacity: 0.3;
+  background-color: rgba(0, 0, 0, 0.418);
+}

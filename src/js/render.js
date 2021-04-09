@@ -1,5 +1,3 @@
-
-
 export function renderServerDeveloperData(serverData) {
   var $developers = document.querySelector(".userCard__items");
   for (var i = 0; i < serverData.length; i++) {
@@ -14,66 +12,69 @@ function renderandFillDevItem($node, serverData, i) {
           <img src="img/edit.png" alt="edit">
         </div>
         <div class="userCard__photoDev">
-          <img src="img/1.jpg" alt="photoDev">
+          <img src=${serverData[i].avatar} alt="photoDev" class="userCard__avatar">
         </div>
         <h3 class="userCard__name">${serverData[i].name}</h3>
         <div class="userCard__line"></div>
-        <h4 class="userCard__title">ОБО МНЕ</h4>
+        <h4 class="userCard__title">About me</h4>
         <div class="userCard__about">
           <div class="userCard__info">
-            <p>Возраст:</p>
-            <p>${serverData[i].age}</p>
+            <p>Age:</p>
+            <p class="userCard__age">${serverData[i].age}</p>
           </div>
           <div class="userCard__info">
-            <p>Любимый цвет::</p>
-            <p>${serverData[i].lovely_color}</p>
+            <p class=>Favorite color:</p>
+            <p class="userCard__color">${serverData[i].lovely_color}</p>
           </div>
           <div class="userCard__info">
-            <p>Опыт в IT:</p>
-            <p>${serverData[i].exp}</p>
+            <p>Experience in IT:</p>
+            <p class="userCard__exp">${serverData[i].exp}</p>
           </div>
         </div>
-        <h4 class="userCard__title">ХОББИ</h4>
+        <h4 class="userCard__title">Hobbie</h4>
         <div class="userCard__about">
           <div class="userCard__info">
-            <p>${serverData[i].hobby} </p>
+            <p class="userCard__hobbie">${serverData[i].hobbie} </p>
           </div>
         </div>
         <!-- Modal form  -->
   <div class="form-user">
       <form action="" class="form-user__form">
-          <h4 class="userCard__title">ОБО МНЕ</h4>
-          <p>Возраст:</p>
-          <input type="text" class="form-user__ageform">
-          <p>Любимый цвет:</p>
-          <input type="text" class="form-user__likecolor">
-          <p>Опыт в IT:</p>
-          <input type="text" class="form-user__it">
-          <h4 class="userCard__title">ХОББИ</h4>
-          <input type="text" class="form-user__hobie">
-          <button class="form-user__btn">Изменить</button>
+          <h4 class="userCard__title">${serverData[i].name}</h4>
+          <p>Age:</p>
+          <input type="text" class="form-user__ageform" placeholder = "${serverData[i].age}">
+          <p>Lovely color:</p>
+          <input type="text" class="form-user__likecolor" placeholder = "${serverData[i].lovely_color}">
+          <p>Exp in IT:</p>
+          <input type="text" class="form-user__it" placeholder = "${serverData[i].exp}">
+          <h4 class="userCard__title">Hobbie</h4>
+          <input type="text" class="form-user__hobbie" placeholder = "${serverData[i].hobbie}">
+          <button class="form-user__btn">Change</button>
       </form>
   </div>
   <!-- END Modal form  -->
       </div>`;
-      if(i === serverData.length - 1){
-       var $userCard = $node.querySelectorAll('.userCard__item');
-        $userCard[5].classList.add('gone');
-      }
+  if (i === serverData.length - 1 ||i === serverData.length - 2) {
+    var $userCard = $node.querySelectorAll(".userCard__item");
+    $userCard[i].classList.add("gone");
+  }
 }
 
 export function renderServerQuestions(serverData) {
   // функция, отрисовки вопросов, которые мы получаем с сервера
   var $questionItems = document.querySelector(".questions__items");
-  if (!Array.isArray(serverData) || serverData[0] === '' || serverData[0].date === null) {
+  if (
+    !Array.isArray(serverData) ||
+    serverData[0] === "" ||
+    serverData[0].date === null
+  ) {
     renderNoQuestions();
   } else {
     for (var i = 0; i < serverData.length; i++) {
-      if(serverData[i] === '' || serverData[i].theme === undefined){
+      if (serverData[i] === "" || serverData[i].theme === undefined) {
         continue;
       }
       createAndFillQuestionItem($questionItems, serverData, i);
-      
     }
   }
 }
@@ -132,4 +133,26 @@ function createAndFillQuestionItem($node, serverData, i) {
 export function renderNoQuestions() {
   var $qHTMLQuestionItems = document.querySelector(".questions__items");
   $qHTMLQuestionItems.innerHTML = `<img src="./img/questions.png" alt="" srcset="">`;
+}
+
+export function rerenderElement(event, obj) {
+  var $element = event.target.parentElement.parentElement.parentElement; // нода карточки
+  var $age = $element.querySelector(".userCard__age");
+  var $color = $element.querySelector(".userCard__color");
+  var $exp = $element.querySelector(".userCard__exp");
+  var $hobbie = $element.querySelector(".userCard__hobbie");
+
+  var $elementModal = event.target.parentElement; // нода модалки карточки
+  var $inputAge = $elementModal.querySelector(".form-user__ageform");
+  var $inputColor = $elementModal.querySelector(".form-user__likecolor");
+  var $inputExp = $elementModal.querySelector(".form-user__it");
+  var $inputHobbie = $elementModal.querySelector(".form-user__hobbie");
+  $age.textContent = obj.age;
+  $color.textContent = obj.lovely_color;
+  $inputColor.placeholder = obj.lovely_color;
+  $exp.textContent = obj.exp;
+  $inputExp.placeholder = obj.exp;
+  $hobbie.textContent = obj.hobbie;
+  $inputHobbie.placeholder = obj.hobbie;
+  $inputAge = obj.age;
 }
