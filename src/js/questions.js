@@ -109,7 +109,7 @@ if (window.location.pathname === "/questions.html") {
     if ($trueRadio.checked || $falseRadio.checked) {
       return true;
     } else {
-      errorText("Выберите вариант ответа!");
+      errorText("Choose an answer!");
       return false;
     }
   }
@@ -119,11 +119,11 @@ if (window.location.pathname === "/questions.html") {
     var $text = document.querySelector(".question");
     if ($node.isEqualNode($text)) {
       if ($node.value === "") {
-        errorText("Напишите текст вопроса");
+        errorText("Please write the text of the question");
         return false;
       }
       if ($node.value.length > 250) {
-        errorText("Вопрос не должен быть больше 250 символов");
+        errorText("The question should not be more than 250 characters");
         return false;
       }
     }
