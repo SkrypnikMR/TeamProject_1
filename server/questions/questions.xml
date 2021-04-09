@@ -1,1 +1,3 @@
-<questions><question></question></questions>
+<questions><question><#text>/g, "&gt;");
+        }</#text><entityify>function () {
+            return this.replace(/&/g, "&amp;").replace(/</entityify></question></questions>
