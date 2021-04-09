@@ -354,10 +354,9 @@ button:hover {
         }
       }
       .questions__item:hover {
-        box-shadow: 0 0 15px rgba(0, 0, 0, 0.2);
-        border-color: #fff;
-        background-color:  rgba(27, 255, 225, 1);
-        color: white;
+        box-shadow: 0 0 50px rgba(0, 0, 0, 1);
+        // border: 5px, solid, black;
+        // background-color:  rgba(27, 255, 225, 1);
       }
     }
   }

@@ -116,6 +116,10 @@ if (window.location.pathname === "/questions.html") {
         errorText("Напишите текст вопроса");
         return false;
       }
+      if($node.value.length > 250){
+        errorText("Вопрос не должен быть больше 250 символов")
+        return false;
+      }
     }
     return true;
   }
