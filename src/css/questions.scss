@@ -1,4 +1,4 @@
-
+// styles of menu on page Questions
 headerQuestionText {
   text-align: center;
   font-size: 30px;
@@ -277,29 +277,29 @@ button:hover {
   font-family: "PT Serif", serif;
   font-family: "Roboto", sans-serif;
   .questions__wrapper {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
     max-width: 1000px;
     margin: 0 auto;
     .questions__items {
       display: flex;
-      justify-content: space-around;
-      flex-wrap: wrap;
+    flex-direction: column;
+    justify-content: center;
+
       img {
         width: 100%;
       }
       .questions__item {
-        min-width: 400px;
-        min-height: 300px;
+        width: 1000px;
+        min-height: 200px;
         box-sizing: border-box;
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-        justify-content: space-between;
-        width: 300px;
+        display: block;
         border: 2px solid #cacaca;
         border-radius: 16px;
         position: relative;
         background-color: rgba(27, 255, 225, 1);
-        padding: 15px 45px 15px 45px;
+        padding: 15px 15px 15px 15px;
         margin-top: 50px;
         transition: 0.3s all;
         .questions__edit {
@@ -322,18 +322,32 @@ button:hover {
             transform: scale(1.1);
           }
         }
+        .question__text{
+          display: block;
+          max-height: 150px;
+        }
+        .questions__themeDateAns{
+          display: flex;
+          justify-content: space-around;
+        }
         .questions__answer {
-          font-size: 30px;
-
-          .questions__info {
-            padding: 10px;
-            text-align: center;
-            .questions__result {
-              color: red;
-              font-size: 30px;
-              padding: 30px;
-            }
-          }
+          font-size: 24px;
+        }
+        .questions__info {
+          padding: 10px;
+          text-align: center;
+        }
+        .questions__result {
+          color: black;
+          font-size: 24px;
+          padding: 10px;
+          overflow: hidden;
+          word-wrap: break-word;
+          display: -webkit-box;
+          -webkit-line-clamp: 3;
+          -webkit-box-orient: vertical;
+          line-height: 1.3em;
+          height: 3.9em;
         }
       }
       .questions__item:hover {
