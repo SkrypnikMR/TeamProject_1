@@ -6,7 +6,6 @@ var jsonParser = json();
 var yamlParser = require("js-yaml");
 var YAML = require("json-to-pretty-yaml");
 
-
 var server = http.createServer(function (req, res) {
   var headers = {
     "Access-Control-Allow-Origin": "*",
@@ -14,37 +13,35 @@ var server = http.createServer(function (req, res) {
     "Access-Control-Allow-Methods": "GET,PUT,POST,DELETE",
     "Access-Control-Max-Age": 12344345789,
   };
- 
-  if (req.method === 'OPTIONS') {
+
+  if (req.method === "OPTIONS") {
     res.writeHead(204, headers);
     res.end();
-    return;
-    }
-  if ((req.method === "GET" && req.url === "/developers") || req.url === "/") {
-    var answer = fs.readFileSync("developers/developers.json");
+  }
+  if (req.url === "/developers" && req.method === "GET") {
+    var serverAnswer = fs.readFileSync("developers/developers.json", "utf-8");
     res.writeHead(200, headers);
-    res.end(answer);
+    res.end(serverAnswer);
   }
-
-
-  /*if(req.method === "POST" && req.url === "/developers" || req.url === "/"){
-    fs.writeFile('./developers/developers.json', JSON.stringify(jsonDev), function(err){
-      if(err) console.log("err");
-    });
-  }*/
-
-  if(req.method === "POST" && req.url === "/developers" || req.url === "/"){
-   
-    
-    jsonParser(req, res, (error)=>{
-      if(error) console.log(error);
-      fs.writeFileSync('./developers/developers.json', JSON.stringify(req.body.devs));
+  if (req.url === "/developers" && req.method === "PUT") {
+    jsonParser(req, res, (err) => {
+    var devBuff = fs.readFileSync('developers/developers.json' , 'utf-8');
+    var devArray = JSON.parse(devBuff);
+      for(var i = 0; i < devArray.length; i++){
+        if(req.body.name === devArray[i].name){
+          devArray[i].name = req.body.name;
+          devArray[i].age = req.body.age;
+          devArray[i].lovely_color = req.body.lovely_color;
+          devArray[i].exp = req.body.exp;
+          devArray[i].hobbie = req.body.hobbie;
+          devArray[i].avatar = req.body.avatar;
+        }
+      }
+      fs.writeFileSync('developers/developers.json', JSON.stringify(devArray));
       res.writeHead(200, headers);
-      res.end();
+      res.end(JSON.stringify(devArray));
     });
   }
-
-
 
   if (req.url !== "/developers") {
     watchMethodAndUrl(req, res, headers);
@@ -96,7 +93,7 @@ function watchGetUrl(req, res, headers) {
     res.writeHead(200, headers);
     res.end(JSON.stringify(serverAnswer));
   }
-  if (URL.get("type") === "YAML"){
+  if (URL.get("type") === "YAML") {
     var serverAnswer = getFromYaml(URL);
     res.writeHead(200, headers);
     res.end(JSON.stringify(serverAnswer));
@@ -135,16 +132,19 @@ function watchPostUrl(req, res, headers) {
           fs.writeFileSync("questions/questions.xml", convertToXML(newRecord));
         }
       }
-      if (req.body.type[i] === "YAML"){
+      if (req.body.type[i] === "YAML") {
         var arrayFromYAML = getFromYaml(URL, 1);
         arrayFromYAML.unshift(req.body);
-        fs.writeFileSync('questions/questions.yaml', YAML.stringify(arrayFromYAML));
+        fs.writeFileSync(
+          "questions/questions.yaml",
+          YAML.stringify(arrayFromYAML)
+        );
       }
       if (req.body.type[i] === "CSV") {
         req.body.type[i] = ["CSV"];
         var arrayFromCSV = getFromCSV(URL, 1);
         arrayFromCSV.unshift(req.body);
-        fs.writeFileSync('questions/questions.csv', convertToCSV(arrayFromCSV));
+        fs.writeFileSync("questions/questions.csv", convertToCSV(arrayFromCSV));
       }
     }
   });
@@ -187,14 +187,17 @@ function watchDeleteUrl(req, res, headers) {
         fs.writeFileSync(`questions/questions.xml`, convertToXML(arrayFromXML));
       }
     }
-    if (URL.get("type") === "YAML"){
+    if (URL.get("type") === "YAML") {
       var arrayFromYAML = getFromYaml(URL, 1);
-      for (var i = 0; i < arrayFromYAML.length; i++){
-        if (arrayFromYAML[i].date === req.body.date){
-          arrayFromYAML.splice(i,1);
+      for (var i = 0; i < arrayFromYAML.length; i++) {
+        if (arrayFromYAML[i].date === req.body.date) {
+          arrayFromYAML.splice(i, 1);
         }
       }
-      fs.writeFileSync(`questions/questions.yaml`, YAML.stringify(arrayFromYAML));
+      fs.writeFileSync(
+        `questions/questions.yaml`,
+        YAML.stringify(arrayFromYAML)
+      );
     }
     if (URL.get("type") === "CSV") {
       var arrayFromCSV = getFromCSV(URL, 1);
@@ -318,18 +321,15 @@ function getFromCSV(URL, mode) {
   return themesCSVArray;
 }
 
-
-
 function getFromYaml(URL, mode) {
   var bufferFromYaml = fs.readFileSync("questions/questions.yaml", "utf-8");
   var arrayFromYaml = yamlParser.load(bufferFromYaml);
   var themesYAMLArray = [];
-  if (URL.get("theme") === "ALLTHEMES" || mode === 1){
+  if (URL.get("theme") === "ALLTHEMES" || mode === 1) {
     return arrayFromYaml;
-  }
-  else {
-    for (var i = 0; i < arrayFromYaml.length; i++){
-      if (arrayFromYaml[i].theme === URL.get("theme")){
+  } else {
+    for (var i = 0; i < arrayFromYaml.length; i++) {
+      if (arrayFromYaml[i].theme === URL.get("theme")) {
         themesYAMLArray.push(arrayFromYaml[i]);
       }
     }
