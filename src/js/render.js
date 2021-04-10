@@ -101,7 +101,7 @@ function createAndFillQuestionItem($node, serverData, i) {
           <p><b>Answer:</b> </p><p class="questions__resultInfo">${serverData[i].answer}</p>
         </div>
         <div class="questions__info">
-          <p>Date:</b> </p><p class="questions__resultInfo">${serverData[i].stringDate}</p>
+          <p><b>Date:</b> </p><p class="questions__resultInfo">${serverData[i].stringDate}</p>
       </div>
     </div>
   </div>`;
