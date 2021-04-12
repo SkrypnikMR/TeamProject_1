@@ -31,7 +31,7 @@ if (window.location.pathname === "/questions.html") {
     $modal.classList.remove("hide");
     var $formCreateButton = document.querySelector(".questionCreate"); // нода кнопки ОТПРАВИТЬ ВОПРОС
     var $formCancelButton = document.querySelector(".questionCancel"); //нода кнопки cancel в модалке
-    $formCancelButton.addEventListener("click", hideModal);
+    $formCancelButton.addEventListener("click", cancelQuestion);
     $formCreateButton.addEventListener("click", createQueston);
     function createQueston(event) {
       // функция клика кнопки ОТПРАВИТЬ ВОПРОС
@@ -61,6 +61,10 @@ if (window.location.pathname === "/questions.html") {
           }
         );
       }
+    }
+    function cancelQuestion(event){
+      event.preventDefault();
+      hideModal();
     }
   }
 
@@ -151,9 +155,8 @@ if (window.location.pathname === "/questions.html") {
     $YAML.checked = false;
     $CSV.checked = false;
   }
-  function hideModal(event) {
+  function hideModal() {
     // функция скрытия модального окна
-    event.preventDefault();
     $modal.classList.add("hide");
     clearModal();
   }
