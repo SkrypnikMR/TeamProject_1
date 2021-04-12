@@ -24,14 +24,14 @@ if (window.location.pathname === "/questions.html") {
   var $modalDelete = document.querySelector(".modalDeleteConfirmation"); //нода модалки на удаление вопроса
   var $closeX = document.querySelector(".close"); // нода кнопки крестика в модальном окне
   var $questionCreateButton = document.querySelector(".questionCreateButton");
-
   $questionCreateButton.addEventListener("click", showModal); // прослушка клика кнопки Создания вопроса
   $closeX.addEventListener("click", hideModal); // слушатель у крестика модального окна
 
   function showModal() {
     $modal.classList.remove("hide");
     var $formCreateButton = document.querySelector(".questionCreate"); // нода кнопки ОТПРАВИТЬ ВОПРОС
-    /*   $formCancelButton.addEventListener("click", hideModal); // нода кнопки вернуться */
+    var $formCancelButton = document.querySelector(".questionCancel"); //нода кнопки cancel в модалке
+    $formCancelButton.addEventListener("click", hideModal);
     $formCreateButton.addEventListener("click", createQueston);
     function createQueston(event) {
       // функция клика кнопки ОТПРАВИТЬ ВОПРОС
@@ -54,7 +54,6 @@ if (window.location.pathname === "/questions.html") {
       obj["answer"] = checkAnswer();
       //если прошла валидаци - нас пустет в иф
       if (flag) {
-        clearModal();
         hideModal();
         postRequest(URL, `?questions&type=${$typeSelect.value}`, obj).then(
           function () {
@@ -155,13 +154,14 @@ if (window.location.pathname === "/questions.html") {
   function hideModal() {
     // функция скрытия модального окна
     $modal.classList.add("hide");
+    clearModal();
   }
+
   window.onclick = function (event) {
     // модальное окно закрыть за пределеами модального окна
     if ($modal) {
       if (event.target === $modal) {
-        $modal.classList.add("hide");
-        clearModal();
+        hideModal()
       }
     }
   };

@@ -101,7 +101,7 @@ function createAndFillQuestionItem($node, serverData, i) {
           <p><b>Answer:</b> </p><p class="questions__resultInfo">${serverData[i].answer}</p>
         </div>
         <div class="questions__info">
-          <p>Date:</b> </p><p class="questions__resultInfo">${serverData[i].stringDate}</p>
+          <p><b>Date: </b> </p><p class="questions__resultInfo">${serverData[i].stringDate}</p>
       </div>
     </div>
   </div>`;
@@ -113,19 +113,19 @@ function createAndFillQuestionItem($node, serverData, i) {
     <div class = "question__text">
       <div class="questions__answer">
         <div class="questions__textInfo">
-          <p><b>Текст вопроса:</b> </p><p class="questions__resultText" title = "${serverData[i].questionText}">${serverData[i].questionText}</p>
+          <p><b>Question: </b> </p><p class="questions__resultText" title = "${serverData[i].questionText}">${serverData[i].questionText}</p>
         </div>
         </div>
       </div>
       <div class = "questions__themeDateAns">
         <div class="questions__info">
-          <p><b>Тема вопроса:</b> </p><p class="questions__resultInfo">${serverData[i].theme}</p>
+          <p><b>Question Theme:</b> </p><p class="questions__resultInfo">${serverData[i].theme}</p>
         </div>  
         <div class="questions__info">
-          <p><b>Ответ на вопрос:</b> </p><p class="questions__resultInfo">${serverData[i].answer}</p>
+          <p><b>Answer: </b> </p><p class="questions__resultInfo">${serverData[i].answer}</p>
         </div>
         <div class="questions__info">
-          <p><b>Дата вопроса:</b> </p><p class="questions__resultInfo">${serverData[i].stringDate}</p>
+          <p><b>Date: </b> </p><p class="questions__resultInfo">${serverData[i].stringDate}</p>
       </div>
     </div>
   </div>`;
@@ -157,5 +157,4 @@ export function rerenderElement(event, obj) {
   $inputExp.placeholder = obj.exp;
   $hobbie.textContent = obj.hobbie;
   $inputHobbie.placeholder = obj.hobbie;
- 
 }
