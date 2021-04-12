@@ -256,11 +256,11 @@ h6 {
 }
 
 footer {
-  background: #8da1f8;
+  text-align: center;
+  background-color: rgba(27, 255, 225, 1);
+  padding: 5px;
   .footer {
     /* Фиксированное положение */
-
-    background: rgba(27, 255, 225, 1);
     width: 100%;
     text-align: center;
   }
