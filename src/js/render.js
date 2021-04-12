@@ -68,12 +68,12 @@ export function renderServerQuestions(serverData) {
     serverData[0] === null ||
     !Array.isArray(serverData) ||
     serverData[0] === "" ||
-    serverData[0].date === null
+    serverData[0].date === null || serverData[0].theme === ''
   ) {
     renderNoQuestions();
   } else {
     for (var i = 0; i < serverData.length; i++) {
-      if (serverData[i] === "" || serverData[i].theme === undefined) {
+      if (serverData[i] === "" || serverData[i].theme === undefined || serverData[i].theme === '') {
         continue;
       }
       createAndFillQuestionItem($questionItems, serverData, i);

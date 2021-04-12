@@ -45,6 +45,7 @@ function getFromXMLFile(URL, mode) {
     return arrayFromXML;
   } else {
     for (var i = 0; i < arrayFromXML.length; i++) {
+      console.log(arrayFromXML);
       if (arrayFromXML[i].theme === URL.get("theme")) {
         themesArrayFromXML.push(arrayFromXML[i]);
       }
