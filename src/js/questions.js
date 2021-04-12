@@ -151,8 +151,9 @@ if (window.location.pathname === "/questions.html") {
     $YAML.checked = false;
     $CSV.checked = false;
   }
-  function hideModal() {
+  function hideModal(event) {
     // функция скрытия модального окна
+    event.preventDefault();
     $modal.classList.add("hide");
     clearModal();
   }
@@ -162,6 +163,7 @@ if (window.location.pathname === "/questions.html") {
     if ($modal) {
       if (event.target === $modal) {
         hideModal()
+        clearModal();
       }
     }
   };
