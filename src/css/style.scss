@@ -273,7 +273,7 @@ footer {
   }
   .footer_text:hover {
     color: #000;
-    text-decoration: underline;
+    text-decoration: none;
     padding-top: 4px;
     font-weight: 700;
   }
@@ -354,24 +354,33 @@ footer {
     }
   }
 
-  .animated-caption {
-    height: 100%;
-    padding: 15px;
-    font-size: 50px;
-    background: linear-gradient(
-      to right,
-      #ef5350,
-      #f48fb1,
-      #7e57c2,
-      #26c6da,
-      #43a047,
-      #eeff41,
-      #f9a825,
-      #ff5722
-    );
-    -webkit-background-clip: text;
+.animated-caption {
+  height: 100%;
+  padding: 40px;
+  font-size: 70px;
+  user-select: none;
+  color: black;
+}
+
+  .animated-caption:hover {
+    user-select: none;
+    background: repeating-linear-gradient(-45deg, red 0%, yellow 7.14%, rgb(0,255,0) 14.28%,
+            rgb(0,255,255) 21.4%, cyan 28.56%, blue 35.7%, magenta 42.84%, red 50%);
+    background-size: 600vw 600vw;
     -webkit-text-fill-color: transparent;
+    -webkit-background-clip: text;
+    animation: slide 10s linear infinite forwards;
   }
+
+@keyframes slide {
+  0%{
+    background-position-x: 0%;
+  }
+  100%{
+    background-position-x: 600vw;
+  }
+}
+
 .gone{
   opacity: 0.3;
   background-color: rgba(0, 0, 0, 0.418);
