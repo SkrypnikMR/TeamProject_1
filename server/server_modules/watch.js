@@ -107,7 +107,7 @@ function watchPostUrl(req, res, headers) {
         continue;
       }
       if (req.body.type[i] === "CSV") {
-        req.body.type[i] = ["CSV"];
+        req.body.type = 'CSV';
         var arrayFromCSV = getFromCSV(URL, 1);
         arrayFromCSV.unshift(req.body);
         fs.writeFileSync("questions/questions.csv", convertToCSV(arrayFromCSV));
