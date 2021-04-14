@@ -37,9 +37,10 @@ function convertToXML(array) {
       obj[string[0].split(",")[2]] = Number(string[i].split(",")[2]);
       obj[string[0].split(",")[3]] = string[i].split(",")[3];
       obj[string[0].split(",")[4]] = string[i].split(",")[4];
-      obj[string[0].split(",")[5].trim()] = Boolean(string[i].split(",")[5]);
+      obj[string[0].split(",")[5].trim()] = string[i].split(",")[5];
       result.push(obj);
     }
+    console.log(result[0]);
     return result;
   }
 
