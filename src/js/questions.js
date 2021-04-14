@@ -8,7 +8,6 @@ import {
 import { renderNoQuestions } from "./render";
 if (window.location.pathname === "/questions.html") {
   // всё что происходит, когда мы запукаем страницу questions.html
-
   var $typeSelect = document.querySelector(".header__filter-type"); // нода фильтра типа;
   var $themeSelect = document.querySelector(".header__filter-theme"); // нода фильтра темы;
   $typeSelect.value = localStorage.getItem("type") || $typeSelect.value; // пулучаем value из локалстореджа, если его нет , то value = себе
@@ -25,231 +24,231 @@ if (window.location.pathname === "/questions.html") {
   var $questionCreateButton = document.querySelector(".questionCreateButton");
   $questionCreateButton.addEventListener("click", showModal); // прослушка клика кнопки Создания вопроса
   $closeX.addEventListener("click", hideModal); // слушатель у крестика модального окна
-
-  export function showModal() {
-    $modal.classList.remove("hide");
-    var $formCreateButton = document.querySelector(".questionCreate"); // нода кнопки ОТПРАВИТЬ ВОПРОС
-    var $formCancelButton = document.querySelector(".questionCancel"); //нода кнопки cancel в модалке
-    $formCancelButton.addEventListener("click", cancelQuestion);
-    $formCreateButton.addEventListener("click", createQueston);
-    function createQueston(event) {
-      // функция клика кнопки ОТПРАВИТЬ ВОПРОС
-      event.preventDefault();
-
-      var $text = document.querySelector(".question");
-      var $theme = document.querySelector(".theme");
-      var flag = formTextValidation($text) && answerValidation(); // в флаг запимсываем значение вернувшееся после выполнения валидации
-
-      // создаем объект, который будет отправлять на сервер
-      var objDate = new Date();
-      var obj = {};
-      obj["questionText"] = $text.value;
-      obj["theme"] = $theme.value;
-      obj["date"] = objDate.getTime();
-      obj[
-        "stringDate"
-      ] = `${objDate.toLocaleDateString()} | ${objDate.toLocaleTimeString()}`;
-      obj["type"] = checkType();
-      obj["answer"] = checkAnswer();
-      //если прошла валидаци - нас пустет в иф
-      if (flag) {
-        hideModal();
-        postRequest(URL, `?questions&type=${$typeSelect.value}`, obj).then(
-          function () {
-            getAndRender();
-          }
-        );
-      }
-    }
-    function cancelQuestion(event){
-      event.preventDefault();
-      hideModal();
-    }
-  }
-
-  function checkAnswer() {
-    // проверяем какая из кнопок чекнута
-    var $trueRadio = document.querySelector(".TRUERadio");
-    var $falseRadio = document.querySelector(".FALSERadio");
-
-    if ($trueRadio.checked) {
-      return true;
-    } else return false;
-  }
-
-  function checkType() {
-    // проверяем какой из типов выбран и записываем его в массив типов, если не выбрано ничего - выбираем JSON
-    var JSON = document.querySelector(".question__type-JSON");
-    var XML = document.querySelector(".question__type-XML");
-    var YAML = document.querySelector(".question__type-YAML");
-    var CSV = document.querySelector(".question__type-CSV");
-
-    var result = [];
-
-    if (JSON.checked) {
-      result.push("JSON");
-    }
-    if (XML.checked) {
-      result.push("XML");
-    }
-    if (YAML.checked) {
-      result.push("YAML");
-    }
-    if (CSV.checked) {
-      result.push("CSV");
-    }
-    if (!JSON.checked && !XML.checked && !YAML.checked && !CSV.checked) {
-      result.push("JSON");
-    }
-    return result;
-  }
-
-  function answerValidation() {
-    //валидация ответов, они должны быть выбраны!
-    var $trueRadio = document.querySelector(".TRUERadio");
-    var $falseRadio = document.querySelector(".FALSERadio");
-    if ($trueRadio.checked || $falseRadio.checked) {
-      return true;
-    } else {
-      errorText("Choose an answer!");
-      return false;
-    }
-  }
-
-  function formTextValidation($node) {
-    // валидируем форму, не должен быть пустой
-    var $text = document.querySelector(".question");
-    if ($node.isEqualNode($text)) {
-      if ($node.value === "") {
-        errorText("Please write the text of the question");
-        return false;
-      }
-      if ($node.value.length > 250) {
-        errorText("The question should not be more than 250 characters");
-        return false;
-      }
-    }
-    return true;
-  }
-
-  function errorText(errorText) {
-    // отрисовка текста ошибки в modalHead
-    var $modalMessage = document.querySelector(".modalMessage");
-    return ($modalMessage.textContent = errorText);
-  }
-  function clearModal() {
-    // функция очистки инпутов и анчекинга чекбоксов радиобатанов
-    var $text = document.querySelector(".question");
-    var $trueRadio = document.querySelector(".TRUERadio");
-    var $falseRadio = document.querySelector(".FALSERadio");
-    var $JSON = document.querySelector(".question__type-JSON");
-    var $XML = document.querySelector(".question__type-XML");
-    var $YAML = document.querySelector(".question__type-YAML");
-    var $CSV = document.querySelector(".question__type-CSV");
-    $text.value = "";
-    $trueRadio.checked = false;
-    $falseRadio.checked = false;
-    $JSON.checked = false;
-    $XML.checked = false;
-    $YAML.checked = false;
-    $CSV.checked = false;
-  }
-  function hideModal() {
-    // функция скрытия модального окна
-    $modal.classList.add("hide");
-    clearModal();
-  }
-
   window.onclick = function (event) {
     // модальное окно закрыть за пределеами модального окна
     if ($modal) {
       if (event.target === $modal) {
-        hideModal()
+        hideModal();
         clearModal();
       }
     }
   };
-  var objDelete = {}; //инициализация объекта для удаления
-  function listenDeleteButtons() {
-    var $questionDeleteButtons = document.querySelectorAll(".questions__edit");
-    /* добавить на все обработчики */
-    for (var i = 0; i < $questionDeleteButtons.length; i++) {
-      $questionDeleteButtons[i].addEventListener("click", function (event) {
-        //добавляем в объект ключи date and type
-        objDelete.date = Number(
-          event.target.parentElement.parentElement.getAttribute("date")
-        );
-        objDelete.type = event.target.parentElement.parentElement
-          .getAttribute("type")
-          .split(",");
-        //вызываем функцию показа модалки
-        showDeleteModal();
-      });
-    }
+}
+function showModal() {
+  var $modal = document.querySelector(".modal"); // нода модального окна
+  $modal.classList.remove("hide");
+  var $formCreateButton = document.querySelector(".questionCreate"); // нода кнопки ОТПРАВИТЬ ВОПРОС
+  var $formCancelButton = document.querySelector(".questionCancel"); //нода кнопки cancel в модалке
+  $formCancelButton.addEventListener("click", cancelQuestion);
+  $formCreateButton.addEventListener("click", createQueston);
+  function createQueston(event) {
+    // функция клика кнопки ОТПРАВИТЬ ВОПРОС
+    event.preventDefault();
 
-    function showDeleteModal() {
-      $modalDelete.classList.remove("hide");
-      var $confirmButton = document.querySelector(".confirmButton"); // нода кнопки confirm
-      var $cancelButton = document.querySelector(".cancelButton"); // нода кнопки cancel
-      $confirmButton.addEventListener("click", deleteConfirm); // слушатель кнопки confirm
-      $cancelButton.addEventListener("click", hideDeleteModal); // слушатель кнопки cancel
-    }
-    //в deleteConfirm в deleteRequest передаем objDelete и перерендериваем страницу и прячем модалку
-    function deleteConfirm() {
-      deleteRequest(
-        URL,
-        `?questions&type=${$typeSelect.value}`,
-        objDelete
-      ).then(function () {
-        getAndRender();
-      });
-      hideDeleteModal();
-    }
-  }
+    var $text = document.querySelector(".question");
+    var $theme = document.querySelector(".theme");
+    var flag = formTextValidation($text) && answerValidation(); // в флаг запимсываем значение вернувшееся после выполнения валидации
 
-  function hideDeleteModal() {
-    $modalDelete.classList.add("hide");
-  }
-  function listenTypeSelect() {
-    $typeSelect.addEventListener("change", typeSelectGetRequest);
-  }
-  function listenThemeSelect() {
-    $themeSelect.addEventListener("change", themeSelectGetRequest);
-  }
-  function themeSelectGetRequest() {
-    localStorage.setItem("theme", `${$themeSelect.value}`);
-    getAndRender();
-  }
-  function typeSelectGetRequest() {
-    // сетим новое значение, если у нас изменилось value select'a типа
-    localStorage.setItem("type", `${$typeSelect.value}`);
-    getAndRender();
-  }
-  function getAndRender() {
-    getRequest(
-      URL,
-      `?questions&type=${$typeSelect.value}&theme=${$themeSelect.value}`
-    ) // запрос на получение данных из нужного файла
-      .then(function (responce) {
-        return JSON.parse(responce);
-      })
-      .then(function (data) {
-        if (data.length === 0) {
-          // если файл пустой - отрисует страницу без вопросов
-          renderNoQuestions();
-        } else {
-          getQuestions(data).then(function () {
-            listenDeleteButtons();
-          });
+    // создаем объект, который будет отправлять на сервер
+    var objDate = new Date();
+    var obj = {};
+    obj["questionText"] = $text.value;
+    obj["theme"] = $theme.value;
+    obj["date"] = objDate.getTime();
+    obj[
+      "stringDate"
+    ] = `${objDate.toLocaleDateString()} | ${objDate.toLocaleTimeString()}`;
+    obj["type"] = checkType();
+    obj["answer"] = checkAnswer();
+    //если прошла валидаци - нас пустет в иф
+    if (flag) {
+      hideModal();
+      postRequest(URL, `?questions&type=${$typeSelect.value}`, obj).then(
+        function () {
+          getAndRender();
         }
-      })
-      .catch(function (error) {
-        console.log(error);
-        // отлавливаем ошибки в промисе, если она будет - отрисует нет вопросов *____ в дальнейшем можно отрисовывать страницу ошибка сервера*
-        renderNoQuestions();
-      });
+      );
+    }
   }
-  
+  function cancelQuestion(event) {
+    event.preventDefault();
+    hideModal();
+  }
+}
+
+function checkAnswer() {
+  // проверяем какая из кнопок чекнута
+  var $trueRadio = document.querySelector(".TRUERadio");
+
+  if ($trueRadio.checked) {
+    return true;
+  } else return false;
+}
+
+function checkType() {
+  // проверяем какой из типов выбран и записываем его в массив типов, если не выбрано ничего - выбираем JSON
+  var JSON = document.querySelector(".question__type-JSON");
+  var XML = document.querySelector(".question__type-XML");
+  var YAML = document.querySelector(".question__type-YAML");
+  var CSV = document.querySelector(".question__type-CSV");
+
+  var result = [];
+
+  if (JSON.checked) {
+    result.push("JSON");
+  }
+  if (XML.checked) {
+    result.push("XML");
+  }
+  if (YAML.checked) {
+    result.push("YAML");
+  }
+  if (CSV.checked) {
+    result.push("CSV");
+  }
+  if (!JSON.checked && !XML.checked && !YAML.checked && !CSV.checked) {
+    result.push("JSON");
+  }
+  return result;
+}
+
+function answerValidation() {
+  //валидация ответов, они должны быть выбраны!
+  var $trueRadio = document.querySelector(".TRUERadio");
+  var $falseRadio = document.querySelector(".FALSERadio");
+  if ($trueRadio.checked || $falseRadio.checked) {
+    return true;
+  } else {
+    errorText("Choose an answer!");
+    return false;
+  }
+}
+
+function formTextValidation($node) {
+  // валидируем форму, не должен быть пустой
+  var $text = document.querySelector(".question");
+  if ($node.isEqualNode($text)) {
+    if ($node.value === "") {
+      errorText("Please write the text of the question");
+      return false;
+    }
+    if ($node.value.length > 250) {
+      errorText("The question should not be more than 250 characters");
+      return false;
+    }
+  }
+  return true;
+}
+
+function errorText(errorText) {
+  // отрисовка текста ошибки в modalHead
+  var $modalMessage = document.querySelector(".modalMessage");
+  return ($modalMessage.textContent = errorText);
+}
+function clearModal() {
+  // функция очистки инпутов и анчекинга чекбоксов радиобатанов
+  var $text = document.querySelector(".question");
+  var $trueRadio = document.querySelector(".TRUERadio");
+  var $falseRadio = document.querySelector(".FALSERadio");
+  var $JSON = document.querySelector(".question__type-JSON");
+  var $XML = document.querySelector(".question__type-XML");
+  var $YAML = document.querySelector(".question__type-YAML");
+  var $CSV = document.querySelector(".question__type-CSV");
+  $text.value = "";
+  $trueRadio.checked = false;
+  $falseRadio.checked = false;
+  $JSON.checked = false;
+  $XML.checked = false;
+  $YAML.checked = false;
+  $CSV.checked = false;
+}
+function hideModal() {
+  // функция скрытия модального окна
+  $modal.classList.add("hide");
+  clearModal();
+}
+var objDelete = {}; //инициализация объекта для удаления
+function listenDeleteButtons() {
+  var $questionDeleteButtons = document.querySelectorAll(".questions__edit");
+  /* добавить на все обработчики */
+  for (var i = 0; i < $questionDeleteButtons.length; i++) {
+    $questionDeleteButtons[i].addEventListener("click", function (event) {
+      //добавляем в объект ключи date and type
+      objDelete.date = Number(
+        event.target.parentElement.parentElement.getAttribute("date")
+      );
+      objDelete.type = event.target.parentElement.parentElement
+        .getAttribute("type")
+        .split(",");
+      //вызываем функцию показа модалки
+      showDeleteModal();
+    });
+  }
+
+  function showDeleteModal() {
+    $modalDelete.classList.remove("hide");
+    var $confirmButton = document.querySelector(".confirmButton"); // нода кнопки confirm
+    var $cancelButton = document.querySelector(".cancelButton"); // нода кнопки cancel
+    $confirmButton.addEventListener("click", deleteConfirm); // слушатель кнопки confirm
+    $cancelButton.addEventListener("click", hideDeleteModal); // слушатель кнопки cancel
+  }
+  //в deleteConfirm в deleteRequest передаем objDelete и перерендериваем страницу и прячем модалку
+  function deleteConfirm() {
+    deleteRequest(URL, `?questions&type=${$typeSelect.value}`, objDelete).then(
+      function () {
+        getAndRender();
+      }
+    );
+    hideDeleteModal();
+  }
+}
+
+function hideDeleteModal() {
+  $modalDelete.classList.add("hide");
+}
+function listenTypeSelect() {
+  $typeSelect.addEventListener("change", typeSelectGetRequest);
+}
+function listenThemeSelect() {
+  var $themeSelect = document.querySelector(".header__filter-theme"); // нода фильтра темы;
+  $themeSelect.addEventListener("change", themeSelectGetRequest);
+}
+function themeSelectGetRequest() {
+  var $themeSelect = document.querySelector(".header__filter-theme");
+  localStorage.setItem("theme", `${$themeSelect.value}`);
+  getAndRender();
+}
+function typeSelectGetRequest() {
+  // сетим новое значение, если у нас изменилось value select'a типа
+  var $typeSelect = document.querySelector(".header__filter-type");
+  localStorage.setItem("type", `${$typeSelect.value}`);
+  getAndRender();
+}
+function getAndRender() {
+  var $typeSelect = document.querySelector(".header__filter-type");
+  var $themeSelect = document.querySelector(".header__filter-theme");
+  getRequest(
+    URL,
+    `?questions&type=${$typeSelect.value}&theme=${$themeSelect.value}`
+  ) // запрос на получение данных из нужного файла
+    .then(function (responce) {
+      return JSON.parse(responce);
+    })
+    .then(function (data) {
+      if (data.length === 0) {
+        // если файл пустой - отрисует страницу без вопросов
+        renderNoQuestions();
+      } else {
+        getQuestions(data).then(function () {
+          listenDeleteButtons();
+        });
+      }
+    })
+    .catch(function (error) {
+      console.log(error);
+      // отлавливаем ошибки в промисе, если она будет - отрисует нет вопросов *____ в дальнейшем можно отрисовывать страницу ошибка сервера*
+      renderNoQuestions();
+    });
 }
 
 module.exports = {
@@ -267,9 +266,5 @@ module.exports = {
   listenThemeSelect,
   themeSelectGetRequest,
   typeSelectGetRequest,
-  getAndRender
-}
-
-
-
-
+  getAndRender,
+};
