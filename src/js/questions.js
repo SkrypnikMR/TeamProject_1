@@ -6,7 +6,6 @@ import {
   getQuestions,
 } from "./request";
 import { renderNoQuestions } from "./render";
-
 if (window.location.pathname === "/questions.html") {
   // всё что происходит, когда мы запукаем страницу questions.html
 
@@ -27,7 +26,7 @@ if (window.location.pathname === "/questions.html") {
   $questionCreateButton.addEventListener("click", showModal); // прослушка клика кнопки Создания вопроса
   $closeX.addEventListener("click", hideModal); // слушатель у крестика модального окна
 
-  function showModal() {
+  export function showModal() {
     $modal.classList.remove("hide");
     var $formCreateButton = document.querySelector(".questionCreate"); // нода кнопки ОТПРАВИТЬ ВОПРОС
     var $formCancelButton = document.querySelector(".questionCancel"); //нода кнопки cancel в модалке
@@ -250,6 +249,7 @@ if (window.location.pathname === "/questions.html") {
         renderNoQuestions();
       });
   }
+  
 }
 
 module.exports = {
@@ -267,5 +267,9 @@ module.exports = {
   listenThemeSelect,
   themeSelectGetRequest,
   typeSelectGetRequest,
-  getAndRender,
+  getAndRender
 }
+
+
+
+
