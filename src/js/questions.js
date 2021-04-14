@@ -251,3 +251,21 @@ if (window.location.pathname === "/questions.html") {
       });
   }
 }
+
+module.exports = {
+  showModal,
+  checkAnswer,
+  checkType,
+  answerValidation,
+  formTextValidation,
+  errorText,
+  clearModal,
+  hideModal,
+  listenDeleteButtons,
+  hideDeleteModal,
+  listenTypeSelect,
+  listenThemeSelect,
+  themeSelectGetRequest,
+  typeSelectGetRequest,
+  getAndRender,
+}
