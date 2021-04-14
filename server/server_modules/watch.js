@@ -21,7 +21,6 @@ function watchGetUrl(req, res, headers) {
   }
   var URL = new URLSearchParams(req.url);
   if (URL.get("type") === "JSON") {
-    getFromXMLFile(URL);
     var serverAnswer = getFromJSONFile(URL);
     res.writeHead(200, headers);
     res.end(JSON.stringify(serverAnswer));
