@@ -5,6 +5,9 @@ var yamlParser = require("js-yaml");
 var {parseFromCSV} = require("./convertParse");
 
 function getFromJSONFile(URL, mode) {
+  if(typeof URL !== 'object'){
+    return false;
+  }
   /* Фунция чтения из файла JSON и фильтрации его, 
     если нужно по темам, которые приходят в query параметрах */
   var bufferFromJsonFile = fs.readFileSync(`questions/questions.json`);
