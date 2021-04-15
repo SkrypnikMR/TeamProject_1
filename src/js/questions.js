@@ -34,7 +34,7 @@ if (window.location.pathname === "/questions.html") {
     }
   };
 }
-function showModal() {
+export function showModal() {
   var $modal = document.querySelector(".modal"); // нода модального окна
   $modal.classList.remove("hide");
   var $formCreateButton = document.querySelector(".questionCreate"); // нода кнопки ОТПРАВИТЬ ВОПРОС
@@ -76,7 +76,7 @@ function showModal() {
   }
 }
 
-function checkAnswer() {
+export function checkAnswer() {
   // проверяем какая из кнопок чекнута
   var $trueRadio = document.querySelector(".TRUERadio");
 
@@ -85,7 +85,7 @@ function checkAnswer() {
   } else return false;
 }
 
-function checkType() {
+export function checkType() {
   // проверяем какой из типов выбран и записываем его в массив типов, если не выбрано ничего - выбираем JSON
   var JSON = document.querySelector(".question__type-JSON");
   var XML = document.querySelector(".question__type-XML");
@@ -112,7 +112,7 @@ function checkType() {
   return result;
 }
 
-function answerValidation() {
+export function answerValidation() {
   //валидация ответов, они должны быть выбраны!
   var $trueRadio = document.querySelector(".TRUERadio");
   var $falseRadio = document.querySelector(".FALSERadio");
@@ -124,7 +124,7 @@ function answerValidation() {
   }
 }
 
-function formTextValidation($node) {
+export function formTextValidation($node) {
   // валидируем форму, не должен быть пустой
   var $text = document.querySelector(".question");
   if ($node.isEqualNode($text)) {
@@ -140,12 +140,12 @@ function formTextValidation($node) {
   return true;
 }
 
-function errorText(errorText) {
+export function errorText(errorText) {
   // отрисовка текста ошибки в modalHead
   var $modalMessage = document.querySelector(".modalMessage");
   return ($modalMessage.textContent = errorText);
 }
-function clearModal() {
+export function clearModal() {
   // функция очистки инпутов и анчекинга чекбоксов радиобатанов
   var $text = document.querySelector(".question");
   var $trueRadio = document.querySelector(".TRUERadio");
@@ -162,13 +162,13 @@ function clearModal() {
   $YAML.checked = false;
   $CSV.checked = false;
 }
-function hideModal() {
+export function hideModal() {
   // функция скрытия модального окна
   $modal.classList.add("hide");
   clearModal();
 }
 var objDelete = {}; //инициализация объекта для удаления
-function listenDeleteButtons() {
+export function listenDeleteButtons() {
   var $questionDeleteButtons = document.querySelectorAll(".questions__edit");
   /* добавить на все обработчики */
   for (var i = 0; i < $questionDeleteButtons.length; i++) {
@@ -203,28 +203,28 @@ function listenDeleteButtons() {
   }
 }
 
-function hideDeleteModal() {
+export function hideDeleteModal() {
   $modalDelete.classList.add("hide");
 }
-function listenTypeSelect() {
+export function listenTypeSelect() {
   $typeSelect.addEventListener("change", typeSelectGetRequest);
 }
-function listenThemeSelect() {
+export function listenThemeSelect() {
   var $themeSelect = document.querySelector(".header__filter-theme"); // нода фильтра темы;
   $themeSelect.addEventListener("change", themeSelectGetRequest);
 }
-function themeSelectGetRequest() {
+export function themeSelectGetRequest() {
   var $themeSelect = document.querySelector(".header__filter-theme");
   localStorage.setItem("theme", `${$themeSelect.value}`);
   getAndRender();
 }
-function typeSelectGetRequest() {
+export function typeSelectGetRequest() {
   // сетим новое значение, если у нас изменилось value select'a типа
   var $typeSelect = document.querySelector(".header__filter-type");
   localStorage.setItem("type", `${$typeSelect.value}`);
   getAndRender();
 }
-function getAndRender() {
+export function getAndRender() {
   var $typeSelect = document.querySelector(".header__filter-type");
   var $themeSelect = document.querySelector(".header__filter-theme");
   getRequest(
@@ -250,21 +250,3 @@ function getAndRender() {
       renderNoQuestions();
     });
 }
-
-module.exports = {
-  showModal,
-  checkAnswer,
-  checkType,
-  answerValidation,
-  formTextValidation,
-  errorText,
-  clearModal,
-  hideModal,
-  listenDeleteButtons,
-  hideDeleteModal,
-  listenTypeSelect,
-  listenThemeSelect,
-  themeSelectGetRequest,
-  typeSelectGetRequest,
-  getAndRender,
-};
