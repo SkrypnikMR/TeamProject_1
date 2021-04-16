@@ -1,4 +1,3 @@
-const { fstat } = require("fs");
 var {
   getFromJSONFile,
   getFromXMLFile,
@@ -14,6 +13,7 @@ URL.get = function (stringType) {
 };
 jest.mock("fs");
 jest.mock("fast-xml-parser");
+jest.mock("js-yaml");
 describe("getFromJSONFile", function () {
   beforeEach(function () {
     var fs = require("fs");
@@ -81,7 +81,7 @@ describe("getFromXMLFile", function () {
         "<questions><question></question></questions>"
       );
     };
-    expect(getFromXMLFile(URL, 1)).toEqual([]);
+    expect(getFromXMLFile(URL, 1)).toEqual([""]);
   });
   it(`should be URL.theme === "ALLTHEMES" `, function () {
     var XMLparser = require("fast-xml-parser");
@@ -270,7 +270,7 @@ describe("getFromCSV", function () {
         stringDate: "15.04.2021 | 18:21:58",
         theme: "HTML",
         type: "CSV",
-      }
+      },
     ];
     URL.get = function (stringType) {
       if (stringType === "theme") {
@@ -284,7 +284,29 @@ describe("getFromYaml", function () {
   beforeEach(function () {
     var fs = require("fs");
     fs.readFileSync = function () {
-      return `[{"a":1, "theme": "A"}, {"b":2, "theme": "B"}, {"c":3, "theme" : "rightTheme"}]`;
+      return `
+      - questionText: "CSS1"
+        theme: "HTML"
+        date: 1618589572816
+        stringDate: "16.04.2021 | 19:12:52"
+        type:
+          - "YAML"
+        answer: true
+      - questionText: "net"
+        theme: "HTML"
+        date: 1618589515905
+        stringDate: "16.04.2021 | 19:11:55"
+        type:
+          - "YAML"
+        answer: false
+      - questionText: "da"
+        theme: "HTML"
+        date: 1618588992287
+        stringDate: "16.04.2021 | 19:03:12"
+        type:
+          - "YAML"
+        answer: true
+    `;
     };
   });
   it("should be defined ", function () {
@@ -295,5 +317,129 @@ describe("getFromYaml", function () {
   });
   it("should be without arguments", function () {
     expect(getFromYaml()).toBe(false);
+  });
+  it("should be URL.get(theme) === 'ALLTHEMES' ", function () {
+    URL.get = function (str) {
+      if (str === "theme") {
+        return "ALLTHEMES";
+      }
+    };
+    var yamlParser = require("js-yaml");
+    var result = [
+      {
+        questionText: "CSS1",
+        theme: "HTML",
+        date: 1618589572816,
+        stringDate: "16.04.2021 | 19:12:52",
+        type: ["YAML"],
+        answer: true,
+      },
+      {
+        questionText: "CSS1",
+        theme: "HTML",
+        date: 1618589572816,
+        stringDate: "16.04.2021 | 19:12:52",
+        type: ["YAML"],
+        answer: true,
+      },
+      {
+        questionText: "CSS1",
+        theme: "HTML",
+        date: 1618589572816,
+        stringDate: "16.04.2021 | 19:12:52",
+        type: ["YAML"],
+        answer: true,
+      },
+    ];
+    yamlParser.load = function (str) {
+      return result;
+    };
+    expect(getFromYaml(URL)).toEqual(result);
+  });
+  it("should be mode === 1", function () {
+    var mode = 1;
+    URL.get = function (str) {
+      if (str === "theme") {
+        return "head";
+      }
+    };
+    var yamlParser = require("js-yaml");
+    var result = [
+      {
+        questionText: "CSS1",
+        theme: "HTML",
+        date: 1618589572816,
+        stringDate: "16.04.2021 | 19:12:52",
+        type: ["YAML"],
+        answer: true,
+      },
+      {
+        questionText: "CSS1",
+        theme: "HTML",
+        date: 1618589572816,
+        stringDate: "16.04.2021 | 19:12:52",
+        type: ["YAML"],
+        answer: true,
+      },
+      {
+        questionText: "CSS1",
+        theme: "HTML",
+        date: 1618589572816,
+        stringDate: "16.04.2021 | 19:12:52",
+        type: ["YAML"],
+        answer: true,
+      },
+    ];
+    yamlParser.load = function (str) {
+      return result;
+    };
+    expect(getFromYaml(URL, mode)).toEqual(result);
+  });
+  it("should be theme = CSS", function () {
+    URL.get = function (str) {
+      if (str === "theme") {
+        return "CSS";
+      }
+    };
+    var yamlParser = require("js-yaml");
+    var result = [
+      {
+        questionText: "CSS1",
+        theme: "CSS",
+        date: 1618589572816,
+        stringDate: "16.04.2021 | 19:12:52",
+        type: ["YAML"],
+        answer: true,
+      },
+      {
+        questionText: "CSS1",
+        theme: "HTML",
+        date: 1618589572816,
+        stringDate: "16.04.2021 | 19:12:52",
+        type: ["YAML"],
+        answer: true,
+      },
+      {
+        questionText: "CSS1",
+        theme: "HTML",
+        date: 1618589572816,
+        stringDate: "16.04.2021 | 19:12:52",
+        type: ["YAML"],
+        answer: true,
+      },
+    ];
+    yamlParser.load = function (str) {
+      return result;
+    };
+    expect(getFromYaml(URL)).toEqual([
+      {
+        questionText: "CSS1",
+        theme: "CSS",
+        date: 1618589572816,
+        stringDate: "16.04.2021 | 19:12:52",
+        type: ["YAML"],
+        answer: true,
+      },
+    ]);
   });
 });

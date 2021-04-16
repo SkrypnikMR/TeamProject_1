@@ -9,7 +9,23 @@ var {
   getFromYaml,
 } = require("./getFromFile");
 var { convertToCSV, convertToXML } = require("./convertParse");
-
+function watchMethodAndUrl(req, res, headers) {
+  /* функция распределяющая распределяющая что делать, 
+    при определенное варианте запроса */
+  if (req.method === "GET") {
+    watchGetUrl(req, res, headers);
+  } else if (req.method === "POST") {
+    watchPostUrl(req, res, headers);
+  } else if (req.method === "DELETE") {
+    watchDeleteUrl(req, res, headers);
+  } else if (req.method === "PUT") {
+    watchPutUrl(req, res, headers);
+  } else if (req.method === "OPTIONS") {
+    res.writeHead(204, headers);
+    res.end();
+    return;
+  }
+}
 function watchGetUrl(req, res, headers) {
   /* функция отвечающая за обработку get запросов, 
     смотря на query параметры, которые пришли в запросе */
@@ -47,23 +63,6 @@ function watchGetUrl(req, res, headers) {
     var serverAnswer = getFromYaml(URL);
     res.writeHead(200, headers);
     res.end(JSON.stringify(serverAnswer));
-  }
-}
-function watchMethodAndUrl(req, res, headers) {
-  /* функция распределяющая распределяющая что делать, 
-    при определенное варианте запроса */
-  if (req.method === "GET") {
-    watchGetUrl(req, res, headers);
-  } else if (req.method === "POST") {
-    watchPostUrl(req, res, headers);
-  } else if (req.method === "DELETE") {
-    watchDeleteUrl(req, res, headers);
-  } else if (req.method === "PUT") {
-    watchPutUrl(req, res, headers);
-  } else if (req.method === "OPTIONS") {
-    res.writeHead(204, headers);
-    res.end();
-    return;
   }
 }
 function watchPostUrl(req, res, headers) {
@@ -195,6 +194,7 @@ function watchPutUrl(req, res, headers) {
     //можно допилить логику к изменениям вопросов
   }
 }
+
 
 module.exports = {
   watchMethodAndUrl,

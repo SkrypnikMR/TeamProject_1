@@ -31,8 +31,7 @@ function getFromXMLFile(URL, mode) {
   }
   /* Фунция чтения из файла XML и фильтрации его, 
     если нужно по темам, которые приходят в query параметрах */
-  var bufferFromXMLFile =
-    /* fs.readFileSync(`questions/questions.xml`, "utf-8"); */ "";
+  var bufferFromXMLFile = fs.readFileSync(`questions/questions.xml`, "utf-8");
   if (bufferFromXMLFile === "") {
     fs.writeFileSync(
       "questions/questions.xml",
@@ -41,7 +40,7 @@ function getFromXMLFile(URL, mode) {
     bufferFromXMLFile = fs.readFileSync(`questions/questions.xml`, "utf-8");
   }
   var allFromBuffer = XMLparser.parse(bufferFromXMLFile);
-  var arrayFromXML = allFromBuffer.questions.question || [];
+  var arrayFromXML = allFromBuffer.questions.question;
   var themesArrayFromXML = [];
   if (!Array.isArray(arrayFromXML)) {
     var newArray = [];
