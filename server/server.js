@@ -11,7 +11,6 @@ var server = http.createServer(function (req, res) {
   watchMethodAndUrl(req, res, headers, watchGetUrl, watchPostUrl, watchDeleteUrl, watchPutUrl);
 
 });
-
 server.listen(3000);
 
 
