@@ -1,5 +1,5 @@
 var http = require("http");
-var {watchMethodAndUrl} = require("./server_modules/watch");
+var {watchMethodAndUrl, watchGetUrl, watchDeleteUrl, watchPostUrl,watchPutUrl} = require("./server_modules/watch");
 
 var server = http.createServer(function (req, res) {
   var headers = {
@@ -8,7 +8,7 @@ var server = http.createServer(function (req, res) {
     "Access-Control-Allow-Methods": "GET,PUT,POST,DELETE",
     "Access-Control-Max-Age": 12344345789,
   };
-    watchMethodAndUrl(req, res, headers);
+  watchMethodAndUrl(req, res, headers, watchGetUrl, watchPostUrl, watchDeleteUrl, watchPutUrl);
 
 });
 

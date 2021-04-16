@@ -9,11 +9,11 @@ var {
   getFromYaml,
 } = require("./getFromFile");
 var { convertToCSV, convertToXML } = require("./convertParse");
-function watchMethodAndUrl(req, res, headers) {
+function watchMethodAndUrl(req, res, headers, watchGetUrl, watchPostUrl, watchDeleteUrl, watchPutUrl) {
   /* функция распределяющая распределяющая что делать, 
     при определенное варианте запроса */
   if (req.method === "GET") {
-    watchGetUrl(req, res, headers);
+   return watchGetUrl(req, res, headers);
   } else if (req.method === "POST") {
     watchPostUrl(req, res, headers);
   } else if (req.method === "DELETE") {
@@ -171,7 +171,7 @@ function watchDeleteUrl(req, res, headers) {
   res.writeHead(200, headers);
   res.end("done");
 }
-function watchPutUrl(req, res, headers) {
+function watchPutUrl(req, res, headers, ) {
   if (req.url === "/developers") {
     jsonParser(req, res, (err) => {
       var devBuff = fs.readFileSync("developers/developers.json", "utf-8");
