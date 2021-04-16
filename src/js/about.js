@@ -18,9 +18,17 @@ if (window.location.pathname === "/about.html") {
   slideContainer.addEventListener("mouseenter", () => {
     clearInterval(slideId);
   });
-  slideContainer.addEventListener("mouseleave", startSlide);
-  nextBtn.addEventListener("click", moveToNextSlide);
-  prevBtn.addEventListener("click", moveToPreviousSlide);
+  slideContainer.addEventListener("mouseleave", function (event) {
+      startSlide(function () {
+          moveToNextSlide(slide);
+      });
+  });
+  nextBtn.addEventListener("click", function (event) {
+      moveToNextSlide(slide);
+  });
+  prevBtn.addEventListener("click", function (event) {
+      moveToPreviousSlide(slide);
+  });
   slide.addEventListener("transitionend", () => {
     slides = getSlides();
     if (slides[index].id === firstClone.id) {
@@ -35,13 +43,15 @@ if (window.location.pathname === "/about.html") {
       slide.style.transform = `translateX(${-800 * index}px)`;
     }
   });
-  startSlide();
+    startSlide(function () {
+        moveToNextSlide(slide);
+    });
 }
 
-export function startSlide() {
+export function startSlide(func) {
   var interval = 5000;
   slideId = setInterval(() => {
-    moveToNextSlide();
+   return func(slide);
   }, interval);
 }
 
@@ -49,17 +59,17 @@ export function getSlides() {
   return document.querySelectorAll(".slide");
 }
 
-export function moveToNextSlide() {
-  slides = getSlides();
-  if (index >= slides.length - 1) return startSlide();
-  index++;
-  slide.style.transition = ".7s ease-out";
-  slide.style.transform = `translateX(${-800 * index}px)`;
+export function moveToNextSlide(element) {
+    slides = getSlides();
+    if (index >= slides.length - 1) return startSlide();
+    index++;
+    element.style.transition = ".7s ease-out";
+    element.style.transform = `translateX(${-800 * index}px)`;
 }
 
-export function moveToPreviousSlide() {
+export function moveToPreviousSlide(element) {
   if (index <= 0) return;
   index--;
-  slide.style.transition = ".7s ease-out";
-  slide.style.transform = `translateX(${-800 * index}px)`;
+    element.style.transition = ".7s ease-out";
+    element.style.transform = `translateX(${-800 * index}px)`;
 }
