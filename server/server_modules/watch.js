@@ -1,5 +1,4 @@
 var fs = require("fs");
-var { json } = require("body-parser");
 var YAML = require("json-to-pretty-yaml");
 var {
   getFromJSONFile,
@@ -14,6 +13,9 @@ var functionParams = {
   getFromCSV,
   getFromYaml,
 };
+var functionsConverters = {
+  convertToXML, convertToCSV
+}
 function watchMethodAndUrl(
   req,
   res,
@@ -28,9 +30,9 @@ function watchMethodAndUrl(
   if (req.method === "GET") {
     watchGetUrl(req, res, headers, functionParams);
   } else if (req.method === "POST") {
-    watchPostUrl(req, res, headers);
+    watchPostUrl(req, res, headers, functionParams, functionsConverters);
   } else if (req.method === "DELETE") {
-    watchDeleteUrl(req, res, headers);
+    watchDeleteUrl(req, res, headers, functionParams, functionsConverters);
   } else if (req.method === "PUT") {
     watchPutUrl(req, res, headers);
   } else if (req.method === "OPTIONS") {
@@ -90,14 +92,14 @@ function watchGetUrl(
     return;
   }
 }
-function watchPostUrl(req, res, headers) {
+function watchPostUrl(req, res, headers, functionParams, functionsConverters) {
   /*    функция, отвечающая за обработку get запросов, 
     логика которой повязана на количестве типов, приехавших в объекте, 
     если выбран не 1 тип вопроса - запишет во все, которые нужно */
     var URL = new URLSearchParams(req.url);
     for (var i = 0; i < req.body.type.length; i++) {
       if (req.body.type[i] === "JSON") {
-        var arrayFromJson = getFromJSONFile(URL, 1);
+        var arrayFromJson = functionParams.getFromJSONFile(URL, 1);
         arrayFromJson.unshift(req.body);
         fs.writeFileSync(
           `questions/questions.json`,
@@ -106,21 +108,21 @@ function watchPostUrl(req, res, headers) {
         continue;
       }
       if (req.body.type[i] === "XML") {
-        var arrayFromXML = getFromXMLFile(URL, 1);
+        var arrayFromXML = functionParams.getFromXMLFile(URL, 1);
         if (arrayFromXML[0] === "" || arrayFromXML[0] === undefined) {
           var newArrayFromXML = [];
           newArrayFromXML.unshift(req.body);
           fs.writeFileSync(
             "questions/questions.xml",
-            convertToXML(newArrayFromXML)
+            functionsConverters.convertToXML(newArrayFromXML)
           );
           continue;
         } else arrayFromXML.unshift(req.body);
-        fs.writeFileSync("questions/questions.xml", convertToXML(arrayFromXML));
+        fs.writeFileSync("questions/questions.xml", functionsConverters.convertToXML(arrayFromXML));
         continue;
       }
       if (req.body.type[i] === "YAML") {
-        var arrayFromYAML = getFromYaml(URL, 1);
+        var arrayFromYAML = functionParams.getFromYaml(URL, 1);
         arrayFromYAML.unshift(req.body);
         fs.writeFileSync(
           "questions/questions.yaml",
@@ -130,21 +132,21 @@ function watchPostUrl(req, res, headers) {
       }
       if (req.body.type[i] === "CSV") {
         req.body.type = "CSV";
-        var arrayFromCSV = getFromCSV(URL, 1);
+        var arrayFromCSV = functionParams.getFromCSV(URL, 1);
         arrayFromCSV.unshift(req.body);
-        fs.writeFileSync("questions/questions.csv", convertToCSV(arrayFromCSV));
+        fs.writeFileSync("questions/questions.csv", functionsConverters.convertToCSV(arrayFromCSV));
         continue;
       }
     }
   res.writeHead(200, headers);
   res.end("done");
 }
-function watchDeleteUrl(req, res, headers) {
+function watchDeleteUrl(req, res, headers, functionParams, functionsConverters) {
   /* Функция логики обработки delete запросов, основная на сравнении questions.date
     При совпадении - объект будет удален из файла, файл перезапишется */
     var URL = new URLSearchParams(req.url);
     if (URL.get("type") === "JSON") {
-      var arrayFromJson = getFromJSONFile(URL, 1);
+      var arrayFromJson = functionParams.getFromJSONFile(URL, 1);
       for (var i = 0; i < arrayFromJson.length; i++) {
         if (arrayFromJson[i].date === req.body.date) {
           arrayFromJson.splice(i, 1);
@@ -156,7 +158,7 @@ function watchDeleteUrl(req, res, headers) {
       );
     }
     if (URL.get("type") === "XML") {
-      var XML = getFromXMLFile(URL, 1);
+      var XML = functionParams.getFromXMLFile(URL, 1);
       for (var i = 0; i < XML.length; i++) {
         if (XML[i]) {
           if (XML[i].date === req.body.date) {
@@ -164,10 +166,10 @@ function watchDeleteUrl(req, res, headers) {
           }
         }
       }
-      fs.writeFileSync("questions/questions.xml", convertToXML(XML));
+      fs.writeFileSync("questions/questions.xml", functionsConverters.convertToXML(XML));
     }
     if (URL.get("type") === "YAML") {
-      var arrayFromYAML = getFromYaml(URL, 1);
+      var arrayFromYAML = functionParams.getFromYaml(URL, 1);
       for (var i = 0; i < arrayFromYAML.length; i++) {
         if (arrayFromYAML[i].date === req.body.date) {
           arrayFromYAML.splice(i, 1);
@@ -179,13 +181,13 @@ function watchDeleteUrl(req, res, headers) {
       );
     }
     if (URL.get("type") === "CSV") {
-      var arrayFromCSV = getFromCSV(URL, 1);
+      var arrayFromCSV = functionParams.getFromCSV(URL, 1);
       for (var i = 0; i < arrayFromCSV.length; i++) {
         if (arrayFromCSV[i].date === req.body.date) {
           arrayFromCSV.splice(i, 1);
         }
       }
-      fs.writeFileSync(`questions/questions.csv`, convertToCSV(arrayFromCSV));
+      fs.writeFileSync(`questions/questions.csv`, functionsConverters.convertToCSV(arrayFromCSV));
     }
   res.writeHead(200, headers);
   res.end("done");
