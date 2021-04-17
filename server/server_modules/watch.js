@@ -1,6 +1,5 @@
 var fs = require("fs");
 var { json } = require("body-parser");
-var jsonParser = json();
 var YAML = require("json-to-pretty-yaml");
 var {
   getFromJSONFile,
@@ -9,11 +8,25 @@ var {
   getFromYaml,
 } = require("./getFromFile");
 var { convertToCSV, convertToXML } = require("./convertParse");
-function watchMethodAndUrl(req, res, headers, watchGetUrl, watchPostUrl, watchDeleteUrl, watchPutUrl) {
+var functionParams = {
+  getFromJSONFile,
+  getFromXMLFile,
+  getFromCSV,
+  getFromYaml,
+};
+function watchMethodAndUrl(
+  req,
+  res,
+  headers,
+  watchGetUrl,
+  watchPostUrl,
+  watchDeleteUrl,
+  watchPutUrl
+) {
   /* функция распределяющая распределяющая что делать, 
     при определенное варианте запроса */
   if (req.method === "GET") {
-   return watchGetUrl(req, res, headers);
+    watchGetUrl(req, res, headers, functionParams);
   } else if (req.method === "POST") {
     watchPostUrl(req, res, headers);
   } else if (req.method === "DELETE") {
@@ -26,7 +39,13 @@ function watchMethodAndUrl(req, res, headers, watchGetUrl, watchPostUrl, watchDe
     return;
   }
 }
-function watchGetUrl(req, res, headers) {
+function watchGetUrl(
+  req,
+  res,
+  headers,
+  functionParams
+) {
+
   /* функция отвечающая за обработку get запросов, 
     смотря на query параметры, которые пришли в запросе */
   if (req.url === "/developers") {
@@ -37,40 +56,44 @@ function watchGetUrl(req, res, headers) {
   }
   var URL = new URLSearchParams(req.url);
   if (URL.get("type") === "JSON") {
-    var serverAnswer = getFromJSONFile(URL);
+    var serverAnswer = functionParams.getFromJSONFile(URL);
     res.writeHead(200, headers);
     res.end(JSON.stringify(serverAnswer));
+    return;
   }
   if (URL.get("type") === "XML") {
-    var serverAnswer = getFromXMLFile(URL);
+    var serverAnswer = functionParams.getFromXMLFile(URL);
     if (serverAnswer === undefined) {
       res.writeHead(200, headers);
       res.end(JSON.stringify([]));
+      return;
     } else if (!Array.isArray(serverAnswer)) {
       res.writeHead(200, headers);
       res.end(JSON.stringify([serverAnswer]));
+      return;
     } else {
       res.writeHead(200, headers);
       res.end(JSON.stringify(serverAnswer));
+      return;
     }
   }
   if (URL.get("type") === "CSV") {
-    var serverAnswer = getFromCSV(URL);
+    var serverAnswer = functionParams.getFromCSV(URL);
     res.writeHead(200, headers);
     res.end(JSON.stringify(serverAnswer));
+    return;
   }
   if (URL.get("type") === "YAML") {
-    var serverAnswer = getFromYaml(URL);
+    var serverAnswer = functionParams.getFromYaml(URL);
     res.writeHead(200, headers);
     res.end(JSON.stringify(serverAnswer));
+    return;
   }
 }
 function watchPostUrl(req, res, headers) {
   /*    функция, отвечающая за обработку get запросов, 
     логика которой повязана на количестве типов, приехавших в объекте, 
     если выбран не 1 тип вопроса - запишет во все, которые нужно */
-  jsonParser(req, res, (err) => {
-    if (err) console.log(err);
     var URL = new URLSearchParams(req.url);
     for (var i = 0; i < req.body.type.length; i++) {
       if (req.body.type[i] === "JSON") {
@@ -106,22 +129,19 @@ function watchPostUrl(req, res, headers) {
         continue;
       }
       if (req.body.type[i] === "CSV") {
-        req.body.type = 'CSV';
+        req.body.type = "CSV";
         var arrayFromCSV = getFromCSV(URL, 1);
         arrayFromCSV.unshift(req.body);
         fs.writeFileSync("questions/questions.csv", convertToCSV(arrayFromCSV));
         continue;
       }
     }
-  });
   res.writeHead(200, headers);
   res.end("done");
 }
 function watchDeleteUrl(req, res, headers) {
   /* Функция логики обработки delete запросов, основная на сравнении questions.date
     При совпадении - объект будет удален из файла, файл перезапишется */
-  jsonParser(req, res, (err) => {
-    if (err) console.log(err);
     var URL = new URLSearchParams(req.url);
     if (URL.get("type") === "JSON") {
       var arrayFromJson = getFromJSONFile(URL, 1);
@@ -167,13 +187,11 @@ function watchDeleteUrl(req, res, headers) {
       }
       fs.writeFileSync(`questions/questions.csv`, convertToCSV(arrayFromCSV));
     }
-  });
   res.writeHead(200, headers);
   res.end("done");
 }
-function watchPutUrl(req, res, headers, ) {
+function watchPutUrl(req, res, headers) {
   if (req.url === "/developers") {
-    jsonParser(req, res, (err) => {
       var devBuff = fs.readFileSync("developers/developers.json", "utf-8");
       var devArray = JSON.parse(devBuff);
       for (var i = 0; i < devArray.length; i++) {
@@ -189,12 +207,10 @@ function watchPutUrl(req, res, headers, ) {
       fs.writeFileSync("developers/developers.json", JSON.stringify(devArray));
       res.writeHead(200, headers);
       res.end(JSON.stringify(devArray));
-    });
   } else {
     //можно допилить логику к изменениям вопросов
   }
 }
-
 
 module.exports = {
   watchMethodAndUrl,
