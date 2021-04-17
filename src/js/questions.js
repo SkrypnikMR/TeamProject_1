@@ -23,13 +23,14 @@ if (window.location.pathname === "/questions.html") {
   var $closeX = document.querySelector(".close"); // нода кнопки крестика в модальном окне
   var $questionCreateButton = document.querySelector(".questionCreateButton");
   $questionCreateButton.addEventListener("click", showModal); // прослушка клика кнопки Создания вопроса
-  $closeX.addEventListener("click", hideModal); // слушатель у крестика модального окна
+  $closeX.addEventListener("click", function(event){
+    hideModal(clearModal)
+  }); // слушатель у крестика модального окна
   window.onclick = function (event) {
     // модальное окно закрыть за пределеами модального окна
     if ($modal) {
       if (event.target === $modal) {
-        hideModal();
-        clearModal();
+        hideModal(clearModal);
       }
     }
   };
@@ -47,7 +48,7 @@ export function showModal() {
 
     var $text = document.querySelector(".question");
     var $theme = document.querySelector(".theme");
-    var flag = formTextValidation($text) && answerValidation(); // в флаг запимсываем значение вернувшееся после выполнения валидации
+    var flag = formTextValidation($text) && answerValidation(errorText); // в флаг запимсываем значение вернувшееся после выполнения валидации
 
     // создаем объект, который будет отправлять на сервер
     var objDate = new Date();
@@ -62,7 +63,7 @@ export function showModal() {
     obj["answer"] = checkAnswer();
     //если прошла валидаци - нас пустет в иф
     if (flag) {
-      hideModal();
+      hideModal(clearModal);
       postRequest(URL, `?questions&type=${$typeSelect.value}`, obj).then(
         function () {
           getAndRender();
@@ -72,7 +73,7 @@ export function showModal() {
   }
   function cancelQuestion(event) {
     event.preventDefault();
-    hideModal();
+    hideModal(clearModal);
   }
 }
 
@@ -112,7 +113,7 @@ export function checkType() {
   return result;
 }
 
-export function answerValidation() {
+export function answerValidation(errorText) {
   //валидация ответов, они должны быть выбраны!
   var $trueRadio = document.querySelector(".TRUERadio");
   var $falseRadio = document.querySelector(".FALSERadio");
@@ -140,10 +141,10 @@ export function formTextValidation($node) {
   return true;
 }
 
-export function errorText(errorText) {
+export function errorText(textError) {
   // отрисовка текста ошибки в modalHead
   var $modalMessage = document.querySelector(".modalMessage");
-  return ($modalMessage.textContent = errorText);
+  return ($modalMessage.textContent = textError);
 }
 export function clearModal() {
   // функция очистки инпутов и анчекинга чекбоксов радиобатанов
@@ -162,7 +163,7 @@ export function clearModal() {
   $YAML.checked = false;
   $CSV.checked = false;
 }
-export function hideModal() {
+export function hideModal(clearModal) {
   // функция скрытия модального окна
   $modal.classList.add("hide");
   clearModal();
@@ -184,23 +185,24 @@ export function listenDeleteButtons() {
       showDeleteModal();
     });
   }
-
-  function showDeleteModal() {
+}
+export function showDeleteModal() {
     $modalDelete.classList.remove("hide");
     var $confirmButton = document.querySelector(".confirmButton"); // нода кнопки confirm
     var $cancelButton = document.querySelector(".cancelButton"); // нода кнопки cancel
     $confirmButton.addEventListener("click", deleteConfirm); // слушатель кнопки confirm
     $cancelButton.addEventListener("click", hideDeleteModal); // слушатель кнопки cancel
-  }
-  //в deleteConfirm в deleteRequest передаем objDelete и перерендериваем страницу и прячем модалку
-  function deleteConfirm() {
-    deleteRequest(URL, `?questions&type=${$typeSelect.value}`, objDelete).then(
-      function () {
-        getAndRender();
-      }
-    );
-    hideDeleteModal();
-  }
+}
+// console.log($modalDelete.classList)
+ //в deleteConfirm в deleteRequest передаем objDelete и перерендериваем страницу и прячем модалку
+  
+export function deleteConfirm() {
+  deleteRequest(URL, `?questions&type=${$typeSelect.value}`, objDelete).then(
+    function () {
+      getAndRender();
+    }
+  );
+  hideDeleteModal();
 }
 
 export function hideDeleteModal() {
@@ -213,7 +215,7 @@ export function listenThemeSelect() {
   var $themeSelect = document.querySelector(".header__filter-theme"); // нода фильтра темы;
   $themeSelect.addEventListener("change", themeSelectGetRequest);
 }
-export function themeSelectGetRequest() {
+export function themeSelectGetRequest(getAndRender) {
   var $themeSelect = document.querySelector(".header__filter-theme");
   localStorage.setItem("theme", `${$themeSelect.value}`);
   getAndRender();
