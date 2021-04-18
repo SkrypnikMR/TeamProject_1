@@ -170,7 +170,6 @@ export function hideModal($modal, clearModal) {
   $modal.classList.add("hide");
   clearModal();
 }
-// console.log($modal.classList)
 var objDelete = {}; //инициализация объекта для удаления
 export function listenDeleteButtons() {
   var $questionDeleteButtons = document.querySelectorAll(".questions__edit");
@@ -185,11 +184,11 @@ export function listenDeleteButtons() {
         .getAttribute("type")
         .split(",");
       //вызываем функцию показа модалки
-      showDeleteModal();
+      showDeleteModal($modalDelete, hideDeleteModal, deleteConfirm);
     });
   }
 }
-export function showDeleteModal() {
+export function showDeleteModal($modalDelete, hideDeleteModal, deleteConfirm) {
     $modalDelete.classList.remove("hide");
     var $confirmButton = document.querySelector(".confirmButton"); // нода кнопки confirm
     var $cancelButton = document.querySelector(".cancelButton"); // нода кнопки cancel
@@ -198,9 +197,7 @@ export function showDeleteModal() {
       hideDeleteModal($modalDelete)
     } ); // слушатель кнопки cancel
 }
-// console.log($modalDelete.classList)
  //в deleteConfirm в deleteRequest передаем objDelete и перерендериваем страницу и прячем модалку
-  
 export function deleteConfirm() {
   deleteRequest(URL, `?questions&type=${$typeSelect.value}`, objDelete).then(
     function () {
