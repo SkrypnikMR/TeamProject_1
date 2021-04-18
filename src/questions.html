@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Question</title>
+    <link rel="preconnect" href="https://fonts.gstatic.com" />
+    <link
+      href="https://fonts.googleapis.com/css2?family=PT+Serif:ital,wght@0,400;0,700;1,400;1,700&family=Roboto:wght@100&display=swap"
+      rel="stylesheet"
+    />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Lato:wght@400;700&family=Open+Sans&family=PT+Sans:wght@400;700&display=swap"
+      rel="stylesheet"
+    />
+  </head>
+  <body>
+    <header class="header" id="header">
+        <div class="header__body">
+         <div class="container">
+          <div class="header__info">
+            <a href="index.html">
+              <img class="header__logo" src="./img/logo.png" alt="logo" />
+            </a>
+            <div>
+              <p class="header__teamName">bigBossesExtraSmart</p>
+              <p class="header__teamSlogan">Кроль бежит, скорость NaN</p>
+            </div>
+          </div>
+         </div>
+
+        
+          <nav class="header__menu">
+            <div class="container">
+              <ul class="header__list">
+                <li class="header__menu-item">
+                  <a class="header__menu-link" href="index.html">HOME</a>
+                </li>
+                <li class="header__menu-item">
+                  <a class="header__menu-link header__active" href="#">QUESTIONS</a>
+                </li>
+                <li class="header__menu-item">
+                  <a class="header__menu-link" href="about.html">ABOUT</a>
+                </li>
+              </ul>
+            </div>
+          </nav>
+          <div class="headerFooter">
+            <div class="headerFilter">
+            <select class="header__filter-type">
+            <option value ="JSON">JSON</option>
+            <option value ="YAML">YAML</option>
+            <option value ="XML">XML</option>
+            <option value ="CSV">CSV</option>
+          </select> 
+          <select class="header__filter-theme">
+            <option value ="ALLTHEMES">ALL THEMES</option>
+            <option value ="HTML">HTML</option>
+            <option value ="CSS">CSS</option>
+            <option value ="JAVASCRIPT">JAVASCRIPT</option>
+            <option value ="GIT">GIT</option>
+            <option value ="ERUDITION">ERUDITION</option>
+          </select>
+          </div>
+          <div class="headerQuestionCreateButton">
+            <button class="questionCreateButton">Create question</button>
+          </div>
+        </div>
+        </div>
+      
+    </header>
+    <section class="questions__Content">
+      <div class="questions__wrapper">
+        <div class="questions__items">
+         </div>
+         </div>
+    </section>
+    <div id="myModal" class="modal hide">
+      <div class="modal-content">
+        <div class="modal-header">
+          <span class="close">&times;</span>
+          <h2 class="modalMessage">Your question</h2>
+        </div>
+        <div class="modal-body">
+          <form class="questionForm">
+            <div class="questionText">
+              <input
+                type="text"
+                name="questionText"
+                placeholder="question text"
+                class="question"
+              />
+            </div>
+            <div class="questionTheme">
+              <select class="theme">
+                <option>HTML</option>
+                <option>CSS</option>
+                <option>JAVASCRIPT</option>
+                <option>GIT</option>
+                <option>ERUDITION</option>
+              </select>
+            </div>
+            <div class="questionAnswer">
+              <p>Answer</p>
+              <label>TRUE</label><input
+                type="radio"
+                name="answer"
+                value="1"
+                class="TRUERadio"
+              />
+              <label>FALSE</label>
+              <input
+                type="radio"
+                name="answer"
+                value="0"
+                class="FALSERadio"
+              />
+            </div>
+            <div class="questionType">
+              <p>Choose the type of files</p>
+              <input type="checkbox" class="question__type-JSON"  /><label>JSON</label>
+              <input type="checkbox" class="question__type-YAML" /><label>YAML</label>
+              <input type="checkbox" class="question__type-XML" /><label>XML</label>
+              <input type="checkbox" class="question__type-CSV" /><label>CSV</label>
+              <p>
+                If you do not select any of the types, it will be automatically selected
+                 JSON
+              </p>
+            </div>
+            <div class="questionButtons">
+              <button class="questionCancel">CANCEL</button>
+              <button class="questionCreate">SEND</button>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+      <div id="modalDeleteConfirmation" class="modalDeleteConfirmation hide">
+        <div class="modalDeleteConfirmation__container">
+        <div class="modalDeleteConfirmation__header">
+        <p class="modalDeleteConfirmation__header__message">Are you sure you want to delete this question?</p>
+        </div>
+        <div class="modalDeleteConfirmation__buttons">
+          <input class="confirmButton modalDeleteConfirmation__button" type="button" value="confirm">
+          <input class="cancelButton modalDeleteConfirmation__button" type="button" value="cancel">
+        </div>
+      </div>
+      </div>
+    <footer class="footer" id="footer">
+      <div class="footer_text">
+        <p> 
+           © 2021 Team six app. All Rights Reserved | Design by <a class="footer__menu-link" href="about.html">bigBossesExtraSmart | Join us right now!</a>
+        </p>
+        <ul class="social-icons">
+          <li><a href="https://www.skype.com/uk/get-skype/"><img src='./img/skype.jpg' /></a></li>
+          <li><a href="https://github.com/SkypnikMR/TeamProject_1"><img src='./img/github.png' /></a></li>
+          <li><a href="https://deveducation.com/uk/"><img src='./img/dev.jpg' /></a></li>
+          </ul>
+     </div>
+  </body>
+</html>
