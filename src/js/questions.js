@@ -9,13 +9,14 @@ import { renderNoQuestions } from "./render";
 if (window.location.pathname === "/questions.html") {
   // всё что происходит, когда мы запукаем страницу questions.html
   var $typeSelect = document.querySelector(".header__filter-type"); // нода фильтра типа;
-  var $themeSelect = document.querySelector(".header__filter-theme"); // нода фильтра темы;
+  var $themeSelect = document.querySelector(".header__filter-theme"); 
+  var $modalMessage = document.querySelector(".modalMessage"); // нода фильтра темы;
   $typeSelect.value = localStorage.getItem("type") || $typeSelect.value; // пулучаем value из локалстореджа, если его нет , то value = себе
   localStorage.setItem("type", $typeSelect.value); // cетим в локал сторедж, нужно для первого запуска приложения, пока нет ничего в localStorage.
   $themeSelect.value = localStorage.getItem("theme") || $themeSelect.value; // пулучаем value из локалстореджа, если его нет , то value = себе
   localStorage.setItem("theme", $themeSelect.value); // cетим в локал сторедж, нужно для первого запуска приложения, пока нет ничего в localStorage.
-  listenTypeSelect(); // Добавляем слушателя селекту типов
-  listenThemeSelect(); // Добавляем слушателя селекту тем
+  listenTypeSelect($typeSelect, getAndRender); // Добавляем слушателя селекту типов
+  listenThemeSelect($themeSelect, getAndRender); // Добавляем слушателя селекту тем
   getAndRender(); // сделали гет запрос и отрисовали
 
   var $modal = document.querySelector(".modal"); // нода модального окна
@@ -24,13 +25,13 @@ if (window.location.pathname === "/questions.html") {
   var $questionCreateButton = document.querySelector(".questionCreateButton");
   $questionCreateButton.addEventListener("click", showModal); // прослушка клика кнопки Создания вопроса
   $closeX.addEventListener("click", function(event){
-    hideModal(clearModal)
+    hideModal($modal,clearModal)
   }); // слушатель у крестика модального окна
   window.onclick = function (event) {
     // модальное окно закрыть за пределеами модального окна
     if ($modal) {
       if (event.target === $modal) {
-        hideModal(clearModal);
+        hideModal($modal, clearModal);
       }
     }
   };
@@ -48,7 +49,7 @@ export function showModal() {
 
     var $text = document.querySelector(".question");
     var $theme = document.querySelector(".theme");
-    var flag = formTextValidation($text) && answerValidation(errorText); // в флаг запимсываем значение вернувшееся после выполнения валидации
+    var flag = formTextValidation($text, errorText) && answerValidation(errorText); // в флаг запимсываем значение вернувшееся после выполнения валидации
 
     // создаем объект, который будет отправлять на сервер
     var objDate = new Date();
@@ -63,7 +64,7 @@ export function showModal() {
     obj["answer"] = checkAnswer();
     //если прошла валидаци - нас пустет в иф
     if (flag) {
-      hideModal(clearModal);
+      hideModal( $modal, clearModal);
       postRequest(URL, `?questions&type=${$typeSelect.value}`, obj).then(
         function () {
           getAndRender();
@@ -73,7 +74,7 @@ export function showModal() {
   }
   function cancelQuestion(event) {
     event.preventDefault();
-    hideModal(clearModal);
+    hideModal($modal, clearModal);
   }
 }
 
@@ -120,31 +121,27 @@ export function answerValidation(errorText) {
   if ($trueRadio.checked || $falseRadio.checked) {
     return true;
   } else {
-    errorText("Choose an answer!");
+    errorText("Choose an answer!", $modalMessage);
     return false;
   }
 }
 
-export function formTextValidation($node) {
+export function formTextValidation($node, errorText) {
   // валидируем форму, не должен быть пустой
-  var $text = document.querySelector(".question");
-  if ($node.isEqualNode($text)) {
     if ($node.value === "") {
-      errorText("Please write the text of the question");
+      errorText("Please write the text of the question", $modalMessage);
       return false;
     }
     if ($node.value.length > 250) {
-      errorText("The question should not be more than 250 characters");
+      errorText("The question should not be more than 250 characters", $modalMessage);
       return false;
     }
-  }
   return true;
 }
 
-export function errorText(textError) {
+export function errorText(textError, $node) {
   // отрисовка текста ошибки в modalHead
-  var $modalMessage = document.querySelector(".modalMessage");
-  return ($modalMessage.textContent = textError);
+  $node.textContent = textError
 }
 export function clearModal() {
   // функция очистки инпутов и анчекинга чекбоксов радиобатанов
@@ -155,6 +152,10 @@ export function clearModal() {
   var $XML = document.querySelector(".question__type-XML");
   var $YAML = document.querySelector(".question__type-YAML");
   var $CSV = document.querySelector(".question__type-CSV");
+  var $theme =  document.querySelector(".theme");
+  var $modalMessage = document.querySelector(".modalMessage");
+  $modalMessage.textContent = 'Your question';
+  $theme.value = "HTML";
   $text.value = "";
   $trueRadio.checked = false;
   $falseRadio.checked = false;
@@ -163,11 +164,12 @@ export function clearModal() {
   $YAML.checked = false;
   $CSV.checked = false;
 }
-export function hideModal(clearModal) {
+export function hideModal($modal, clearModal) {
   // функция скрытия модального окна
   $modal.classList.add("hide");
   clearModal();
 }
+// console.log($modal.classList)
 var objDelete = {}; //инициализация объекта для удаления
 export function listenDeleteButtons() {
   var $questionDeleteButtons = document.querySelectorAll(".questions__edit");
@@ -191,7 +193,9 @@ export function showDeleteModal() {
     var $confirmButton = document.querySelector(".confirmButton"); // нода кнопки confirm
     var $cancelButton = document.querySelector(".cancelButton"); // нода кнопки cancel
     $confirmButton.addEventListener("click", deleteConfirm); // слушатель кнопки confirm
-    $cancelButton.addEventListener("click", hideDeleteModal); // слушатель кнопки cancel
+    $cancelButton.addEventListener("click",function(){
+      hideDeleteModal($modalDelete)
+    } ); // слушатель кнопки cancel
 }
 // console.log($modalDelete.classList)
  //в deleteConfirm в deleteRequest передаем objDelete и перерендериваем страницу и прячем модалку
@@ -202,29 +206,29 @@ export function deleteConfirm() {
       getAndRender();
     }
   );
-  hideDeleteModal();
+  hideDeleteModal($modalDelete);
 }
 
-export function hideDeleteModal() {
+export function hideDeleteModal($modalDelete) {
   $modalDelete.classList.add("hide");
 }
-export function listenTypeSelect() {
-  $typeSelect.addEventListener("change", typeSelectGetRequest);
+export function listenTypeSelect($node, cb) {
+  $node.addEventListener("change", function(){
+    typeSelectGetRequest($node, cb)
+  });
 }
-export function listenThemeSelect() {
-  var $themeSelect = document.querySelector(".header__filter-theme"); // нода фильтра темы;
-  $themeSelect.addEventListener("change", themeSelectGetRequest);
+export function listenThemeSelect($node, cb) {
+  $node.addEventListener("change", function (){
+    themeSelectGetRequest($node, cb)
+})
 }
-export function themeSelectGetRequest(getAndRender) {
-  var $themeSelect = document.querySelector(".header__filter-theme");
-  localStorage.setItem("theme", `${$themeSelect.value}`);
-  getAndRender();
+export function themeSelectGetRequest($node, cb) {
+  localStorage.setItem("theme", `${$node.value}`);
+  cb();
 }
-export function typeSelectGetRequest() {
-  // сетим новое значение, если у нас изменилось value select'a типа
-  var $typeSelect = document.querySelector(".header__filter-type");
-  localStorage.setItem("type", `${$typeSelect.value}`);
-  getAndRender();
+export function typeSelectGetRequest($node, cb) {
+  localStorage.setItem("type", `${$node.value}`);
+  cb();
 }
 export function getAndRender() {
   var $typeSelect = document.querySelector(".header__filter-type");

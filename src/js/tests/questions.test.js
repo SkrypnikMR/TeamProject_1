@@ -18,6 +18,10 @@ var {showModal,
 } = require('../questions');
 
 //showModal гребаный класс лист как работает
+// ($node.isEqualNode($text))
+// addEventListener("click", deleteConfirm)
+// .then как тестировать
+// функция в функции как передавать? listenTypeSelect and listenThemeSelect
 
 describe("showModal", function () {
     it("should be defined ", function () {
@@ -230,7 +234,6 @@ describe("answerValidation", function () {
         expect(errorText).toHaveBeenCalled();
     });
 })
-''
 
 describe("formTextValidation", function () {
     it("should be defined ", function () {
@@ -238,6 +241,27 @@ describe("formTextValidation", function () {
     });
     it("should be function", function () {
         expect(typeof formTextValidation).toBe("function");
+    });
+    it("should call error text and return false if text is empty", function () {
+        errorText = jest.fn()
+        var $node = {value: ''}
+
+        expect(formTextValidation($node, errorText)).toBe(false);
+        expect(errorText).toHaveBeenCalled();
+    });
+    it("should call error text and return false if text is more than 250 chars long", function () {
+        errorText = jest.fn()
+        var $node = {value: {length: 300}}
+
+        expect(formTextValidation($node, errorText)).toBe(false);
+        expect(errorText).toHaveBeenCalled();
+    });
+    it("should return true if text is OK", function () {
+        errorText = jest.fn()
+        var $node = {value: '{length: 300}'}
+
+        expect(formTextValidation($node, errorText)).toBe(true);
+        expect(errorText).not.toHaveBeenCalled();
     });
 })
 
@@ -249,13 +273,15 @@ describe("errorText", function () {
         expect(typeof errorText).toBe("function");
     });
     it("should return error message", function () {
-        window.document.querySelector = function(str) {
-            if (str === ".modalMessage"){
-                return {textContent: textError}
-            }
-        }
-        var textError = '1'
-        expect(errorText('1')).toBe('1');
+        var $node = {textContent: ''}
+        var textError = ''
+        // window.document.querySelector = function(str) {
+        //     if (str === ".modalMessage"){
+        //         return {textContent: textError}
+        //     }
+        // }
+        errorText(textError, $node)
+        expect($node).toHaveProperty('textContent', '');
     });
 })
 
@@ -267,7 +293,7 @@ describe("clearModal", function () {
         expect(typeof clearModal).toBe("function");
     });
     it("should clear all nodes", function () {
-        var  $text, $trueRadio, $falseRadio, $JSON, $XML, $YAML, $CSV
+        var  $text, $trueRadio, $falseRadio, $JSON, $XML, $YAML, $CSV, $theme, $modalMessage
         window.document.querySelector = function(str) {
             if (str === ".question"){
                 $text =  {value: ''}
@@ -297,6 +323,14 @@ describe("clearModal", function () {
                  $CSV = {checked: false}
                 return $CSV 
             }
+            if (str === ".theme"){
+                $theme = {value: 'HTML'}
+               return $theme 
+            }
+            if (str === ".modalMessage"){
+                $modalMessage = {textContent: 'Your question'}
+               return $modalMessage 
+            }
         }
         clearModal();
         expect($text).toHaveProperty('value', '');
@@ -306,8 +340,11 @@ describe("clearModal", function () {
         expect($XML).toHaveProperty('checked', false);
         expect($YAML).toHaveProperty('checked', false);
         expect($CSV).toHaveProperty('checked', false);
+        expect($theme).toHaveProperty('value', 'HTML');
+        expect($modalMessage).toHaveProperty('textContent', 'Your question');
     });
 })
+
 describe("hideModal", function () {
     it("should be defined ", function () {
         expect(hideModal).toBeDefined();
@@ -315,30 +352,29 @@ describe("hideModal", function () {
     it("should be function", function () {
         expect(typeof hideModal).toBe("function");
     });
-    // it("should call clearModal and add class hide", function () {
-    //     window.document.querySelector = function(str) {
-    //         if (str === ".modal"){
-    //             window.DOMTokenList.add = function(str) {
-    //                 if (str === "hide"){
-    //                     var $modal = {}
-    //                     $modal[classList] =  {0: 'modalDeleteConfirmation', 1: 'hide', length: 2, value: 'modalDeleteConfirmation, hide'}
-    //                     return $modal.classList
-    //                 }
-    //             }
-    //         }
-    //     }
-    //     // window.DOMTokenList.add = function(str) {
-    //     //     if (str === "hide"){
-    //     //         var $modal = {}
-    //     //         $modal[classList] =  {0: 'modalDeleteConfirmation', 1: 'hide', length: 2, value: 'modalDeleteConfirmation, hide'}
-    //     //         return $modal.classList
-    //     //     }
-    //     // }
-    //     var clearModal = jest.fn()
-    //     hideModal(clearModal)
-    //     expect(clearModal).toHaveBeenCalled();
-    // });
+    it("should return nothing", function(){
+        var $modal = {classList: {add: jest.fn()}};
+        var clearModal = jest.fn();
+        expect(hideModal($modal, clearModal)).toBe();
+    });
+    it("should call clearModal and change classList", function(){
+        var $modal = {classList: {add: jest.fn()}};
+        var clearModal = jest.fn();
+        hideModal($modal, clearModal)
+        expect($modal.classList.add).toHaveBeenCalled();
+        expect(clearModal).toHaveBeenCalled();
+    });
 })
+
+describe("listenDeleteButtons", function () {
+    it("should be defined ", function () {
+        expect(listenDeleteButtons).toBeDefined();
+    });
+    it("should be function", function () {
+        expect(typeof listenDeleteButtons).toBe("function");
+    });
+})
+
 describe("showDeleteModal", function () {
     it("should be defined ", function () {
         expect(showDeleteModal).toBeDefined();
@@ -346,6 +382,10 @@ describe("showDeleteModal", function () {
     it("should be function", function () {
         expect(typeof showDeleteModal).toBe("function");
     });
+    // it("should show modalDelete", function () {
+    //     var $modalDelete = {classList: {remove: jest.fn()}};
+    //     expect(showDeleteModal).toBe("function");
+    // });
 })
 
 describe("hideDeleteModal", function () {
@@ -354,6 +394,47 @@ describe("hideDeleteModal", function () {
     });
     it("should be function", function () {
         expect(typeof hideDeleteModal).toBe("function");
+    });
+    it("should return nothing", function(){
+        var $modalDelete = {classList: {add: jest.fn()}};
+        expect(hideDeleteModal($modalDelete)).toBe();
+    });
+    // it("should call clearModal and change classList", function(){
+    //     var $modalDelete = {classList: {add: jest.fn()}};
+    //     hideDeleteModal($modalDelete)
+    //     expect($modalDelete.classList.add).toHaveBeenCalled();
+    // });
+})
+
+describe("listenTypeSelect", function () {
+    it("should be defined ", function () {
+        expect(listenTypeSelect).toBeDefined();
+    });
+    it("should be function", function () {
+        expect(typeof listenTypeSelect).toBe("function");
+    });
+    it("should add event listener", function () {
+        var cb  = jest.fn()
+        var a = {addEventListener: jest.fn()}
+        listenTypeSelect(a, cb)
+        expect(a.addEventListener).toHaveBeenCalled();
+        // expect(cb).toHaveBeenCalled();
+    });
+})
+
+describe("listenThemeSelect", function () {
+    it("should be defined ", function () {
+        expect(listenThemeSelect).toBeDefined();
+    });
+    it("should be function", function () {
+        expect(typeof listenThemeSelect).toBe("function");
+    });
+    it("should add event listener", function () {
+        var cb  = jest.fn()
+        var a = {addEventListener: jest.fn()}
+        listenThemeSelect(a, cb)
+        expect(a.addEventListener).toHaveBeenCalled();
+        // expect(cb).toHaveBeenCalled();
     });
 })
 
@@ -373,21 +454,43 @@ describe("themeSelectGetRequest", function () {
     it("should be function", function () {
         expect(typeof themeSelectGetRequest).toBe("function");
     });
-    it("should set theme into local storage", function () {
-        var $themeSelect = {value: '1'}
-        window.document.querySelector = function(str) {
-            if (str === ".header__filter-theme"){
-                window.localStorage.setItem = function(str, obj){
-                    var $themeSelect = {value: '1'}
-                    if (str === "theme"){
-                        return {"theme": $themeSelect.value}
-                    }
-                }
-            }
-        }       
-        var LS = {"theme": $themeSelect.value}
-        var getAndRender = jest.fn()
-        expect(themeSelectGetRequest(getAndRender)).toBe(LS);
-        expect(getAndRender).toHaveBeenCalled();
+    it("should be function", function () {
+        expect(typeof themeSelectGetRequest).toBe("function");
+    });
+    it("should call local storage and callback", function () {
+        var a = {}
+        // localStorage.setItem = 
+        window.localStorage = {setItem: jest.fn()}
+        var cb = jest.fn()
+        themeSelectGetRequest(a, cb)
+        expect(window.localStorage.setItem.mockReturnValue).toBe();
+        expect(cb).toHaveBeenCalled();
+        // console.log(window.localStorage.setItem = jest.fn());
+    });
+})
+
+describe("typeSelectGetRequest", function () {
+    it("should be defined ", function () {
+        expect(typeSelectGetRequest).toBeDefined();
+    });
+    it("should be function", function () {
+        expect(typeof typeSelectGetRequest).toBe("function");
+    });
+    it("should call local storage and callback", function () {
+        var a = {}
+        window.localStorage = {setItem: jest.fn()}
+        var cb = jest.fn()
+        typeSelectGetRequest(a, cb)
+        expect(window.localStorage.setItem.mockReturnValue).toBe();
+        expect(cb).toHaveBeenCalled();
+    });
+})
+
+describe("getAndRender", function () {
+    it("should be defined ", function () {
+        expect(getAndRender).toBeDefined();
+    });
+    it("should be function", function () {
+        expect(typeof getAndRender).toBe("function");
     });
 })

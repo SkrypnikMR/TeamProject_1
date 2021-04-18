@@ -40,7 +40,7 @@ function convertToXML(array) {
       obj[string[0].split(",")[5].trim()] = string[i].split(",")[5];
       result.push(obj);
     }
-    console.log(result[0]);
+    // console.log(result[0]);
     return result;
   }
 
