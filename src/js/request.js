@@ -18,6 +18,7 @@ export function getRequest(url, folder) {
   });
 }
 
+
 export function postRequest(url, folder, requestBody) {
   return new Promise(function (resolve, reject) {
     var request = new XMLHttpRequest();

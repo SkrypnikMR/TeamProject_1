@@ -11,6 +11,7 @@ headerQuestionText {
 .headerFooter {
   max-width: 1000px;
   margin: 0 auto;
+  padding: 10px 0;
   display: flex;
   justify-content: space-around;
   align-items: center;
@@ -22,8 +23,8 @@ headerQuestionText {
 }
 .headerFooter input,
 .headerFooter select {
-  margin: 15px 15px;
   padding: 15px 30px;
+  margin-right: 10px; 
   font-family: "PT Serif", serif;
   font-family: "Roboto", sans-serif;
   font-size: 25px;
@@ -224,14 +225,14 @@ label p {
 }
 .questionText {
   padding: 10px;
+  width: 100%;
 }
 .questionText input {
   font-family: "PT Serif", serif;
   font-family: "Roboto", sans-serif;
   height: 50px;
-  width: 400px;
+  width: 100%;
   font-size: 20px;
-  margin: 20px;
 }
 .questionButtons {
   display: flex;
@@ -364,8 +365,3 @@ button:hover {
 }
 
 
-@media (max-width: 760px){
-  .questionText input{
-    width: 350px;
-  }
-}

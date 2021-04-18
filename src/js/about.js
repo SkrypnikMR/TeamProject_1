@@ -14,7 +14,7 @@ if (window.location.pathname === "/about.html") {
   slide.append(firstClone);
   slide.prepend(lastClone);
   /*     const slideWidth = slides[index].clientWidth; */
-  slide.style.transform = `translateX(${-800 * index}px)`;
+  slide.style.transform = `translateX(${-700 * index}px)`; //800
   slideContainer.addEventListener("mouseenter", () => {
     clearInterval(slideId);
   });
@@ -26,13 +26,13 @@ if (window.location.pathname === "/about.html") {
     if (slides[index].id === firstClone.id) {
       slide.style.transition = "none";
       index = 1;
-      slide.style.transform = `translateX(${-800 * index}px)`;
+      slide.style.transform = `translateX(${-700 * index}px)`;
     }
 
     if (slides[index].id === lastClone.id) {
       slide.style.transition = "none";
       index = slides.length - 2;
-      slide.style.transform = `translateX(${-800 * index}px)`;
+      slide.style.transform = `translateX(${-700 * index}px)`;
     }
   });
   startSlide();
@@ -54,12 +54,12 @@ export function moveToNextSlide() {
   if (index >= slides.length - 1) return startSlide();
   index++;
   slide.style.transition = ".7s ease-out";
-  slide.style.transform = `translateX(${-800 * index}px)`;
+  slide.style.transform = `translateX(${-700 * index}px)`;
 }
 
 export function moveToPreviousSlide() {
   if (index <= 0) return;
   index--;
   slide.style.transition = ".7s ease-out";
-  slide.style.transform = `translateX(${-800 * index}px)`;
+  slide.style.transform = `translateX(${-700 * index}px)`;
 }
