@@ -2,9 +2,12 @@ var fs = require("fs");
 var { json } = require("body-parser");
 var XMLparser = require("fast-xml-parser");
 var yamlParser = require("js-yaml");
-var {parseFromCSV} = require("./convertParse");
+var { parseFromCSV } = require("./convertParse");
 
 function getFromJSONFile(URL, mode) {
+  if (typeof URL !== "object") {
+    return false;
+  }
   /* Фунция чтения из файла JSON и фильтрации его, 
     если нужно по темам, которые приходят в query параметрах */
   var bufferFromJsonFile = fs.readFileSync(`questions/questions.json`);
@@ -23,6 +26,9 @@ function getFromJSONFile(URL, mode) {
 }
 
 function getFromXMLFile(URL, mode) {
+  if (typeof URL !== "object") {
+    return false;
+  }
   /* Фунция чтения из файла XML и фильтрации его, 
     если нужно по темам, которые приходят в query параметрах */
   var bufferFromXMLFile = fs.readFileSync(`questions/questions.xml`, "utf-8");
@@ -45,7 +51,6 @@ function getFromXMLFile(URL, mode) {
     return arrayFromXML;
   } else {
     for (var i = 0; i < arrayFromXML.length; i++) {
-      console.log(arrayFromXML);
       if (arrayFromXML[i].theme === URL.get("theme")) {
         themesArrayFromXML.push(arrayFromXML[i]);
       }
@@ -54,6 +59,9 @@ function getFromXMLFile(URL, mode) {
   return themesArrayFromXML;
 }
 function getFromCSV(URL, mode) {
+  if (typeof URL !== "object") {
+    return false;
+  }
   var bufferFromCSVFile = fs.readFileSync("questions/questions.csv", "utf-8");
   var arrayFromCSV = parseFromCSV(bufferFromCSVFile);
   var themesCSVArray = [];
@@ -70,6 +78,9 @@ function getFromCSV(URL, mode) {
 }
 
 function getFromYaml(URL, mode) {
+  if (typeof URL !== "object") {
+    return false;
+  }
   var bufferFromYaml = fs.readFileSync("questions/questions.yaml", "utf-8");
   var arrayFromYaml = yamlParser.load(bufferFromYaml);
   var themesYAMLArray = [];
