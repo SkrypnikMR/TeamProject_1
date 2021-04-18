@@ -30,10 +30,6 @@ describe("showModal", function () {
     it("should be function", function () {
         expect(typeof showModal).toBe("function");
     });
-//     var createQuestion = jest.fn()
-//     it("should call createQuestion", function () {
-//         expect(createQuestion).toHaveBeenCalled();
-//     });
 });
 
 describe("checkAnswer", function () {
@@ -382,10 +378,20 @@ describe("showDeleteModal", function () {
     it("should be function", function () {
         expect(typeof showDeleteModal).toBe("function");
     });
-    // it("should show modalDelete", function () {
-    //     var $modalDelete = {classList: {remove: jest.fn()}};
-    //     expect(showDeleteModal).toBe("function");
-    // });
+    it("should return nothing", function () {
+        var $confirmButton, $cancelButton
+        window.document.querySelector = function(str) {
+            if (str === ".confirmButton"){
+                return $confirmButton = {addEventListener: jest.fn()}
+            }
+            if (str === ".cancelButton"){
+                return $cancelButton = {addEventListener: jest.fn()}
+            }
+        }
+        var $modalDelete = {classList: {remove: jest.fn()}};
+        hideDeleteModal = jest.fn()
+        expect(showDeleteModal($modalDelete, hideDeleteModal, deleteConfirm)).toBe();
+    });
 })
 
 describe("hideDeleteModal", function () {
@@ -399,10 +405,10 @@ describe("hideDeleteModal", function () {
         var $modalDelete = {classList: {add: jest.fn()}};
         expect(hideDeleteModal($modalDelete)).toBe();
     });
-    // it("should call clearModal and change classList", function(){
-    //     var $modalDelete = {classList: {add: jest.fn()}};
-    //     hideDeleteModal($modalDelete)
-    //     expect($modalDelete.classList.add).toHaveBeenCalled();
+    // it("should add hide to classList", function(){
+    //     var a = {classList: {add: jest.fn()}};
+    //     hideDeleteModal(a)
+    //     expect(a.classList.add).toHaveBeenCalled();
     // });
 })
 
@@ -443,6 +449,9 @@ describe("deleteConfirm", function () {
         expect(deleteConfirm).toBeDefined();
     });
     it("should be function", function () {
+        expect(typeof deleteConfirm).toBe("function");
+    });
+    it("should call hideDeleteModal", function () {
         expect(typeof deleteConfirm).toBe("function");
     });
 })
