@@ -246,7 +246,7 @@ export function getAndRender() {
         // если файл пустой - отрисует страницу без вопросов
         renderNoQuestions($questions__items);
       } else {
-        getQuestions(data).then(function () {
+        getQuestions(data, $questions__items).then(function () {
           listenDeleteButtons();
         });
       }
