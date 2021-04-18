@@ -43,6 +43,7 @@ function convertToXML(array) {
     for (var key in array[i]) {
       wrapper += `<${key}>${array[i][key]}</${key}>`;
     }
+
     result += wrapper + "</question>";
   }
   result += "</questions>";

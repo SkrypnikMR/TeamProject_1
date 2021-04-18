@@ -1,4 +1,4 @@
-var {showModal} = require('../questions');
+var {errorText} = require('../questions');
 describe("showModal", function () {
     it("should be defined ", function () {
         expect(showModal).toBeDefined();
