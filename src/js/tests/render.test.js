@@ -3,6 +3,8 @@ var {
   renderNoQuestions,
   renderServerDeveloperData,
   renderandFillDevItem,
+  renderServerQuestions,
+  createAndFillQuestionItem,
 } = require("../render");
 describe("rerenderElement", function () {
   var event = {
@@ -124,90 +126,253 @@ describe("renderandFillDevItem", function () {
         return [
           { classList: { add: jest.fn() } },
           { classList: { add: jest.fn() } },
+          { classList: { add: jest.fn() } },
+          { classList: { add: jest.fn() } },
+          { classList: { add: jest.fn() } },
+          { classList: { add: jest.fn() } },
         ];
       },
     };
     var serverData = [
       { avatar: "", name: "", age: "", lovely_color: "", exp: "", hobbie: "" },
       { avatar: "", name: "", age: "", lovely_color: "", exp: "", hobbie: "" },
+      { avatar: "", name: "", age: "", lovely_color: "", exp: "", hobbie: "" },
+      { avatar: "", name: "", age: "", lovely_color: "", exp: "", hobbie: "" },
+      { avatar: "", name: "", age: "", lovely_color: "", exp: "", hobbie: "" },
+      { avatar: "", name: "", age: "", lovely_color: "", exp: "", hobbie: "" },
     ];
-    var i = 1;
+    var i = 5;
     expect(renderandFillDevItem($node, serverData, i)).toBe(undefined);
   });
-  it("should new new innerHTML of $node", function () {
-    var $node = {
-      innerHTML: "",
-      querySelectorAll: function () {
-        return [
-          { classList: { add: jest.fn() } },
-          { classList: { add: jest.fn() } },
-        ];
-      },
-    };
-    var serverData = [
-      { avatar: "", name: "", age: "", lovely_color: "", exp: "", hobbie: "" },
-      { avatar: '25', name: "25", age: "25", lovely_color: "25", exp: "25", hobbie: "25" },
-    ];
-    var i = 1;
-    var expectStr = `<div class="userCard__item">
-        <div class="userCard__edit">
-          <img src="img/edit.png" alt="edit">
-        </div>
-        <div class="userCard__photoDev">
-          <img src=${serverData[i].age} alt="photoDev" class="userCard__avatar">
-        </div>
-        <h3 class="userCard__name">${serverData[i].name}</h3>
-        <div class="userCard__line"></div>
-        <h4 class="userCard__title">About me</h4>
-        <div class="userCard__about">
-          <div class="userCard__info">
-            <p>Age:</p>
-            <p class="userCard__age">${serverData[i].age}</p>
-          </div>
-          <div class="userCard__info">
-            <p class=>Favorite color:</p>
-            <p class="userCard__color">${serverData[i].lovely_color}</p>
-          </div>
-          <div class="userCard__info">
-            <p>Experience in IT:</p>
-            <p class="userCard__exp">${serverData[i].exp}</p>
-          </div>
-        </div>
-        <h4 class="userCard__title">Hobbies</h4>
-        <div class="userCard__about">
-          <div class="userCard__info">
-            <p class="userCard__hobbie">${serverData[i].hobbie} </p>
-          </div>
-        </div>
-        <!-- Modal form  -->
-  <div class="form-user">
-      <form action="" class="form-user__form">
-          <h4 class="userCard__title">${serverData[i].name}</h4>
-          <p>Age:</p>
-          <input type="text" class="form-user__ageform" placeholder = "${serverData[i].age}">
-          <p>Lovely color:</p>
-          <input type="text" class="form-user__likecolor" placeholder = "${serverData[i].lovely_color}">
-          <p>Exp in IT:</p>
-          <input type="text" class="form-user__it" placeholder = "${serverData[i].exp}">
-          <h4 class="userCard__title">Hobbies</h4>
-          <input type="text" class="form-user__hobbie" placeholder = "${serverData[i].hobbie}">
-          <button class="form-user__btn">Change</button>
-      </form>
-  </div>
-  <!-- END Modal form  -->
-      </div>`;
-    renderandFillDevItem($node, serverData, i);
-    expect($node.innerHTML).toBe(expectStr);
-  });
 });
-describe("renderServerDeveloperData", function () {
+describe("renderServerQuestions", function () {
   it("should be defined ", function () {
-    expect(renderServerDeveloperData).toBeDefined();
+    expect(renderServerQuestions).toBeDefined();
   });
   it("should be function", function () {
-    expect(typeof renderServerDeveloperData).toBe("function");
+    expect(typeof renderServerQuestions).toBe("function");
   });
   it("should return false", function () {
-    expect(renderServerDeveloperData()).toBe(false);
+    expect(renderServerQuestions()).toBe(false);
+  });
+  it("should return 1 witn serverData[0] === null", function () {
+    var serverData = [null, {}];
+    var renderNoQuestions = jest.fn();
+    var $questions__items = {};
+    renderServerQuestions(serverData, $questions__items, renderNoQuestions);
+    expect(renderNoQuestions).toHaveBeenCalled();
+    expect(
+      renderServerQuestions(serverData, $questions__items, renderNoQuestions)
+    ).toBe(1);
+    console.log(serverData[0] === null);
+  });
+  it("should return 1 witn serverData === {}", function () {
+    var serverData = {};
+    var renderNoQuestions = jest.fn();
+    var $questions__items = {};
+    renderServerQuestions(serverData, $questions__items, renderNoQuestions);
+    expect(renderNoQuestions).toHaveBeenCalled();
+    expect(
+      renderServerQuestions(serverData, $questions__items, renderNoQuestions)
+    ).toBe(1);
+  });
+  it("should return 1 witn serverData[0] === '' ", function () {
+    var serverData = ["", ""];
+    var renderNoQuestions = jest.fn();
+    var $questions__items = {};
+    renderServerQuestions(serverData, $questions__items, renderNoQuestions);
+    expect(renderNoQuestions).toHaveBeenCalled();
+    expect(
+      renderServerQuestions(serverData, $questions__items, renderNoQuestions)
+    ).toBe(1);
+  });
+  it("should return 1 witn serverData[0].date === null ", function () {
+    var serverData = [{ date: null }, ""];
+    var renderNoQuestions = jest.fn();
+    var $questions__items = {};
+    renderServerQuestions(serverData, $questions__items, renderNoQuestions);
+    expect(renderNoQuestions).toHaveBeenCalled();
+    expect(
+      renderServerQuestions(serverData, $questions__items, renderNoQuestions)
+    ).toBe(1);
+  });
+  it("should return 1 witn serverData[0].theme === '' ", function () {
+    var serverData = [{ theme: "" }, ""];
+    var renderNoQuestions = jest.fn();
+    var $questions__items = {};
+    renderServerQuestions(serverData, $questions__items, renderNoQuestions);
+    expect(renderNoQuestions).toHaveBeenCalled();
+    expect(
+      renderServerQuestions(serverData, $questions__items, renderNoQuestions)
+    ).toBe(1);
+  });
+  it("should return 1 witn serverData[0].theme === '' ", function () {
+    var serverData = [{ theme: "" }, ""];
+    var renderNoQuestions = jest.fn();
+    var $questions__items = {};
+    renderServerQuestions(serverData, $questions__items, renderNoQuestions);
+    expect(renderNoQuestions).toHaveBeenCalled();
+    expect(
+      renderServerQuestions(serverData, $questions__items, renderNoQuestions)
+    ).toBe(1);
+  });
+  it("should continue in loop and 2 calls of createAndFillQuestionsItem item === '' ", function () {
+    var serverData = [{ theme: "dad" }, "", { theme: "mad" }];
+    var renderNoQuestions = jest.fn();
+    var $questions__items = {};
+    var createAndFillQuestionItem = jest.fn();
+    expect(
+      renderServerQuestions(
+        serverData,
+        $questions__items,
+        renderNoQuestions,
+        createAndFillQuestionItem
+      )
+    ).toBe();
+    expect(createAndFillQuestionItem).toHaveBeenCalledTimes(2);
+  });
+  it("should continue in loop and 2 calls of createAndFillQuestionsItem and item === {theme: undefined}", function () {
+    var serverData = [{ theme: "dad" }, { theme: undefined }, { theme: "mad" }];
+    var renderNoQuestions = jest.fn();
+    var $questions__items = {};
+    var createAndFillQuestionItem = jest.fn();
+    expect(
+      renderServerQuestions(
+        serverData,
+        $questions__items,
+        renderNoQuestions,
+        createAndFillQuestionItem
+      )
+    ).toBe();
+    expect(createAndFillQuestionItem).toHaveBeenCalledTimes(2);
+  });
+  it("should continue in loop and 2 calls of createAndFillQuestionsItem and item === {theme: ''}", function () {
+    var serverData = [{ theme: "dad" }, { theme: "" }, { theme: "mad" }];
+    var renderNoQuestions = jest.fn();
+    var $questions__items = {};
+    var createAndFillQuestionItem = jest.fn();
+    expect(
+      renderServerQuestions(
+        serverData,
+        $questions__items,
+        renderNoQuestions,
+        createAndFillQuestionItem
+      )
+    ).toBe();
+    expect(createAndFillQuestionItem).toHaveBeenCalledTimes(2);
+  });
+});
+describe("createAndFillQuestionItem", function () {
+  it("should be defined ", function () {
+    expect(createAndFillQuestionItem).toBeDefined();
+  });
+  it("should be function", function () {
+    expect(typeof createAndFillQuestionItem).toBe("function");
+  });
+  it("should return false if called without arguments", function () {
+    expect(createAndFillQuestionItem()).toBe(false);
+  });
+  it("should return false if called only with one argument", function () {
+    var $node = {};
+    expect(createAndFillQuestionItem($node)).toBe(false);
+  });
+  it("should return false if called only with two arguments", function () {
+    var $node = {};
+    var serverData = [];
+    expect(createAndFillQuestionItem($node, serverData)).toBe(false);
+  });
+  it("should innerHTML of $node is changed", function () {
+    var $node = { innerHTML: "" };
+    var serverData = [
+      {
+        date: "1",
+        type: "1",
+        questionText: "1",
+        theme: "1",
+        answer: "1",
+        stringDate: "1",
+      },
+    ];
+    var i = 0;
+    var expectStr = `<div class="questions__item" date = ${serverData[i].date} type = ${serverData[i].type}>
+    <div class="questions__edit">
+    <img src="img/X.png" alt="edit">
+  </div>
+    <div class = "question__text">
+      <div class="questions__answer">
+        <div class="questions__textInfo">
+          <p><b>Question: </b> </p><p class="questions__resultText" title = "${serverData[i].questionText}">${serverData[i].questionText}</p>
+        </div>
+        </div>
+      </div>
+      <div class = "questions__themeDateAns">
+        <div class="questions__info">
+          <p><b>Question Theme:</b> </p><p class="questions__resultInfo">${serverData[i].theme}</p>
+        </div>  
+        <div class="questions__info">
+          <p><b>Answer:</b> </p><p class="questions__resultInfo">${serverData[i].answer}</p>
+        </div>
+        <div class="questions__info">
+          <p><b>Date: </b> </p><p class="questions__resultInfo">${serverData[i].stringDate}</p>
+      </div>
+    </div>
+  </div>`;
+    expect(createAndFillQuestionItem($node, serverData, i)).toBe();
+    expect($node.innerHTML).toBe(expectStr);
+  });
+  it("should innerHTML of $node is changed", function () {
+    var $node = { innerHTML: "heh" };
+    var serverData = [
+      {
+        date: "1",
+        type: "1",
+        questionText: "1",
+        theme: "1",
+        answer: "1",
+        stringDate: "1",
+      },
+      {
+        date: "1",
+        type: "1",
+        questionText: "1",
+        theme: "1",
+        answer: "1",
+        stringDate: "1",
+      },
+      {
+        date: "1",
+        type: "1",
+        questionText: "1",
+        theme: "1",
+        answer: "1",
+        stringDate: "1",
+      },
+    ];
+    var i = 2;
+    var expectStr = `heh<div class="questions__item" date = ${serverData[i].date} type = ${serverData[i].type}>
+    <div class="questions__edit">
+    <img src="img/X.png" alt="edit">
+  </div>
+    <div class = "question__text">
+      <div class="questions__answer">
+        <div class="questions__textInfo">
+          <p><b>Question: </b> </p><p class="questions__resultText" title = "${serverData[i].questionText}">${serverData[i].questionText}</p>
+        </div>
+        </div>
+      </div>
+      <div class = "questions__themeDateAns">
+        <div class="questions__info">
+          <p><b>Question Theme:</b> </p><p class="questions__resultInfo">${serverData[i].theme}</p>
+        </div>  
+        <div class="questions__info">
+          <p><b>Answer: </b> </p><p class="questions__resultInfo">${serverData[i].answer}</p>
+        </div>
+        <div class="questions__info">
+          <p><b>Date: </b> </p><p class="questions__resultInfo">${serverData[i].stringDate}</p>
+      </div>
+    </div>
+  </div>`;
+    expect(createAndFillQuestionItem($node, serverData, i)).toBe();
+    expect($node.innerHTML).toBe(expectStr);
   });
 });

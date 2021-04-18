@@ -2,13 +2,13 @@ export function renderServerDeveloperData(serverData, $developers, cb) {
   if (!serverData || !$developers || !cb | (serverData.length < 1)) {
     return false;
   }
-  for (var i = 0; i <= serverData.length; i++) {
+  for (var i = 0; i < serverData.length; i++) {
     cb($developers, serverData, i); // вызываем функцию отрисовки итема, столько раз, скольк нам приехало объектов
   }
   return true;
 }
 export function renderandFillDevItem($node, serverData, i) {
-  if (!$node || !serverData || !i) {
+  if (!$node || !serverData || i === undefined) {
     return false;
   }
   // фукнция отрисовки одного итема на странице index.html
@@ -65,9 +65,14 @@ export function renderandFillDevItem($node, serverData, i) {
   }
 }
 
-export function renderServerQuestions(serverData, $questions__items, renderNoQuestions, createAndFillQuestionItem) {
+export function renderServerQuestions(
+  serverData,
+  $questions__items,
+  renderNoQuestions,
+  createAndFillQuestionItem
+) {
   // функция, отрисовки вопросов, которые мы получаем с сервера
-  if(serverData === undefined){
+  if (serverData === undefined) {
     return false;
   }
   if (
@@ -78,6 +83,7 @@ export function renderServerQuestions(serverData, $questions__items, renderNoQue
     serverData[0].theme === ""
   ) {
     renderNoQuestions($questions__items);
+    return 1;
   } else {
     for (var i = 0; i < serverData.length; i++) {
       if (
@@ -93,6 +99,9 @@ export function renderServerQuestions(serverData, $questions__items, renderNoQue
   }
 }
 export function createAndFillQuestionItem($node, serverData, i) {
+  if (!$node || !serverData || i === undefined) {
+    return false;
+  }
   if (i === 0) {
     $node.innerHTML = `<div class="questions__item" date = ${serverData[i].date} type = ${serverData[i].type}>
     <div class="questions__edit">
