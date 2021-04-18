@@ -1,4 +1,4 @@
-import {renderServerDeveloperData, renderServerQuestions, renderandFillDevItem} from './render'
+import {renderServerDeveloperData, renderServerQuestions, renderandFillDevItem, renderNoQuestions, createAndFillQuestionItem} from './render'
 
 export const URL = "http://localhost:3000/"; // constant нашего пути
 var request = new XMLHttpRequest();
@@ -71,9 +71,9 @@ export function getDevelopers(data, $developers) {
     resolve(data);
   });
 }
-export function getQuestions(data) {
+export function getQuestions(data,$questions__items) {
   return new Promise(function (resolve, reject) {
-    renderServerQuestions(data);
+    renderServerQuestions(data, $questions__items, renderNoQuestions, createAndFillQuestionItem)
     resolve(data);
   });
 }

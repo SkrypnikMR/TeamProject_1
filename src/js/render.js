@@ -1,13 +1,16 @@
 export function renderServerDeveloperData(serverData, $developers, cb) {
-  if(!serverData || !$developers || !cb| serverData.length < 1){
+  if (!serverData || !$developers || !cb | (serverData.length < 1)) {
     return false;
   }
-  for (var i = 0; i < serverData.length; i++) {
+  for (var i = 0; i <= serverData.length; i++) {
     cb($developers, serverData, i); // вызываем функцию отрисовки итема, столько раз, скольк нам приехало объектов
   }
   return true;
 }
 export function renderandFillDevItem($node, serverData, i) {
+  if (!$node || !serverData || !i) {
+    return false;
+  }
   // фукнция отрисовки одного итема на странице index.html
   $node.innerHTML += `<div class="userCard__item">
         <div class="userCard__edit">
@@ -62,23 +65,30 @@ export function renderandFillDevItem($node, serverData, i) {
   }
 }
 
-export function renderServerQuestions(serverData) {
+export function renderServerQuestions(serverData, $questions__items, renderNoQuestions, createAndFillQuestionItem) {
   // функция, отрисовки вопросов, которые мы получаем с сервера
-  var $questionItems = document.querySelector(".questions__items");
-
+  if(serverData === undefined){
+    return false;
+  }
   if (
     serverData[0] === null ||
     !Array.isArray(serverData) ||
     serverData[0] === "" ||
-    serverData[0].date === null || serverData[0].theme === ''
+    serverData[0].date === null ||
+    serverData[0].theme === ""
   ) {
-    renderNoQuestions();
+    renderNoQuestions($questions__items);
   } else {
     for (var i = 0; i < serverData.length; i++) {
-      if (serverData[i] === "" || serverData[i].theme === undefined || serverData[i].theme === '') {
+      if (
+        serverData[i] === "" ||
+        serverData[i].theme === undefined ||
+        serverData[i].theme === ""
+      ) {
         continue;
+      } else {
+        createAndFillQuestionItem($questions__items, serverData, i);
       }
-      createAndFillQuestionItem($questionItems, serverData, i);
     }
   }
 }
@@ -135,12 +145,12 @@ export function createAndFillQuestionItem($node, serverData, i) {
 }
 
 export function renderNoQuestions($node) {
-  if(!$node) return false;
+  if (!$node) return false;
   $node.innerHTML = `<img src="./img/questions.png" alt="" srcset="">`;
 }
 
 export function rerenderElement(event, obj) {
-  if(!event || !obj){
+  if (!event || !obj) {
     return false;
   }
   var $element = event.target.parentElement.parentElement.parentElement; // нода карточки
