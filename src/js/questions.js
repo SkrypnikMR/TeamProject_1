@@ -8,7 +8,8 @@ import {
 import { renderNoQuestions } from "./render";
 if (window.location.pathname === "/questions.html") {
   // всё что происходит, когда мы запукаем страницу questions.html
-  var $typeSelect = document.querySelector(".header__filter-type"); // нода фильтра типа;
+  var $typeSelect = document.querySelector(".header__filter-type");
+  var $questionsItems = document.querySelector(".questions__items")// нода фильтра типа;
   var $themeSelect = document.querySelector(".header__filter-theme"); // нода фильтра темы;
   $typeSelect.value = localStorage.getItem("type") || $typeSelect.value; // пулучаем value из локалстореджа, если его нет , то value = себе
   localStorage.setItem("type", $typeSelect.value); // cетим в локал сторедж, нужно для первого запуска приложения, пока нет ничего в localStorage.
@@ -237,7 +238,7 @@ export function getAndRender() {
     .then(function (data) {
       if (data.length === 0) {
         // если файл пустой - отрисует страницу без вопросов
-        renderNoQuestions();
+        renderNoQuestions($questionsItems);
       } else {
         getQuestions(data).then(function () {
           listenDeleteButtons();
@@ -247,6 +248,6 @@ export function getAndRender() {
     .catch(function (error) {
       console.log(error);
       // отлавливаем ошибки в промисе, если она будет - отрисует нет вопросов *____ в дальнейшем можно отрисовывать страницу ошибка сервера*
-      renderNoQuestions();
+      renderNoQuestions($questionsItems);
     });
 }
