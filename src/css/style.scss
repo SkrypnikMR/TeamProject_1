@@ -316,7 +316,7 @@ footer {
 
 .slides-container {
   margin: 30px auto;
-  width: 800px;
+  width: 700px;
   height: auto;
   position: relative;
   overflow: hidden;
@@ -327,7 +327,9 @@ footer {
 }
 .slide {
   min-width: 100%;
-
+  img{
+    width: 100%;
+  }
 }
 
 i {
