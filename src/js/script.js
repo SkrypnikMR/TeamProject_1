@@ -2,13 +2,13 @@ import {
   getRequest,
   putRequest,
   URL,
-  getQuestions,
   getDevelopers,
 } from "./request";
 import { rerenderElement } from "./render";
 var path = window.location.pathname;
 if (path === "/index.html" || path === "/") {
   getRenderListen();
+  var $developers = document.querySelector(".userCard__items");
 }
 
 function getRenderListen() {
@@ -17,14 +17,14 @@ function getRenderListen() {
       return JSON.parse(responce);
     })
     .then(function (data) {
-      getDevelopers(data).then(function () {
+      getDevelopers(data, $developers).then(function () {
         listenEditButtons();
       });
     });
 }
 
 function listenEditButtons() {
-  var $userCards = document.querySelector(".userCard__items");
+
   var $modalCard = document.querySelectorAll(".form-user");
   var $editButtons = document.querySelectorAll(".userCard__edit"); // nodelist кнопок edit
   var $modalButtons = document.querySelectorAll(".form-user__btn");

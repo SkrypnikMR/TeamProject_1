@@ -1,11 +1,13 @@
-export function renderServerDeveloperData(serverData) {
-  var $developers = document.querySelector(".userCard__items");
+export function renderServerDeveloperData(serverData, $developers, cb) {
+  if(!serverData || !$developers || !cb| serverData.length < 1){
+    return false;
+  }
   for (var i = 0; i < serverData.length; i++) {
-    renderandFillDevItem($developers, serverData, i); // вызываем функцию отрисовки итема, столько раз, скольк нам приехало объектов
+    cb($developers, serverData, i); // вызываем функцию отрисовки итема, столько раз, скольк нам приехало объектов
   }
   return true;
 }
-function renderandFillDevItem($node, serverData, i) {
+export function renderandFillDevItem($node, serverData, i) {
   // фукнция отрисовки одного итема на странице index.html
   $node.innerHTML += `<div class="userCard__item">
         <div class="userCard__edit">
@@ -31,7 +33,7 @@ function renderandFillDevItem($node, serverData, i) {
             <p class="userCard__exp">${serverData[i].exp}</p>
           </div>
         </div>
-        <h4 class="userCard__title">Hobbie</h4>
+        <h4 class="userCard__title">Hobbies</h4>
         <div class="userCard__about">
           <div class="userCard__info">
             <p class="userCard__hobbie">${serverData[i].hobbie} </p>
@@ -47,7 +49,7 @@ function renderandFillDevItem($node, serverData, i) {
           <input type="text" class="form-user__likecolor" placeholder = "${serverData[i].lovely_color}">
           <p>Exp in IT:</p>
           <input type="text" class="form-user__it" placeholder = "${serverData[i].exp}">
-          <h4 class="userCard__title">Hobbie</h4>
+          <h4 class="userCard__title">Hobbies</h4>
           <input type="text" class="form-user__hobbie" placeholder = "${serverData[i].hobbie}">
           <button class="form-user__btn">Change</button>
       </form>
@@ -80,7 +82,7 @@ export function renderServerQuestions(serverData) {
     }
   }
 }
-function createAndFillQuestionItem($node, serverData, i) {
+export function createAndFillQuestionItem($node, serverData, i) {
   if (i === 0) {
     $node.innerHTML = `<div class="questions__item" date = ${serverData[i].date} type = ${serverData[i].type}>
     <div class="questions__edit">
@@ -132,12 +134,15 @@ function createAndFillQuestionItem($node, serverData, i) {
   }
 }
 
-export function renderNoQuestions() {
-  var $qHTMLQuestionItems = document.querySelector(".questions__items");
-  $qHTMLQuestionItems.innerHTML = `<img src="./img/questions.png" alt="" srcset="">`;
+export function renderNoQuestions($node) {
+  if(!$node) return false;
+  $node.innerHTML = `<img src="./img/questions.png" alt="" srcset="">`;
 }
 
 export function rerenderElement(event, obj) {
+  if(!event || !obj){
+    return false;
+  }
   var $element = event.target.parentElement.parentElement.parentElement; // нода карточки
   var $age = $element.querySelector(".userCard__age");
   var $color = $element.querySelector(".userCard__color");

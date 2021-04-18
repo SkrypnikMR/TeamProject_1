@@ -1,4 +1,4 @@
-import {renderServerDeveloperData, renderServerQuestions} from './render'
+import {renderServerDeveloperData, renderServerQuestions, renderandFillDevItem} from './render'
 
 export const URL = "http://localhost:3000/"; // constant нашего пути
 var request = new XMLHttpRequest();
@@ -65,9 +65,9 @@ export function putRequest(url, folder, requestBody) {
     request.send(JSON.stringify(requestBody));
   });
 }
-export function getDevelopers(data) {
+export function getDevelopers(data, $developers) {
   return new Promise(function (resolve, reject) {
-    renderServerDeveloperData(data);
+    renderServerDeveloperData(data, $developers, renderandFillDevItem);
     resolve(data);
   });
 }

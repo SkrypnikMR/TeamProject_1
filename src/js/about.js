@@ -60,12 +60,15 @@ export function getSlides() {
 }
 
 
-export function moveToNextSlide() {
+export function moveToNextSlide(element) {
+  if(!element){
+    return;
+  }
   slides = getSlides();
   if (index >= slides.length - 1) return startSlide();
   index++;
-  slide.style.transition = ".7s ease-out";
-  slide.style.transform = `translateX(${-700 * index}px)`;
+  element.style.transition = ".7s ease-out";
+  element.style.transform = `translateX(${-700 * index}px)`;
 
 }
 
@@ -73,7 +76,7 @@ export function moveToPreviousSlide(element) {
   if (index <= 0) return;
   index--;
 
-  slide.style.transition = ".7s ease-out";
-  slide.style.transform = `translateX(${-700 * index}px)`;
+  element.style.transition = ".7s ease-out";
+  element.style.transform = `translateX(${-700 * index}px)`;
 
 }

@@ -45,8 +45,11 @@ describe("moveToNextSlide", function () {
         expect(typeof moveToNextSlide).toBe("function");
     });
     it("moveToNextSlide should be without arguments", function () {
-        var slide = {style:[{transition:""}, {transform: ""}]};
-        expect(moveToNextSlide(slide)).toBe(undefined);
+        expect(moveToNextSlide()).toBe();
+    });
+    it("should return nothing with right argument", function () {
+        var slide = {style:[{transform: ''}, {transition: ''}]}
+        expect(moveToNextSlide(slide)).toBe();
     });
 });
 
