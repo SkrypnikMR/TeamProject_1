@@ -243,7 +243,7 @@ export function getAndRender() {
     .then(function (data) {
       if (data.length === 0) {
         // если файл пустой - отрисует страницу без вопросов
-        renderNoQuestions($questionsItems);
+        renderNoQuestions();
       } else {
         getQuestions(data).then(function () {
           listenDeleteButtons();
@@ -253,6 +253,6 @@ export function getAndRender() {
     .catch(function (error) {
       console.log(error);
       // отлавливаем ошибки в промисе, если она будет - отрисует нет вопросов *____ в дальнейшем можно отрисовывать страницу ошибка сервера*
-      renderNoQuestions($questionsItems);
+      renderNoQuestions();
     });
 }
