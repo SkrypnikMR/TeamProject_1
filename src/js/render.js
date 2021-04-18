@@ -33,7 +33,7 @@ export function renderandFillDevItem($node, serverData, i) {
             <p class="userCard__exp">${serverData[i].exp}</p>
           </div>
         </div>
-        <h4 class="userCard__title">Hobbie</h4>
+        <h4 class="userCard__title">Hobbies</h4>
         <div class="userCard__about">
           <div class="userCard__info">
             <p class="userCard__hobbie">${serverData[i].hobbie} </p>
@@ -49,7 +49,7 @@ export function renderandFillDevItem($node, serverData, i) {
           <input type="text" class="form-user__likecolor" placeholder = "${serverData[i].lovely_color}">
           <p>Exp in IT:</p>
           <input type="text" class="form-user__it" placeholder = "${serverData[i].exp}">
-          <h4 class="userCard__title">Hobbie</h4>
+          <h4 class="userCard__title">Hobbies</h4>
           <input type="text" class="form-user__hobbie" placeholder = "${serverData[i].hobbie}">
           <button class="form-user__btn">Change</button>
       </form>
