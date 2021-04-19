@@ -164,7 +164,6 @@ describe("renderServerQuestions", function () {
     expect(
       renderServerQuestions(serverData, $questions__items, renderNoQuestions)
     ).toBe(1);
-    console.log(serverData[0] === null);
   });
   it("should return 1 witn serverData === {}", function () {
     var serverData = {};
