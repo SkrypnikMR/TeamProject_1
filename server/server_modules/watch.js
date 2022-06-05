@@ -26,7 +26,7 @@ function watchMethodAndUrl(
   watchDeleteUrl,
   watchPutUrl
 ) {
-  /* функция распределяющая распределяющая что делать, 
+  /* функция распределяющая распределяющая что делать,
     при определенное варианте запроса */
   if (req.method === "GET") {
     watchGetUrl(req, res, headers, functionParams);
@@ -43,7 +43,7 @@ function watchMethodAndUrl(
   }
 }
 function watchGetUrl(req, res, headers, functionParams) {
-  /* функция отвечающая за обработку get запросов, 
+  /* функция отвечающая за обработку get запросов,
     смотря на query параметры, которые пришли в запросе */
   if (req.url === "/developers") {
     var serverAnswer = fs.readFileSync("developers/developers.json", "utf-8");
@@ -88,8 +88,8 @@ function watchGetUrl(req, res, headers, functionParams) {
   }
 }
 function watchPostUrl(req, res, headers, functionParams, functionsConverters) {
-  /*    функция, отвечающая за обработку get запросов, 
-    логика которой повязана на количестве типов, приехавших в объекте, 
+  /*    функция, отвечающая за обработку get запросов,
+    логика которой повязана на количестве типов, приехавших в объекте,
     если выбран не 1 тип вопроса - запишет во все, которые нужно */
   var URL = new URLSearchParams(req.url);
   for (var i = 0; i < req.body.type.length; i++) {
@@ -207,9 +207,9 @@ function watchPutUrl(req, res, headers) {
       if (req.body.name === devArray[i].name) {
         devArray[i].name = req.body.name;
         devArray[i].age = req.body.age;
-        devArray[i].lovely_color = req.body.lovely_color;
+        devArray[i].color = req.body.color;
         devArray[i].exp = req.body.exp;
-        devArray[i].hobbie = req.body.hobbie;
+        devArray[i].hobbies = req.body.hobbies;
         devArray[i].avatar = req.body.avatar;
       }
     }
