@@ -9,6 +9,12 @@ var {
   watchPutUrl,
 } = require("./server_modules/watch");
 
+var { config } = require("dotenv");
+
+config();
+
+var PORT = process.env.PORT;
+
 var server = http.createServer(function (req, res) {
   var headers = {
     "Access-Control-Allow-Origin": "*",
@@ -29,4 +35,4 @@ var server = http.createServer(function (req, res) {
     );
   });
 });
-server.listen(3000);
+server.listen(PORT, () => console.log("Server started on " + PORT));
