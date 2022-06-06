@@ -10,3 +10,13 @@ export interface Developer extends ChangeableFields {
   name: string;
   avatar: string;
 }
+
+export interface Question {
+  id: string;
+  questionText: string;
+  theme: string;
+  date: string;
+  stringDate: string;
+  type: string;
+  answer: string;
+}

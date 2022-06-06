@@ -87,7 +87,9 @@ function DeveloperCard({ id, name, age, exp, color, hobbies, avatar }: Developer
   return (
     <StyledCard width="300px" hoverable actions={actions} color={color} borderRadius="15px" minHeight="200px">
       <Avatar src={avatar} />
-      <Span paddingLeft="50px">{name}</Span>
+      <b>
+        <Span paddingLeft="50px">{name}</Span>
+      </b>
       {isLoading ? (
         <Loader />
       ) : (

@@ -1,8 +1,9 @@
 import React, { useCallback, useMemo } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { Layout, Menu } from 'antd';
+import { Menu } from 'antd';
 
 import { PageNames, Pages } from 'consts';
+import { LayoutHeader } from 'Common';
 
 function Header() {
   const navigation = useNavigate();
@@ -24,9 +25,9 @@ function Header() {
   );
 
   return (
-    <Layout.Header>
+    <LayoutHeader height="8.2vh">
       <Menu theme="dark" mode="horizontal" items={menu} />
-    </Layout.Header>
+    </LayoutHeader>
   );
 }
 

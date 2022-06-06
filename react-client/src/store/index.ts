@@ -1,12 +1,14 @@
 import { configureStore, ThunkAction, Action } from '@reduxjs/toolkit';
 import { setupListeners } from '@reduxjs/toolkit/query';
-import { developersApi } from 'api';
+import { developersApi, questionsApi } from 'api';
 
 export const store = configureStore({
   reducer: {
     [developersApi.reducerPath]: developersApi.reducer,
+    [questionsApi.reducerPath]: questionsApi.reducer,
   },
-  middleware: (getDefaultMiddleware) => getDefaultMiddleware().concat(developersApi.middleware),
+  middleware: (getDefaultMiddleware) =>
+    getDefaultMiddleware().concat(developersApi.middleware).concat(questionsApi.middleware),
 });
 
 setupListeners(store.dispatch);

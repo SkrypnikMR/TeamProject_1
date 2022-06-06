@@ -1,30 +1,24 @@
 import React, { FC } from 'react';
-import { BrowserRouter, Route, Routes } from 'react-router-dom';
-import { Layout } from 'antd';
+import { BrowserRouter } from 'react-router-dom';
 
-import { Pages } from 'consts';
-import { Main, About, Questions } from 'Pages';
-import { Container } from 'Common';
+import { Container, Layout, LayoutContent } from 'Common';
 
 import Header from 'Components/Header';
-
-const tempStyle = { minHeight: '91vh' };
+import Footer from 'Components/Footer';
+import Routes from 'Components/Routes';
 
 export const App: FC = () => {
   return (
-    <Layout className="layout">
-      <BrowserRouter>
+    <BrowserRouter>
+      <Layout height="100%">
         <Header />
-        <Layout.Content style={tempStyle}>
-          <Container padding="10px 50px 20px 50px" height="100%">
-            <Routes>
-              <Route path={Pages.Main} element={<Main />} />
-              <Route path={Pages.About} element={<About />} />
-              <Route path={Pages.Questions} element={<Questions />} />
-            </Routes>
+        <LayoutContent height="86vh">
+          <Container padding="10px 50px 20px 50px" height="100%" overflow="auto">
+            <Routes />
           </Container>
-        </Layout.Content>
-      </BrowserRouter>
-    </Layout>
+        </LayoutContent>
+        <Footer />
+      </Layout>
+    </BrowserRouter>
   );
 };
