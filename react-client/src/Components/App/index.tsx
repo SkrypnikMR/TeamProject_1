@@ -12,7 +12,7 @@ export const App: FC = () => {
     <BrowserRouter>
       <Layout height="100%">
         <Header />
-        <LayoutContent height="86vh">
+        <LayoutContent height="85.2vh">
           <Container padding="10px 50px 20px 50px" height="100%" overflow="auto">
             <Routes />
           </Container>

@@ -25,7 +25,7 @@ function Header() {
   );
 
   return (
-    <LayoutHeader height="8.2vh">
+    <LayoutHeader height="9vh">
       <Menu theme="dark" mode="horizontal" items={menu} />
     </LayoutHeader>
   );

@@ -11,7 +11,7 @@ interface CarouselProps {
 
 function Carousel({ autoplay, height = '100%' }: CarouselProps) {
   return (
-    <FlexCol height={height}>
+    <FlexCol height={height} width="80%" margin="0 auto">
       <AntdCarousel autoplay={autoplay}>
         <Image height={height} src="./img/1slider.gif"></Image>
         <Image height={height} src="./img/2slider.gif"></Image>
